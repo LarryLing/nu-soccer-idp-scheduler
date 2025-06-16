@@ -7,7 +7,7 @@ This is a community-maintained example. If you experience a problem, please subm
 Run the following command:
 
 ```sh
-npx create-turbo@latest -e with-vite-react
+npx create-turbo@latest -e with-frontend-react
 ```
 
 ## What's inside?

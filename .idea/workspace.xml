@@ -1,18 +1,66 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
   <component name="ChangeListManager">
-    <list default="true" id="b05902af-5cdc-4fb0-944c-d2d26c9f2b39" name="Changes" comment="" />
+    <list default="true" id="b05902af-5cdc-4fb0-944c-d2d26c9f2b39" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/apps/backend/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/apps/backend/src/config/config.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/apps/backend/src/controllers/controller.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/apps/backend/src/middleware/errorHandler.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/apps/backend/src/routes/routes.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/apps/backend/src/server.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/apps/backend/src/types.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/apps/backend/tsconfig.app.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/apps/backend/tsconfig.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/apps/backend/tsconfig.node.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/apps/frontend/src/styles/background.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/apps/frontend/src/styles/gray.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/apps/frontend/src/styles/northwestern.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/web/.eslintrc.cjs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/web/index.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/web/package.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/web/public/typescript.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/web/public/vite.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/web/src/main.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/web/src/style.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/web/src/vite-env.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/web/tsconfig.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/web/vite.config.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/ui/.eslintrc.cjs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/ui/components/counter.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/ui/components/header.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/ui/components/index.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/ui/index.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/ui/package.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/ui/tsconfig.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pnpm-lock.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/pnpm-lock.yaml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="Git.Settings">
-    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/my-turborepo" />
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="CSS File" />
+        <option value="TypeScript File" />
+      </list>
+    </option>
   </component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "associatedIndex": 3
-}]]></component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="ProjectErrors" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 3
+}</component>
   <component name="ProjectId" id="2yZsgdsOjdQPXPNxRfQfdqtsUnr" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
@@ -22,15 +70,28 @@
   "keyToString": {
     "ModuleVcsDetector.initialDetectionPerformed": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
     "git-widget-placeholder": "main",
     "junie.onboarding.icon.badge.shown": "true",
+    "last_opened_file_path": "/Users/larryling/WebstormProjects/nu-soccer-idp-scheduler/apps/backend",
+    "list.type.of.created.stylesheet": "CSS",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
     "settings.editor.selected.configurable": "preferences.keymap",
+    "ts.external.directory.path": "/Users/larryling/WebstormProjects/nu-soccer-idp-scheduler/apps/frontend/node_modules/typescript/lib",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
   <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/apps/backend" />
+    </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/apps/backend/src" />
+      <recent name="$PROJECT_DIR$/apps/frontend/src/styles" />
       <recent name="$PROJECT_DIR$" />
     </key>
   </component>
@@ -49,10 +110,28 @@
       <option name="presentableId" value="Default" />
       <updated>1750053541637</updated>
       <workItem from="1750053542606" duration="243000" />
+      <workItem from="1750053895745" duration="13309000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/apps/frontend/node_modules/@radix-ui/themes/src/components/theme.tsx</url>
+          <line>2</line>
+          <properties lambdaOrdinal="-1" />
+          <option name="timeStamp" value="2" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/apps/frontend/node_modules/@radix-ui/themes/src/components/theme.props.tsx</url>
+          <properties lambdaOrdinal="-1" />
+          <option name="timeStamp" value="3" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>

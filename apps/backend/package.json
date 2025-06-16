@@ -1,0 +1,29 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/server.ts",
+  "type": "module",
+  "scripts": {
+    "type-check": "tsc",
+    "build": "rimraf dist && tsc --noEmit false && tsc-alias",
+    "start": "node dist/server.js",
+    "dev": "NODE_ENV=development tsx watch src/server.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.5.0",
+    "express": "^5.1.0"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.3",
+    "@types/node": "^24.0.3",
+    "rimraf": "^6.0.1",
+    "tsx": "^4.20.3",
+    "typescript": "~5.8.3"
+  }
+}
