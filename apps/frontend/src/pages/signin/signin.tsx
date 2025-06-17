@@ -1,9 +1,10 @@
 import SignInCard from "../../components/authentication/sign-in-card.tsx";
+import { Flex } from "@radix-ui/themes";
 
 export default function Signin() {
   return (
-    <div className="size-full">
+    <Flex height="100vh" justify="center" align="center">
       <SignInCard />
-    </div>
+    </Flex>
   );
 }

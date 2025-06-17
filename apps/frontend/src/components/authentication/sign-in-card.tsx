@@ -8,7 +8,7 @@ import {
   TextField,
 } from "@radix-ui/themes";
 
-export default function SignInCard({}) {
+export default function SignInCard() {
   return (
     <Box width="400px">
       <Card size="4">
