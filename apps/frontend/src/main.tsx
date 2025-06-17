@@ -9,7 +9,7 @@ createRoot(document.getElementById("root")!).render(
     <Theme
       accentColor="violet"
       panelBackground="translucent"
-      radius="medium"
+      radius="large"
       scaling="100%"
     >
       <App />

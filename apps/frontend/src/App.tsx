@@ -1,38 +1,28 @@
-import { useState } from "react";
-import reactLogo from "./assets/react.svg";
-import "./App.css";
 import "@radix-ui/themes/styles.css";
 import "./styles/northwestern.css";
 import "./styles/gray.css";
 import "./styles/background.css";
-import { Button } from "@radix-ui/themes";
+import { BrowserRouter, Routes, Route } from "react-router";
+import Layout from "./layouts/layout.tsx";
+import Signin from "./pages/signin/signin.tsx";
+import CreateAnAccount from "./pages/create-an-account/create-an-account.tsx";
+import ForgotPassword from "./pages/forgot-password/forgot-password.tsx";
+import ResetPassword from "./pages/reset-password/reset-password.tsx";
 
 function App() {
-  const [count, setCount] = useState(0);
-
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <Button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </Button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Layout />}>
+          <Route index path="signin" element={<Signin />} />
+          <Route path="create-an-account" element={<CreateAnAccount />} />
+          <Route path="forgot-password" element={<ForgotPassword />} />
+          <Route path="reset-password" element={<ResetPassword />} />
+          <Route path="players" element={<></>} />
+          <Route path="training-blocks" element={<></>} />
+        </Route>
+      </Routes>
+    </BrowserRouter>
   );
 }
 
