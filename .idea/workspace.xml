@@ -5,9 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b05902af-5cdc-4fb0-944c-d2d26c9f2b39" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/apps/backend/vercel.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/apps/frontend/vercel.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/apps/backend/src/config/firebase.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/backend/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/apps/backend/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/vite.config.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/vite.config.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pnpm-lock.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/pnpm-lock.yaml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -18,6 +21,7 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="CSS File" />
+        <option value="TypeScript JSX File" />
         <option value="TypeScript File" />
       </list>
     </option>
@@ -38,7 +42,7 @@
   }
 }]]></component>
   <component name="ProblemsViewState">
-    <option name="selectedTabId" value="ProjectErrors" />
+    <option name="selectedTabId" value="CurrentFile" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 3
@@ -53,9 +57,9 @@
     "ModuleVcsDetector.initialDetectionPerformed": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "main",
+    "git-widget-placeholder": "feature/firebase-authentication",
     "junie.onboarding.icon.badge.shown": "true",
-    "last_opened_file_path": "/Users/larryling/WebstormProjects/nu-soccer-idp-scheduler/apps/backend",
+    "last_opened_file_path": "/Users/larryling/WebstormProjects/nu-soccer-idp-scheduler/apps/frontend/src/pages/training-blocks",
     "list.type.of.created.stylesheet": "CSS",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
@@ -70,9 +74,14 @@
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/apps/backend" />
+      <recent name="$PROJECT_DIR$/apps/frontend/src/pages/training-blocks" />
+      <recent name="$PROJECT_DIR$/apps/frontend/src/pages/signin" />
+      <recent name="$PROJECT_DIR$/apps/frontend/src/pages/reset-password" />
+      <recent name="$PROJECT_DIR$/apps/frontend/src/pages/players" />
+      <recent name="$PROJECT_DIR$/apps/frontend/src/pages/forgot-password" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/apps/frontend/src/pages" />
       <recent name="$PROJECT_DIR$/apps/backend/src" />
       <recent name="$PROJECT_DIR$/apps/backend" />
       <recent name="$PROJECT_DIR$/apps/frontend/src/styles" />
@@ -111,7 +120,7 @@
       <option name="presentableId" value="Default" />
       <updated>1750053541637</updated>
       <workItem from="1750053542606" duration="243000" />
-      <workItem from="1750053895745" duration="22055000" />
+      <workItem from="1750053895745" duration="27474000" />
     </task>
     <servers />
   </component>
