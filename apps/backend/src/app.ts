@@ -1,5 +1,5 @@
 import express from 'express';
-import itemRoutes from './routes/routes';
+import itemRoutes from './routes/firebaseRoutes';
 import { errorHandler } from './middleware/errorHandler';
 
 const app = express();
@@ -7,7 +7,7 @@ const app = express();
 app.use(express.json());
 
 // Routes
-app.use('/api/items', itemRoutes);
+app.use('/api', itemRoutes);
 
 // Global error handler (should be after routes)
 app.use(errorHandler);

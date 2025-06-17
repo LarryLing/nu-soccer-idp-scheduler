@@ -5,12 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b05902af-5cdc-4fb0-944c-d2d26c9f2b39" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/apps/backend/src/config/firebase.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/backend/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/apps/backend/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/vite.config.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/vite.config.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pnpm-lock.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/pnpm-lock.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/backend/src/app.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/backend/src/app.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/backend/src/controllers/controller.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/backend/src/controllers/firebaseController.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/backend/src/routes/routes.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/backend/src/routes/firebaseRoutes.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -120,7 +118,7 @@
       <option name="presentableId" value="Default" />
       <updated>1750053541637</updated>
       <workItem from="1750053542606" duration="243000" />
-      <workItem from="1750053895745" duration="27474000" />
+      <workItem from="1750053895745" duration="28500000" />
     </task>
     <servers />
   </component>
