@@ -5,19 +5,17 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b05902af-5cdc-4fb0-944c-d2d26c9f2b39" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/apps/frontend/src/layouts/protected-layout.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/apps/frontend/src/layouts/public-layout.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/apps/frontend/src/pages/players/players.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/apps/frontend/src/pages/training-blocks/training-blocks.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/apps/frontend/src/App.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/App.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/components/authentication/create-an-account-card.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/components/authentication/create-an-account-card.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/components/authentication/forgot-password-card.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/components/authentication/forgot-password-card.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/components/authentication/reset-password-card.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/components/authentication/reset-password-card.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/apps/frontend/src/components/authentication/sign-in-card.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/components/authentication/sign-in-card.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/src/components/miscellaneous/navbar.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/components/miscellaneous/navbar.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/src/layouts/layout.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/src/pages/create-an-account/create-an-account.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/pages/create-an-account/create-an-account.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/src/pages/forgot-password/forgot-password.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/pages/forgot-password/forgot-password.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/src/pages/reset-password/reset-password.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/pages/reset-password/reset-password.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/layouts/protected-layout.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/layouts/protected-layout.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/layouts/public-layout.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/pages/players/players.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/pages/players/players.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/apps/frontend/src/pages/signin/signin.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/pages/signin/signin.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/pages/training-blocks/training-blocks.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/pages/training-blocks/training-blocks.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -127,7 +125,7 @@
       <option name="presentableId" value="Default" />
       <updated>1750053541637</updated>
       <workItem from="1750053542606" duration="243000" />
-      <workItem from="1750053895745" duration="42045000" />
+      <workItem from="1750053895745" duration="44424000" />
     </task>
     <servers />
   </component>

@@ -1,3 +1,3 @@
 export default function TrainingBlocks() {
-  return <></>;
+  return <>Training Blocks Page</>;
 }

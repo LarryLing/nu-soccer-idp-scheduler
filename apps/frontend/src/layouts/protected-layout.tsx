@@ -14,11 +14,11 @@ export default function ProtectedLayout() {
   }, [navigate]);
 
   return (
-    <main>
+    <>
       <Navbar />
       <Box p="72px" width="100%" height="100%">
         <Outlet />
       </Box>
-    </main>
+    </>
   );
 }
