@@ -1,9 +1,18 @@
-import { Router } from "express";
-import { getTest, getAnotherTest } from "../controllers/controller.ts";
+import { Router } from 'express';
+import {
+    createItem,
+    getItems,
+    getItemById,
+    updateItem,
+    deleteItem,
+} from '../controllers/controller';
 
 const router = Router();
 
-router.get("/test", getTest);
-router.get("/another-test", getAnotherTest);
+router.get('/', getItems);
+router.get('/:id', getItemById);
+router.post('/', createItem);
+router.put('/:id', updateItem);
+router.delete('/:id', deleteItem);
 
 export default router;

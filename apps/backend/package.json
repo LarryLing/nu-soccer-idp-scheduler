@@ -2,28 +2,28 @@
   "name": "backend",
   "version": "1.0.0",
   "description": "",
-  "main": "src/server.ts",
-  "type": "module",
+  "main": "index.js",
   "scripts": {
-    "type-check": "tsc",
-    "build": "rimraf dist && tsc --noEmit false && tsc-alias",
+    "build": "tsc",
     "start": "node dist/server.js",
-    "dev": "NODE_ENV=development tsx watch src/server.ts"
+    "dev": "nodemon --watch 'src/**/*.ts' --exec 'ts-node' src/server.ts",
+    "lint": "eslint 'src/**/*.ts'"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
+  "type": "commonjs",
   "dependencies": {
-    "cors": "^2.8.5",
-    "dotenv": "^16.5.0",
-    "express": "^5.1.0"
+    "express": "^5.1.0",
+    "dotenv": "^16.5.0"
   },
   "devDependencies": {
-    "@types/cors": "^2.8.19",
     "@types/express": "^5.0.3",
     "@types/node": "^24.0.3",
-    "rimraf": "^6.0.1",
-    "tsx": "^4.20.3",
-    "typescript": "~5.8.3"
+    "eslint": "^9.29.0",
+    "nodemon": "^3.1.10",
+    "prettier": "^3.5.3",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.8.3"
   }
 }
