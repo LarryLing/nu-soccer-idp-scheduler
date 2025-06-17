@@ -1,12 +1,14 @@
 import { Router } from 'express';
 import {
-    registerUser,
-    signinUser
+    register,
+    signin,
+    signout,
 } from '../controllers/firebaseController';
 
 const router = Router();
 
-router.post('/auth/register', registerUser);
-router.post('/auth/signin', signinUser);
+router.post('/auth/register', register);
+router.post('/auth/signin', signin);
+router.get('/auth/signout', signout);
 
 export default router;

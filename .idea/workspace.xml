@@ -5,10 +5,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b05902af-5cdc-4fb0-944c-d2d26c9f2b39" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/apps/frontend/src/contexts/AuthContext.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/apps/backend/src/app.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/backend/src/app.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/backend/src/controllers/controller.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/backend/src/controllers/firebaseController.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/backend/src/routes/routes.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/backend/src/routes/firebaseRoutes.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/backend/src/controllers/firebaseController.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/backend/src/controllers/firebaseController.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/backend/src/routes/firebaseRoutes.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/backend/src/routes/firebaseRoutes.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/tsconfig.app.json" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/tsconfig.app.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/tsconfig.node.json" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/tsconfig.node.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -118,7 +121,7 @@
       <option name="presentableId" value="Default" />
       <updated>1750053541637</updated>
       <workItem from="1750053542606" duration="243000" />
-      <workItem from="1750053895745" duration="28500000" />
+      <workItem from="1750053895745" duration="29828000" />
     </task>
     <servers />
   </component>
