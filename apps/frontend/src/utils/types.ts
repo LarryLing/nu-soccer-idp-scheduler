@@ -10,5 +10,8 @@ export type UserContextType = {
   signIn: (email?: string, password?: string) => Promise<void>;
   signOut: () => Promise<void>;
   requestPasswordReset: (email?: string) => Promise<void>;
-  resetPassword: (newPassword?: string) => Promise<void>;
+  resetPassword: (
+    actionCode: string | null,
+    newPassword?: string,
+  ) => Promise<void>;
 };

@@ -9,8 +9,10 @@ import {
 } from "@radix-ui/themes";
 import { z } from "zod";
 import { useUser } from "../../hooks/useUser.ts";
-import { useActionState } from "react";
-import { useNavigate } from "react-router";
+import { useActionState, useEffect, useState } from "react";
+import { useNavigate, useSearchParams } from "react-router";
+import { verifyPasswordResetCode } from "firebase/auth";
+import { clientAuth } from "../../utils/firebase.ts";
 
 const ResetPasswordFormSchema = z.object({
   password: z.string().min(8),
@@ -26,11 +28,16 @@ type ResetPasswordFormState = {
 
 export default function ResetPasswordCard() {
   const context = useUser();
+  const [searchParams] = useSearchParams();
   const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(true);
   const [state, formAction, isPending] = useActionState<
     ResetPasswordFormState,
     FormData
   >(submitForm, null);
+
+  const mode = searchParams.get("mode");
+  const actionCode = searchParams.get("oobCode");
 
   async function submitForm(
     prevState: ResetPasswordFormState,
@@ -47,64 +54,103 @@ export default function ResetPasswordCard() {
       };
     }
 
-    await context.resetPassword(result.data.password);
+    await context.resetPassword(actionCode, result.data.password);
 
     navigate("/players");
     return prevState;
   }
 
+  useEffect(() => {
+    async function verifyParamsAndActionCode(
+      mode: string | null,
+      actionCode: string | null,
+    ) {
+      if (!mode) {
+        navigate("/", { replace: true });
+        return;
+      }
+
+      if (mode !== "resetPassword") {
+        navigate("/", { replace: true });
+        return;
+      }
+
+      if (!actionCode) {
+        navigate("/", { replace: true });
+        return;
+      }
+
+      try {
+        await verifyPasswordResetCode(clientAuth, actionCode);
+      } catch {
+        navigate("/", { replace: true });
+      } finally {
+        setIsLoading(false);
+      }
+    }
+
+    verifyParamsAndActionCode(mode, actionCode);
+  }, [navigate, mode, actionCode]);
+
   return (
-    <Box width="400px">
-      <Card size="4">
-        <form action={formAction}>
-          <Heading size="6" mb="5">
-            Reset Password
-          </Heading>
-          <Box mb="5">
-            <label htmlFor="password">
-              <Text size="2" weight="medium" mb="1" as="p">
-                Password
+    !isLoading && (
+      <Box width="400px">
+        <Card size="4">
+          <form action={formAction}>
+            <Box mb="5">
+              <Heading size="6" mb="1">
+                Reset Password
+              </Heading>
+              <Text size="2" weight="medium" as="p">
+                After resetting, you will be prompted to log in again.
               </Text>
-              <TextField.Root
-                id="password"
-                name="password"
-                type="password"
-                placeholder="Enter your password"
-                className="w-full"
-              />
-              {state?.errors?.password && (
-                <Text size="2" weight="regular" as="p" color="red">
-                  {state.errors.password}
+            </Box>
+            <Box mb="5">
+              <label htmlFor="password">
+                <Text size="2" weight="medium" mb="1" as="p">
+                  Password
                 </Text>
-              )}
-            </label>
-          </Box>
-          <Box mb="5">
-            <label htmlFor="confirmPassword">
-              <Text size="2" weight="medium" mb="1" as="p">
-                Confirm Password
-              </Text>
-              <TextField.Root
-                id="confirmPassword"
-                name="confirmPassword"
-                type="password"
-                placeholder="Confirm your password"
-                className="w-full"
-              />
-              {state?.errors?.confirmPassword && (
-                <Text size="2" weight="regular" as="p" color="red">
-                  {state.errors.confirmPassword}
+                <TextField.Root
+                  id="password"
+                  name="password"
+                  type="password"
+                  placeholder="Enter your password"
+                  className="w-full"
+                />
+                {state?.errors?.password && (
+                  <Text size="2" weight="regular" as="p" color="red">
+                    {state.errors.password}
+                  </Text>
+                )}
+              </label>
+            </Box>
+            <Box mb="5">
+              <label htmlFor="confirmPassword">
+                <Text size="2" weight="medium" mb="1" as="p">
+                  Confirm Password
                 </Text>
-              )}
-            </label>
-          </Box>
-          <Flex direction="row-reverse" gap="4">
-            <Button type="submit" disabled={isPending}>
-              Reset Password
-            </Button>
-          </Flex>
-        </form>
-      </Card>
-    </Box>
+                <TextField.Root
+                  id="confirmPassword"
+                  name="confirmPassword"
+                  type="password"
+                  placeholder="Confirm your password"
+                  className="w-full"
+                />
+                {state?.errors?.confirmPassword && (
+                  <Text size="2" weight="regular" as="p" color="red">
+                    {state.errors.confirmPassword}
+                  </Text>
+                )}
+              </label>
+            </Box>
+            <Flex direction="row-reverse" gap="4">
+              <Button type="submit" disabled={isPending}>
+                Reset Password
+              </Button>
+            </Flex>
+          </form>
+        </Card>
+      </Box>
+    )
   );
 }

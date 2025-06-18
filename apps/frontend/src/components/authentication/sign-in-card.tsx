@@ -6,8 +6,9 @@ import {
   Heading,
   Text,
   TextField,
+  Link,
 } from "@radix-ui/themes";
-import { Link, useNavigate } from "react-router";
+import { Link as ReactRouterLink, useNavigate } from "react-router";
 import { z } from "zod";
 import { useActionState } from "react";
 import { useUser } from "../../hooks/useUser.ts";
@@ -78,9 +79,16 @@ export default function SignInCard() {
           </Box>
           <Box mb="5">
             <label htmlFor="password">
-              <Text size="2" weight="medium" mb="1" as="p">
-                Password
-              </Text>
+              <Flex justify="between">
+                <Text size="2" weight="medium" mb="1" as="p">
+                  Password
+                </Text>
+                <Link size="2" weight="medium" asChild>
+                  <ReactRouterLink to="/forgot-password">
+                    Forgot Password?
+                  </ReactRouterLink>
+                </Link>
+              </Flex>
               <TextField.Root
                 id="password"
                 name="password"
@@ -99,11 +107,11 @@ export default function SignInCard() {
             <Button type="submit" disabled={isPending}>
               Sign In
             </Button>
-            <Link to="/create-an-account">
+            <ReactRouterLink to="/create-an-account">
               <Button variant="soft" type="button" disabled={isPending}>
                 Create An Account
               </Button>
-            </Link>
+            </ReactRouterLink>
           </Flex>
         </form>
       </Card>

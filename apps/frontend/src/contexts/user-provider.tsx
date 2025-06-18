@@ -3,11 +3,11 @@ import type { User } from "../utils/types.ts";
 import { UserContext } from "./user-context.tsx";
 import { clientAuth } from "../utils/firebase.ts";
 import {
+  confirmPasswordReset,
   createUserWithEmailAndPassword,
   sendPasswordResetEmail,
   signInWithEmailAndPassword,
   signOut,
-  updatePassword,
 } from "firebase/auth";
 
 export function UserProvider({ children }: PropsWithChildren) {
@@ -42,13 +42,15 @@ export function UserProvider({ children }: PropsWithChildren) {
     await sendPasswordResetEmail(clientAuth, email);
   };
 
-  const resetPassword = async (newPassword?: string) => {
-    if (!newPassword) {
-      throw new Error("New password required");
+  const resetPassword = async (
+    actionCode: string | null,
+    newPassword?: string,
+  ) => {
+    if (!newPassword || !actionCode) {
+      throw new Error("New password and action required");
     }
 
-    if (clientAuth.currentUser)
-      await updatePassword(clientAuth.currentUser, newPassword);
+    await confirmPasswordReset(clientAuth, actionCode, newPassword);
   };
 
   useEffect(() => {
@@ -77,9 +79,9 @@ export function UserProvider({ children }: PropsWithChildren) {
     resetPassword: resetPassword,
   };
 
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-
-  return <UserContext.Provider value={value}>{children}</UserContext.Provider>;
+  return (
+    <UserContext.Provider value={value}>
+      {!isLoading && children}
+    </UserContext.Provider>
+  );
 }

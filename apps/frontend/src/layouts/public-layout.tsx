@@ -12,7 +12,5 @@ export default function PublicLayout() {
     }
   }, [navigate, context.user]);
 
-  return (
-      <Outlet />
-  );
+  return <Outlet />;
 }
