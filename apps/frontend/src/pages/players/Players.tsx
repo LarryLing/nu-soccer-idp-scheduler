@@ -16,6 +16,56 @@ import {
     UploadIcon,
 } from "@radix-ui/react-icons";
 import { useState } from "react";
+import type { Player } from "../../utils/types.ts";
+import { DataTable } from "./DataTable.tsx";
+import { columns } from "./Column.tsx";
+
+const players: Player[] = [
+    {
+        id: "0",
+        number: 0,
+        name: "Dominic Pereira",
+        position: "Goalkeeper",
+        availability: [
+            {
+                day: "Monday",
+                start: "8:00am",
+                end: "10:30am",
+            },
+        ],
+    },
+    {
+        id: "1",
+        number: 1,
+        name: "Rafael Ponce de Leon",
+        position: "Goalkeeper",
+        availability: [
+            {
+                day: "Friday",
+                start: "6:30pm",
+                end: "8:00pm",
+            },
+            {
+                day: "Thursday",
+                start: "7:00pm",
+                end: "8:30pm",
+            },
+        ],
+    },
+    {
+        id: "2",
+        number: 2,
+        name: "Brandon Clagette",
+        position: "Defender",
+        availability: [
+            {
+                day: "Tuesday",
+                start: "7:00pm",
+                end: "9:00pm",
+            },
+        ],
+    },
+];
 
 export default function Players() {
     const [selectedPlayers, setSelectedPlayers] = useState([]);
@@ -70,6 +120,9 @@ export default function Players() {
                         </TextField.Root>
                     </Box>
                 </Flex>
+            </Section>
+            <Section p="0">
+                <DataTable columns={columns} data={players} />
             </Section>
         </>
     );

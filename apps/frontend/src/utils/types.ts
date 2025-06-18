@@ -3,6 +3,27 @@ export type User = {
     email: string;
 };
 
+export type Player = {
+    id: string;
+    number: number;
+    name: string;
+    position: "Goalkeeper" | "Defender" | "Midfielder" | "Forward";
+    availability: Availability[];
+};
+
+export type Availability = {
+    day:
+        | "Monday"
+        | "Tuesday"
+        | "Wednesday"
+        | "Thursday"
+        | "Friday"
+        | "Saturday"
+        | "Sunday";
+    start: string;
+    end: string;
+};
+
 export type UserContextType = {
     user: User | null;
     isLoading: boolean;
