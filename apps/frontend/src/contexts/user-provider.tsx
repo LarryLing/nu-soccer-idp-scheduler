@@ -3,85 +3,82 @@ import type { User } from "../utils/types.ts";
 import { UserContext } from "./user-context.tsx";
 import { clientAuth } from "../utils/firebase.ts";
 import {
-  confirmPasswordReset,
-  createUserWithEmailAndPassword,
-  sendPasswordResetEmail,
-  signInWithEmailAndPassword,
-  signOut,
+    confirmPasswordReset,
+    createUserWithEmailAndPassword,
+    sendPasswordResetEmail,
+    signInWithEmailAndPassword,
+    signOut,
 } from "firebase/auth";
 
 export function UserProvider({ children }: PropsWithChildren) {
-  const [user, setUser] = useState<User | null>(null);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
+    const [user, setUser] = useState<User | null>(null);
+    const [isLoading, setIsLoading] = useState<boolean>(true);
 
-  const signUpUser = async (email?: string, password?: string) => {
-    if (!email || !password) {
-      throw new Error("Email and password required");
-    }
+    const signUpUser = async (email?: string, password?: string) => {
+        if (!email || !password) {
+            throw new Error("Email and password required");
+        }
 
-    await createUserWithEmailAndPassword(clientAuth, email, password);
-  };
+        await createUserWithEmailAndPassword(clientAuth, email, password);
+    };
 
-  const signInUser = async (email?: string, password?: string) => {
-    if (!email || !password) {
-      throw new Error("Email and password required");
-    }
+    const signInUser = async (email?: string, password?: string) => {
+        if (!email || !password) {
+            throw new Error("Email and password required");
+        }
 
-    await signInWithEmailAndPassword(clientAuth, email, password);
-  };
+        await signInWithEmailAndPassword(clientAuth, email, password);
+    };
 
-  const signOutUser = async () => {
-    await signOut(clientAuth);
-  };
+    const signOutUser = async () => {
+        await signOut(clientAuth);
+    };
 
-  const requestPasswordReset = async (email?: string) => {
-    if (!email) {
-      throw new Error("Email required");
-    }
+    const requestPasswordReset = async (email?: string) => {
+        if (!email) {
+            throw new Error("Email required");
+        }
 
-    await sendPasswordResetEmail(clientAuth, email);
-  };
+        await sendPasswordResetEmail(clientAuth, email);
+    };
 
-  const resetPassword = async (
-    actionCode: string | null,
-    newPassword?: string,
-  ) => {
-    if (!newPassword || !actionCode) {
-      throw new Error("New password and action required");
-    }
+    const resetPassword = async (actionCode?: string, newPassword?: string) => {
+        if (!newPassword || !actionCode) {
+            throw new Error("New password and action code required");
+        }
 
-    await confirmPasswordReset(clientAuth, actionCode, newPassword);
-  };
+        await confirmPasswordReset(clientAuth, actionCode, newPassword);
+    };
 
-  useEffect(() => {
-    const unsubscribe = clientAuth.onAuthStateChanged((user) => {
-      if (user) {
-        setUser({
-          uid: user.uid,
-          email: user.email || "",
+    useEffect(() => {
+        const unsubscribe = clientAuth.onAuthStateChanged((user) => {
+            if (user) {
+                setUser({
+                    uid: user.uid,
+                    email: user.email || "",
+                });
+            } else {
+                setUser(null);
+            }
+            setIsLoading(false);
         });
-      } else {
-        setUser(null);
-      }
-      setIsLoading(false);
-    });
 
-    return () => unsubscribe();
-  }, []);
+        return () => unsubscribe();
+    }, []);
 
-  const value = {
-    user: user,
-    isLoading: isLoading,
-    signUp: signUpUser,
-    signIn: signInUser,
-    signOut: signOutUser,
-    requestPasswordReset: requestPasswordReset,
-    resetPassword: resetPassword,
-  };
+    const value = {
+        user: user,
+        isLoading: isLoading,
+        signUp: signUpUser,
+        signIn: signInUser,
+        signOut: signOutUser,
+        requestPasswordReset: requestPasswordReset,
+        resetPassword: resetPassword,
+    };
 
-  return (
-    <UserContext.Provider value={value}>
-      {!isLoading && children}
-    </UserContext.Provider>
-  );
+    return (
+        <UserContext.Provider value={value}>
+            {!isLoading && children}
+        </UserContext.Provider>
+    );
 }

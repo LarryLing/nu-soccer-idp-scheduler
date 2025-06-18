@@ -3,14 +3,14 @@ import { useEffect } from "react";
 import { useUser } from "../hooks/useUser.ts";
 
 export default function PublicLayout() {
-  const context = useUser();
-  const navigate = useNavigate();
+    const context = useUser();
+    const navigate = useNavigate();
 
-  useEffect(() => {
-    if (context.user !== null) {
-      navigate("/players", { replace: true });
-    }
-  }, [navigate, context.user]);
+    useEffect(() => {
+        if (context.user !== null) {
+            navigate("/players", { replace: true });
+        }
+    }, [navigate, context.user]);
 
-  return <Outlet />;
+    return context.isLoading && <Outlet />;
 }

@@ -5,16 +5,55 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b05902af-5cdc-4fb0-944c-d2d26c9f2b39" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/apps/frontend/src/pages/email-actions/email-actions.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/codeStyles/codeStyleConfig.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/jsonSchemas.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.prettierrc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.eslintrc.js" beforeDir="false" afterPath="$PROJECT_DIR$/.eslintrc.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/backend/.prettierrc" beforeDir="false" afterPath="$PROJECT_DIR$/apps/backend/.prettierrc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/backend/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/apps/backend/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/backend/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/apps/backend/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/backend/src/config/firebase.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/backend/src/config/firebase.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/backend/src/middleware/firebaseMiddleware.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/backend/src/middleware/firebaseMiddleware.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/backend/src/server.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/backend/src/server.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/backend/src/types.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/backend/src/types.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/backend/tsconfig.json" beforeDir="false" afterPath="$PROJECT_DIR$/apps/backend/tsconfig.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/backend/vercel.json" beforeDir="false" afterPath="$PROJECT_DIR$/apps/backend/vercel.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/index.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/apps/frontend/src/App.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/App.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/assets/northwestern-logo.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/assets/northwestern-logo.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/apps/frontend/src/components/authentication/create-an-account-card.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/components/authentication/create-an-account-card.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/apps/frontend/src/components/authentication/forgot-password-card.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/components/authentication/forgot-password-card.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/apps/frontend/src/components/authentication/reset-password-card.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/components/authentication/reset-password-card.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/apps/frontend/src/components/authentication/sign-in-card.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/components/authentication/sign-in-card.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/src/pages/reset-password/reset-password.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/components/miscellaneous/navbar.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/components/miscellaneous/navbar.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/contexts/user-context.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/contexts/user-context.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/contexts/user-provider.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/contexts/user-provider.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/hooks/useUser.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/hooks/useUser.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/layouts/protected-layout.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/layouts/protected-layout.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/layouts/public-layout.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/layouts/public-layout.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/main.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/main.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/pages/create-an-account/create-an-account.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/pages/create-an-account/create-an-account.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/pages/email-actions/email-actions.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/pages/email-actions/email-actions.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/pages/forgot-password/forgot-password.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/pages/forgot-password/forgot-password.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/pages/players/players.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/pages/players/players.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/pages/signin/signin.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/pages/signin/signin.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/pages/training-blocks/training-blocks.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/pages/training-blocks/training-blocks.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/utils/firebase.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/utils/firebase.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/utils/schemas.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/utils/schemas.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/utils/types.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/utils/types.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/vite.config.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/vite.config.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/eslint-config/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/packages/eslint-config/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/eslint-config/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/packages/eslint-config/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/typescript-config/base.json" beforeDir="false" afterPath="$PROJECT_DIR$/packages/typescript-config/base.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/typescript-config/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/packages/typescript-config/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/typescript-config/react-library.json" beforeDir="false" afterPath="$PROJECT_DIR$/packages/typescript-config/react-library.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/typescript-config/vite.json" beforeDir="false" afterPath="$PROJECT_DIR$/packages/typescript-config/vite.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pnpm-lock.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/pnpm-lock.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pnpm-workspace.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/pnpm-workspace.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/turbo.json" beforeDir="false" afterPath="$PROJECT_DIR$/turbo.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -63,7 +102,7 @@
     "RunOnceActivity.git.unshallow": "true",
     "git-widget-placeholder": "feature/firebase-authentication",
     "junie.onboarding.icon.badge.shown": "true",
-    "last_opened_file_path": "/Users/larryling/WebstormProjects/nu-soccer-idp-scheduler/apps/frontend/src/components/authentication",
+    "last_opened_file_path": "/Users/larryling/WebstormProjects/nu-soccer-idp-scheduler",
     "list.type.of.created.stylesheet": "CSS",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
@@ -71,18 +110,18 @@
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
     "npm.backend > build.executor": "Run",
-    "settings.editor.selected.configurable": "preferences.pluginManager",
+    "settings.editor.selected.configurable": "settings.json.schema",
     "ts.external.directory.path": "/Users/larryling/WebstormProjects/nu-soccer-idp-scheduler/apps/backend/node_modules/typescript/lib",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$" />
       <recent name="$PROJECT_DIR$/apps/frontend/src/components/authentication" />
       <recent name="$PROJECT_DIR$/apps/frontend/src/layouts" />
       <recent name="$PROJECT_DIR$/apps/frontend" />
       <recent name="$PROJECT_DIR$/apps/frontend/src/pages" />
-      <recent name="$PROJECT_DIR$/apps/frontend/src/pages/training-blocks" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/apps/frontend/src/pages/actions" />
@@ -124,7 +163,7 @@
       <option name="presentableId" value="Default" />
       <updated>1750053541637</updated>
       <workItem from="1750053542606" duration="243000" />
-      <workItem from="1750053895745" duration="98030000" />
+      <workItem from="1750053895745" duration="100432000" />
     </task>
     <servers />
   </component>

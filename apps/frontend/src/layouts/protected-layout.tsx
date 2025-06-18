@@ -5,21 +5,23 @@ import { useEffect } from "react";
 import { useUser } from "../hooks/useUser.ts";
 
 export default function ProtectedLayout() {
-  const context = useUser();
-  const navigate = useNavigate();
+    const context = useUser();
+    const navigate = useNavigate();
 
-  useEffect(() => {
-    if (context.user === null) {
-      navigate("/signin", { replace: true });
-    }
-  }, [navigate, context.user]);
+    useEffect(() => {
+        if (context.user === null) {
+            navigate("/signin", { replace: true });
+        }
+    }, [navigate, context.user]);
 
-  return (
-    <>
-      <Navbar />
-      <Box p="72px" width="100%" height="100%">
-        <Outlet />
-      </Box>
-    </>
-  );
+    return (
+        context.isLoading && (
+            <>
+                <Navbar />
+                <Box p="72px" width="100%" height="100%">
+                    <Outlet />
+                </Box>
+            </>
+        )
+    );
 }

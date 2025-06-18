@@ -1,3 +1,3 @@
 export default function Players() {
-  return <>Players Page</>;
+    return <>Players Page</>;
 }

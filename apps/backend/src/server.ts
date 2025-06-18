@@ -13,5 +13,5 @@ app.use(cookieParser());
 app.use("/api", firebaseRoutes);
 
 app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+    console.log(`Server running on port ${PORT}`);
 });
