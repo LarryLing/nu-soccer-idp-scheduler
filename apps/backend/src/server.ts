@@ -1,8 +1,10 @@
 import firebaseRoutes from "./routes/firebaseRoutes";
 import express from "express";
 import cookieParser from "cookie-parser";
+import dotenv from "dotenv";
 
-require("dotenv").config();
+dotenv.config();
+
 const PORT = process.env.PORT || 3000;
 
 const app = express();

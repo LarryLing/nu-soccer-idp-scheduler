@@ -60,9 +60,9 @@ export function UserProvider({ children }: PropsWithChildren) {
             } else {
                 setUser(null);
             }
+
             setIsLoading(false);
         });
-
         return () => unsubscribe();
     }, []);
 

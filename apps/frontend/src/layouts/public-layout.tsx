@@ -12,5 +12,5 @@ export default function PublicLayout() {
         }
     }, [navigate, context.user]);
 
-    return context.isLoading && <Outlet />;
+    return <Outlet />;
 }

@@ -12,6 +12,7 @@ import { useUser } from "../../hooks/useUser.ts";
 import { useActionState } from "react";
 import { CreateAnAccountSchema } from "../../utils/schemas.ts";
 import type { AuthFormState } from "../../utils/types.ts";
+import { FirebaseError } from "firebase/app";
 
 export default function CreateAnAccountCard() {
     const context = useUser();
@@ -36,21 +37,23 @@ export default function CreateAnAccountCard() {
 
         try {
             await context.signUp(result.data.email, result.data.password);
-        } catch (error: any) {
-            console.error(error);
+        } catch (error: unknown) {
+            if (error instanceof FirebaseError) {
+                console.error(error);
 
-            if (error.code === "auth/email-already-in-use") {
-                return {
-                    errors: {
-                        email: ["Email already in use"],
-                    },
-                };
-            } else {
-                return {
-                    errors: {
-                        email: ["An unexpected error occurred"],
-                    },
-                };
+                if (error.code === "auth/email-already-in-use") {
+                    return {
+                        errors: {
+                            email: ["Email already in use"],
+                        },
+                    };
+                } else {
+                    return {
+                        errors: {
+                            email: ["An unexpected error occurred"],
+                        },
+                    };
+                }
             }
         }
 
