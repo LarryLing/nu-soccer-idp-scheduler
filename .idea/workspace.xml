@@ -5,14 +5,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b05902af-5cdc-4fb0-944c-d2d26c9f2b39" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/apps/frontend/src/components/players/AvailabilityBadge.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/apps/frontend/src/components/players/PositionBadge.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/apps/frontend/src/pages/players/Column.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/apps/frontend/src/pages/players/DataTable.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/apps/frontend/src/components/players/PlayerActionsDropdown.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/apps/frontend/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/components/miscellaneous/Navbar.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/components/miscellaneous/Navbar.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/pages/players/Column.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/pages/players/Column.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/pages/players/DataTable.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/pages/players/DataTable.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/apps/frontend/src/pages/players/Players.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/pages/players/Players.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/src/utils/types.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/utils/types.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pnpm-lock.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/pnpm-lock.yaml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
