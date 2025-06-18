@@ -1,8 +1,11 @@
 import NorthwesternLogo from "../../assets/northwestern-logo.tsx";
 import { Button, Flex, Text, Link } from "@radix-ui/themes";
 import { Link as ReactRouterLink } from "react-router";
+import { useUser } from "../../hooks/useUser.ts";
 
 export default function Navbar() {
+  const context = useUser();
+
   return (
     <Flex
       px="72px"
@@ -27,7 +30,9 @@ export default function Navbar() {
             Training Blocks
           </ReactRouterLink>
         </Link>
-        <Button type="button">Sign Out</Button>
+        <Button type="button" onClick={() => context.signOut()}>
+          Sign Out
+        </Button>
       </Flex>
     </Flex>
   );

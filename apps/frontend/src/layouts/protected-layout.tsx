@@ -2,19 +2,17 @@ import { Outlet, useNavigate } from "react-router";
 import Navbar from "../components/miscellaneous/navbar.tsx";
 import { Box } from "@radix-ui/themes";
 import { useEffect } from "react";
+import { useUser } from "../hooks/useUser.ts";
 
 export default function ProtectedLayout() {
-  const user = {
-    id: 123,
-    username: "test",
-  };
+  const context = useUser();
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (user === null) {
+    if (context.user === null) {
       navigate("/signin", { replace: true });
     }
-  }, [navigate, user]);
+  }, [navigate, context.user]);
 
   return (
     <>

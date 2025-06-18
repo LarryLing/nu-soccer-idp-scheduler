@@ -7,13 +7,59 @@ import {
   Text,
   TextField,
 } from "@radix-ui/themes";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
+import { z } from "zod";
+import { useUser } from "../../hooks/useUser.ts";
+import { useActionState } from "react";
+
+const CreateAnAccountSchema = z.object({
+  email: z.string().email(),
+  password: z.string().min(8),
+  confirmPassword: z.string().min(8),
+});
+
+type CreateAnAccountFormState = {
+  errors?: {
+    email?: string[];
+    password?: string[];
+    confirmPassword?: string[];
+  };
+} | null;
 
 export default function CreateAnAccountCard() {
+  const context = useUser();
+  const navigate = useNavigate();
+  const [state, formAction, isPending] = useActionState<
+    CreateAnAccountFormState,
+    FormData
+  >(submitForm, null);
+
+  async function submitForm(
+    prevState: CreateAnAccountFormState,
+    formData: FormData,
+  ) {
+    const result = CreateAnAccountSchema.safeParse({
+      email: formData.get("email"),
+      password: formData.get("password"),
+      confirmPassword: formData.get("confirmPassword"),
+    });
+
+    if (!result.success) {
+      return {
+        errors: result.error.flatten().fieldErrors,
+      };
+    }
+
+    await context.signUp(result.data.email, result.data.password);
+
+    navigate("/players");
+    return prevState;
+  }
+
   return (
     <Box width="400px">
       <Card size="4">
-        <form action={() => {}}>
+        <form action={formAction}>
           <Heading size="6" mb="5">
             Create An Account
           </Heading>
@@ -28,6 +74,11 @@ export default function CreateAnAccountCard() {
                 placeholder="Enter your email address"
                 className="w-full"
               />
+              {state?.errors?.email && (
+                <Text size="2" weight="regular" as="p" color="red">
+                  {state.errors.email}
+                </Text>
+              )}
             </label>
           </Box>
           <Box mb="5">
@@ -42,6 +93,11 @@ export default function CreateAnAccountCard() {
                 placeholder="Enter your password"
                 className="w-full"
               />
+              {state?.errors?.password && (
+                <Text size="2" weight="regular" as="p" color="red">
+                  {state.errors.password}
+                </Text>
+              )}
             </label>
           </Box>
           <Box mb="5">
@@ -56,12 +112,19 @@ export default function CreateAnAccountCard() {
                 placeholder="Confirm your password"
                 className="w-full"
               />
+              {state?.errors?.confirmPassword && (
+                <Text size="2" weight="regular" as="p" color="red">
+                  {state.errors.confirmPassword}
+                </Text>
+              )}
             </label>
           </Box>
           <Flex direction="row-reverse" gap="4">
-            <Button type="submit">Create Account</Button>
+            <Button type="submit" disabled={isPending}>
+              Create Account
+            </Button>
             <Link to="/signin">
-              <Button variant="soft" type="button">
+              <Button variant="soft" type="button" disabled={isPending}>
                 Go Back
               </Button>
             </Link>

@@ -1,173 +1,85 @@
-import { useEffect, useState, type ReactNode, type ReactElement } from "react";
-import type { User, UserContextType } from "../utils/types.ts";
+import { type PropsWithChildren, useEffect, useState } from "react";
+import type { User } from "../utils/types.ts";
 import { UserContext } from "./user-context.tsx";
 import { clientAuth } from "../utils/firebase.ts";
 import {
+  createUserWithEmailAndPassword,
+  sendPasswordResetEmail,
   signInWithEmailAndPassword,
   signOut,
-  sendPasswordResetEmail,
+  updatePassword,
 } from "firebase/auth";
 
-interface UserProviderProps {
-  children: ReactNode;
-}
-
-export function UserProvider({ children }: UserProviderProps): ReactElement {
+export function UserProvider({ children }: PropsWithChildren) {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
 
-  const buildUrl = (endpoint: string): string =>
-    `http://localhost:3000${endpoint}`;
-  // `${import.meta.env.VITE_BACKEND_URL?.replace(/\/$/, '')}${endpoint}`;
+  const signUpUser = async (email?: string, password?: string) => {
+    if (!email || !password) {
+      throw new Error("Email and password required");
+    }
 
-  const loadUser = async (): Promise<void> => {
-    await checkAuth();
+    await createUserWithEmailAndPassword(clientAuth, email, password);
   };
 
-  const checkAuth = async (): Promise<boolean> => {
-    try {
-      const currentUser = clientAuth.currentUser;
-      if (!currentUser) {
-        return false;
-      }
-
-      const idToken = await currentUser.getIdToken();
-
-      const response = await fetch("api/auth/check", {
-        headers: {
-          authorization: `Bearer ${idToken}`,
-        },
-      });
-
-      if (!response.ok) {
-        throw new Error("User not found, must reauthenticate");
-      }
-
-      const data = await response.json();
-      setUser({
-        uid: data.uid,
-        email: data.email,
-      });
-      setIsAuthenticated(true);
-      return true;
-    } catch {
-      setUser(null);
-      setIsAuthenticated(false);
-      return false;
-    } finally {
-      setIsLoading(false);
+  const signInUser = async (email?: string, password?: string) => {
+    if (!email || !password) {
+      throw new Error("Email and password required");
     }
+
+    await signInWithEmailAndPassword(clientAuth, email, password);
   };
 
-  const signin = async (email: string, password: string): Promise<boolean> => {
-    try {
-      const userCredential = await signInWithEmailAndPassword(
-        clientAuth,
-        email,
-        password,
-      );
-      const idToken = await userCredential.user.getIdToken();
-
-      const response = await fetch("api/auth/signin", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ idToken }),
-      });
-
-      if (!response.ok) {
-        throw new Error("Auth check failed");
-      }
-
-      const data = await response.json();
-
-      setUser({
-        uid: data.uid,
-        email: data.email,
-      });
-      setIsAuthenticated(true);
-      return true;
-    } catch (error) {
-      console.error("Signin error:", error);
-      return false;
-    } finally {
-      setIsLoading(false);
-    }
+  const signOutUser = async () => {
+    await signOut(clientAuth);
   };
 
-  const signout = async (): Promise<void> => {
-    try {
-      await signOut(clientAuth);
-      const uid = clientAuth.currentUser?.uid;
-
-      await fetch("/api/auth/signout", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ uid }),
-      });
-    } catch (error) {
-      console.error("Signout error:", error);
+  const requestPasswordReset = async (email?: string) => {
+    if (!email) {
+      throw new Error("Email required");
     }
+
+    await sendPasswordResetEmail(clientAuth, email);
   };
 
-  const requestPasswordReset = async (email: string) => {
-    try {
-      await sendPasswordResetEmail(clientAuth, email);
-      return true;
-    } catch (error) {
-      console.error("Password reset error:", error);
-      return false;
+  const resetPassword = async (newPassword?: string) => {
+    if (!newPassword) {
+      throw new Error("New password required");
     }
-  };
 
-  const updatePassword = async (
-    password: string,
-    accessToken: string,
-  ): Promise<boolean> => {
-    try {
-      const response = await fetch(buildUrl("/auth/reset-password"), {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${accessToken}`,
-        },
-        body: JSON.stringify({ password }),
-      });
-
-      if (!response.ok) {
-        const data = await response.json();
-        throw new Error(data.error || "Password update failed");
-      }
-
-      return true;
-    } catch (error) {
-      console.error("Password update error:", error);
-      throw error;
-    }
+    if (clientAuth.currentUser)
+      await updatePassword(clientAuth.currentUser, newPassword);
   };
 
   useEffect(() => {
-    const initialize = async () => {
-      await loadUser();
-    };
-    initialize();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    const unsubscribe = clientAuth.onAuthStateChanged((user) => {
+      if (user) {
+        setUser({
+          uid: user.uid,
+          email: user.email || "",
+        });
+      } else {
+        setUser(null);
+      }
+      setIsLoading(false);
+    });
+
+    return () => unsubscribe();
   }, []);
 
-  const contextValue: UserContextType = {
-    user,
-    setUser,
-    isLoading,
-    isAuthenticated,
-    signin,
-    signout,
-    loadUser,
-    checkAuth,
-    requestPasswordReset,
-    updatePassword,
+  const value = {
+    user: user,
+    isLoading: isLoading,
+    signUp: signUpUser,
+    signIn: signInUser,
+    signOut: signOutUser,
+    requestPasswordReset: requestPasswordReset,
+    resetPassword: resetPassword,
   };
 
-  return (
-    <UserContext.Provider value={contextValue}>{children}</UserContext.Provider>
-  );
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  return <UserContext.Provider value={value}>{children}</UserContext.Provider>;
 }

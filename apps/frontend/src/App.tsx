@@ -11,6 +11,7 @@ import "./styles/northwestern.css";
 import "./styles/gray.css";
 import "./styles/background.css";
 import { UserProvider } from "./contexts/user-provider.tsx";
+import PublicLayout from "./layouts/public-layout.tsx";
 
 function App() {
   return (
@@ -18,13 +19,15 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Navigate to="/players" replace />} />
-          <Route index path="signin" element={<SignIn />} />
-          <Route path="create-an-account" element={<CreateAnAccount />} />
-          <Route path="forgot-password" element={<ForgotPassword />} />
+          <Route element={<PublicLayout />}>
+            <Route path="/signin" element={<SignIn />} />
+            <Route path="/create-an-account" element={<CreateAnAccount />} />
+            <Route path="/forgot-password" element={<ForgotPassword />} />
+          </Route>
           <Route element={<ProtectedLayout />}>
-            <Route path="players" element={<Players />} />
-            <Route path="training-blocks" element={<TrainingBlocks />} />
-            <Route path="reset-password" element={<ResetPassword />} />
+            <Route path="/players" element={<Players />} />
+            <Route path="/training-blocks" element={<TrainingBlocks />} />
+            <Route path="/reset-password" element={<ResetPassword />} />
           </Route>
         </Routes>
       </BrowserRouter>
