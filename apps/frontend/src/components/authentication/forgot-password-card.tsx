@@ -8,31 +8,19 @@ import {
   TextField,
 } from "@radix-ui/themes";
 import { Link } from "react-router";
-import { z } from "zod";
 import { useUser } from "../../hooks/useUser.ts";
 import { useActionState } from "react";
-
-const ForgotPasswordFormSchema = z.object({
-  email: z.string().email(),
-});
-
-type ForgotPasswordFormState = {
-  errors?: {
-    email?: string[];
-  };
-} | null;
+import { ForgotPasswordFormSchema } from "../../utils/schemas.ts";
+import type { AuthFormState } from "../../utils/types.ts";
 
 export default function ForgotPasswordCard() {
   const context = useUser();
   const [state, formAction, isPending] = useActionState<
-    ForgotPasswordFormState,
+    AuthFormState,
     FormData
   >(submitForm, null);
 
-  async function submitForm(
-    prevState: ForgotPasswordFormState,
-    formData: FormData,
-  ) {
+  async function submitForm(prevState: AuthFormState, formData: FormData) {
     const result = ForgotPasswordFormSchema.safeParse({
       email: formData.get("email"),
     });

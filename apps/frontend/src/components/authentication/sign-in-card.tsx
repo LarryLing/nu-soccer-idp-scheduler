@@ -9,31 +9,20 @@ import {
   Link,
 } from "@radix-ui/themes";
 import { Link as ReactRouterLink, useNavigate } from "react-router";
-import { z } from "zod";
 import { useActionState } from "react";
 import { useUser } from "../../hooks/useUser.ts";
-
-const SignInFormSchema = z.object({
-  email: z.string().email(),
-  password: z.string().min(8),
-});
-
-type SignInFormState = {
-  errors?: {
-    email?: string[];
-    password?: string[];
-  };
-} | null;
+import { SignInFormSchema } from "../../utils/schemas.ts";
+import type { AuthFormState } from "../../utils/types.ts";
 
 export default function SignInCard() {
   const context = useUser();
   const navigate = useNavigate();
   const [state, formAction, isPending] = useActionState<
-    SignInFormState,
+    AuthFormState,
     FormData
   >(submitForm, null);
 
-  async function submitForm(prevState: SignInFormState, formData: FormData) {
+  async function submitForm(prevState: AuthFormState, formData: FormData) {
     const result = SignInFormSchema.safeParse({
       email: formData.get("email"),
       password: formData.get("password"),

@@ -15,3 +15,11 @@ export type UserContextType = {
     newPassword?: string,
   ) => Promise<void>;
 };
+
+export type AuthFormState = {
+  errors?: {
+    email?: string[];
+    password?: string[];
+    confirmPassword?: string[];
+  };
+} | null;

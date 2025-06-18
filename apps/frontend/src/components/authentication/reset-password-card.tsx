@@ -7,24 +7,13 @@ import {
   Text,
   TextField,
 } from "@radix-ui/themes";
-import { z } from "zod";
 import { useUser } from "../../hooks/useUser.ts";
 import { useActionState, useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router";
 import { verifyPasswordResetCode } from "firebase/auth";
 import { clientAuth } from "../../utils/firebase.ts";
-
-const ResetPasswordFormSchema = z.object({
-  password: z.string().min(8),
-  confirmPassword: z.string().min(8),
-});
-
-type ResetPasswordFormState = {
-  errors?: {
-    password?: string[];
-    confirmPassword?: string[];
-  };
-} | null;
+import { ResetPasswordFormSchema } from "../../utils/schemas.ts";
+import type { AuthFormState } from "../../utils/types.ts";
 
 export default function ResetPasswordCard() {
   const context = useUser();
@@ -32,17 +21,14 @@ export default function ResetPasswordCard() {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(true);
   const [state, formAction, isPending] = useActionState<
-    ResetPasswordFormState,
+    AuthFormState,
     FormData
   >(submitForm, null);
 
   const mode = searchParams.get("mode");
   const actionCode = searchParams.get("oobCode");
 
-  async function submitForm(
-    prevState: ResetPasswordFormState,
-    formData: FormData,
-  ) {
+  async function submitForm(prevState: AuthFormState, formData: FormData) {
     const result = ResetPasswordFormSchema.safeParse({
       password: formData.get("password"),
       confirmPassword: formData.get("confirmPassword"),
@@ -118,9 +104,16 @@ export default function ResetPasswordCard() {
                   className="w-full"
                 />
                 {state?.errors?.password && (
-                  <Text size="2" weight="regular" as="p" color="red">
-                    {state.errors.password}
-                  </Text>
+                  <>
+                    <Text size="2" weight="regular" as="p" color="red">
+                      Password must:
+                    </Text>
+                    {state.errors.password.map((value) => (
+                      <Text size="2" weight="regular" as="p" color="red">
+                        - {value}
+                      </Text>
+                    ))}
+                  </>
                 )}
               </label>
             </Box>

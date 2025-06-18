@@ -8,36 +8,20 @@ import {
   TextField,
 } from "@radix-ui/themes";
 import { Link, useNavigate } from "react-router";
-import { z } from "zod";
 import { useUser } from "../../hooks/useUser.ts";
 import { useActionState } from "react";
-
-const CreateAnAccountSchema = z.object({
-  email: z.string().email(),
-  password: z.string().min(8),
-  confirmPassword: z.string().min(8),
-});
-
-type CreateAnAccountFormState = {
-  errors?: {
-    email?: string[];
-    password?: string[];
-    confirmPassword?: string[];
-  };
-} | null;
+import { CreateAnAccountSchema } from "../../utils/schemas.ts";
+import type { AuthFormState } from "../../utils/types.ts";
 
 export default function CreateAnAccountCard() {
   const context = useUser();
   const navigate = useNavigate();
   const [state, formAction, isPending] = useActionState<
-    CreateAnAccountFormState,
+    AuthFormState,
     FormData
   >(submitForm, null);
 
-  async function submitForm(
-    prevState: CreateAnAccountFormState,
-    formData: FormData,
-  ) {
+  async function submitForm(prevState: AuthFormState, formData: FormData) {
     const result = CreateAnAccountSchema.safeParse({
       email: formData.get("email"),
       password: formData.get("password"),
@@ -94,9 +78,16 @@ export default function CreateAnAccountCard() {
                 className="w-full"
               />
               {state?.errors?.password && (
-                <Text size="2" weight="regular" as="p" color="red">
-                  {state.errors.password}
-                </Text>
+                <>
+                  <Text size="2" weight="regular" as="p" color="red">
+                    Password must:
+                  </Text>
+                  {state.errors.password.map((value) => (
+                    <Text size="2" weight="regular" as="p" color="red">
+                      - {value}
+                    </Text>
+                  ))}
+                </>
               )}
             </label>
           </Box>
