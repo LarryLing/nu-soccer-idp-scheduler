@@ -34,7 +34,25 @@ export default function CreateAnAccountCard() {
       };
     }
 
-    await context.signUp(result.data.email, result.data.password);
+    try {
+      await context.signUp(result.data.email, result.data.password);
+    } catch (error: any) {
+      console.error(error);
+
+      if (error.code === "auth/email-already-in-use") {
+        return {
+          errors: {
+            email: ["Email already in use"],
+          }
+        };
+      } else {
+        return {
+          errors: {
+            email: ["An unexpected error occurred"],
+          }
+        };
+      }
+    }
 
     navigate("/players");
     return prevState;

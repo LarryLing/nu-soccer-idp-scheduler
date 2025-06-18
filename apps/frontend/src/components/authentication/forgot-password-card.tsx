@@ -31,7 +31,17 @@ export default function ForgotPasswordCard() {
       };
     }
 
-    await context.requestPasswordReset(result.data.email);
+    try {
+      await context.requestPasswordReset(result.data.email);
+    } catch (error) {
+      console.error(error);
+
+      return {
+        errors: {
+          email: ["An unexpected error occurred"],
+        }
+      }
+    }
 
     return prevState;
   }
