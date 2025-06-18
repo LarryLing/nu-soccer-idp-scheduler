@@ -5,9 +5,21 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b05902af-5cdc-4fb0-944c-d2d26c9f2b39" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/apps/backend/vercel.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/apps/frontend/vercel.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/public/images/trianglify.png" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/public/images/trianglify.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/components/miscellaneous/navbar.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/components/miscellaneous/navbar.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/index.css" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/index.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/layouts/protected-layout.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/layouts/protected-layout.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/layouts/public-layout.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/layouts/public-layout.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/pages/create-an-account/create-an-account.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/pages/create-an-account/create-an-account.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/pages/email-actions/email-actions.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/pages/email-actions/email-actions.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/pages/forgot-password/forgot-password.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/pages/forgot-password/forgot-password.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/pages/players/players.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/pages/players/players.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/pages/signin/signin.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/pages/signin/signin.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/pages/training-blocks/training-blocks.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/pages/training-blocks/training-blocks.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/vite.config.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/vite.config.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pnpm-lock.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/pnpm-lock.yaml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -18,6 +30,7 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="CSS File" />
+        <option value="TypeScript JSX File" />
         <option value="TypeScript File" />
       </list>
     </option>
@@ -53,9 +66,9 @@
     "ModuleVcsDetector.initialDetectionPerformed": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "main",
+    "git-widget-placeholder": "feature/firebase-authentication",
     "junie.onboarding.icon.badge.shown": "true",
-    "last_opened_file_path": "/Users/larryling/WebstormProjects/nu-soccer-idp-scheduler/apps/backend",
+    "last_opened_file_path": "/Users/larryling/WebstormProjects/nu-soccer-idp-scheduler",
     "list.type.of.created.stylesheet": "CSS",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
@@ -63,20 +76,25 @@
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
     "npm.backend > build.executor": "Run",
-    "settings.editor.selected.configurable": "preferences.keymap",
+    "settings.editor.selected.configurable": "settings.json.schema",
     "ts.external.directory.path": "/Users/larryling/WebstormProjects/nu-soccer-idp-scheduler/apps/backend/node_modules/typescript/lib",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/apps/backend" />
+      <recent name="$PROJECT_DIR$" />
+      <recent name="$PROJECT_DIR$/apps/frontend/src/components/authentication" />
+      <recent name="$PROJECT_DIR$/apps/frontend/src/layouts" />
+      <recent name="$PROJECT_DIR$/apps/frontend" />
+      <recent name="$PROJECT_DIR$/apps/frontend/src/pages" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/apps/frontend/public/images" />
+      <recent name="$PROJECT_DIR$/apps/frontend/src/pages/actions" />
       <recent name="$PROJECT_DIR$/apps/backend/src" />
-      <recent name="$PROJECT_DIR$/apps/backend" />
-      <recent name="$PROJECT_DIR$/apps/frontend/src/styles" />
-      <recent name="$PROJECT_DIR$" />
+      <recent name="$PROJECT_DIR$/apps/frontend/public" />
+      <recent name="$PROJECT_DIR$/apps/frontend/src/pages" />
     </key>
   </component>
   <component name="RunManager">
@@ -111,12 +129,23 @@
       <option name="presentableId" value="Default" />
       <updated>1750053541637</updated>
       <workItem from="1750053542606" duration="243000" />
-      <workItem from="1750053895745" duration="22055000" />
+      <workItem from="1750053895745" duration="106881000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
