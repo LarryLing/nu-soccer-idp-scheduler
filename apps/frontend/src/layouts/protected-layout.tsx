@@ -1,8 +1,9 @@
 import { Outlet, useNavigate } from "react-router";
 import Navbar from "../components/miscellaneous/navbar.tsx";
-import { Box } from "@radix-ui/themes";
+import { Box, Flex } from "@radix-ui/themes";
 import { useEffect } from "react";
 import { useUser } from "../hooks/useUser.ts";
+import trianglify from "../../public/images/trianglify.png";
 
 export default function ProtectedLayout() {
     const context = useUser();
@@ -15,11 +16,17 @@ export default function ProtectedLayout() {
     }, [navigate, context.user]);
 
     return (
-        <>
+        <Flex
+            direction="column"
+            height="100vh"
+            style={{
+                background: `url(${trianglify}) no-repeat center center fixed`,
+            }}
+        >
             <Navbar />
-            <Box p="72px" width="100%" height="100%">
+            <Box px="72px" width="100%" height="100%">
                 <Outlet />
             </Box>
-        </>
+        </Flex>
     );
 }

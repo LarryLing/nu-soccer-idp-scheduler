@@ -6,16 +6,19 @@
   <component name="ChangeListManager">
     <list default="true" id="b05902af-5cdc-4fb0-944c-d2d26c9f2b39" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/backend/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/apps/backend/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/backend/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/apps/backend/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/backend/src/server.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/backend/src/server.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/apps/frontend/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/src/components/authentication/create-an-account-card.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/components/authentication/create-an-account-card.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/src/components/authentication/sign-in-card.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/components/authentication/sign-in-card.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/src/contexts/user-provider.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/contexts/user-provider.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/public/images/trianglify.png" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/public/images/trianglify.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/components/miscellaneous/navbar.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/components/miscellaneous/navbar.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/index.css" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/index.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/apps/frontend/src/layouts/protected-layout.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/layouts/protected-layout.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/apps/frontend/src/layouts/public-layout.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/layouts/public-layout.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/eslint-config/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/packages/eslint-config/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/pages/create-an-account/create-an-account.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/pages/create-an-account/create-an-account.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/pages/email-actions/email-actions.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/pages/email-actions/email-actions.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/pages/forgot-password/forgot-password.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/pages/forgot-password/forgot-password.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/pages/players/players.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/pages/players/players.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/pages/signin/signin.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/pages/signin/signin.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/pages/training-blocks/training-blocks.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/pages/training-blocks/training-blocks.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/vite.config.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/vite.config.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pnpm-lock.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/pnpm-lock.yaml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -87,9 +90,9 @@
       <recent name="$PROJECT_DIR$/apps/frontend/src/pages" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/apps/frontend/public/images" />
       <recent name="$PROJECT_DIR$/apps/frontend/src/pages/actions" />
       <recent name="$PROJECT_DIR$/apps/backend/src" />
-      <recent name="$PROJECT_DIR$/apps/frontend/public/images" />
       <recent name="$PROJECT_DIR$/apps/frontend/public" />
       <recent name="$PROJECT_DIR$/apps/frontend/src/pages" />
     </key>
@@ -126,7 +129,7 @@
       <option name="presentableId" value="Default" />
       <updated>1750053541637</updated>
       <workItem from="1750053542606" duration="243000" />
-      <workItem from="1750053895745" duration="103131000" />
+      <workItem from="1750053895745" duration="106881000" />
     </task>
     <servers />
   </component>

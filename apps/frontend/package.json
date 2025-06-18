@@ -11,13 +11,11 @@
   },
   "dependencies": {
     "@radix-ui/themes": "^3.2.1",
-    "@tailwindcss/vite": "^4.1.10",
     "dotenv": "^16.5.0",
     "firebase": "^11.9.1",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "react-router": "^7.6.2",
-    "tailwindcss": "^4.1.10",
     "zod": "^3.25.67"
   },
   "devDependencies": {

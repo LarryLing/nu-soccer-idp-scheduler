@@ -1,3 +1,5 @@
+import { Section } from "@radix-ui/themes";
+
 export default function Players() {
-    return <>Players Page</>;
+    return <Section>Players Page</Section>;
 }

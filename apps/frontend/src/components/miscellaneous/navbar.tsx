@@ -13,7 +13,11 @@ export default function Navbar() {
             width="100%"
             justify="between"
             align="center"
-            style={{ borderBottom: "1px solid", borderColor: "var(--gray-5)" }}
+            style={{
+                borderBottom: "1px solid",
+                borderColor: "var(--gray-5)",
+                backgroundColor: "var(--color-panel)",
+            }}
         >
             <Flex gap="4" align="center">
                 <NorthwesternLogo height={40} width={25.51} />

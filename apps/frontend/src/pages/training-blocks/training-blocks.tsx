@@ -1,3 +1,5 @@
+import { Section } from "@radix-ui/themes";
+
 export default function TrainingBlocks() {
-    return <>Training Blocks Page</>;
+    return <Section>Training Blocks Page</Section>;
 }
