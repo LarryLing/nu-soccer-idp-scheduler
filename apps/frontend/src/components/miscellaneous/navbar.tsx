@@ -1,5 +1,6 @@
 import NorthwesternLogo from "../../assets/northwestern-logo.tsx";
 import { Button, Flex, Text, Link } from "@radix-ui/themes";
+import { Link as ReactRouterLink } from "react-router";
 
 export default function Navbar() {
   return (
@@ -18,15 +19,15 @@ export default function Navbar() {
         </Text>
       </Flex>
       <Flex gap="5" align="center">
-        <Link href="#" weight="medium" color="gray">
-          Players
+        <Link weight="medium" color="gray" asChild>
+          <ReactRouterLink to="/players">Players</ReactRouterLink>
         </Link>
-        <Link href="#" weight="medium" color="gray">
-          Training Blocks
+        <Link weight="medium" color="gray" asChild>
+          <ReactRouterLink to="/training-blocks">
+            Training Blocks
+          </ReactRouterLink>
         </Link>
-        <Link href="#" asChild>
-          <Button>Sign Out</Button>
-        </Link>
+        <Button type="button">Sign Out</Button>
       </Flex>
     </Flex>
   );

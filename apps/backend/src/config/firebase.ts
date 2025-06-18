@@ -1,15 +1,27 @@
-import { initializeApp } from "firebase/app";
-import { getAuth } from "firebase/auth";
+import * as admin from "firebase-admin";
+import { getAuth } from "firebase-admin/auth";
+import dotenv from "dotenv";
 
-const app = initializeApp({
-  apiKey: process.env.REACT_APP_API_KEY,
-  authDomain: process.env.REACT_APP_AUTH_DOMAIN,
-  projectId: process.env.REACT_APP_PROJECT_ID,
-  storageBucket: process.env.REACT_APP_STORAGE_BUCKET,
-  messagingSenderId: process.env.REACT_APP_MESSAGING_SENDER_ID,
-  appId: process.env.REACT_APP_APP_ID,
-  measurementId: process.env.REACT_APP_MEASUREMENT_ID,
+dotenv.config();
+
+if (
+  !process.env.FIREBASE_PRIVATE_KEY ||
+  !process.env.FIREBASE_CLIENT_EMAIL ||
+  !process.env.FIREBASE_PROJECT_ID
+) {
+  throw new Error(
+    "Missing Firebase Admin credentials in environment variables",
+  );
+}
+
+const adminApp = admin.initializeApp({
+  credential: admin.credential.cert({
+    projectId: process.env.FIREBASE_PROJECT_ID,
+    clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
+    privateKey: process.env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, "\n"),
+  }),
 });
 
-export default app;
-export const auth = getAuth(app);
+const adminAuth = getAuth(adminApp);
+
+export { adminApp, adminAuth };

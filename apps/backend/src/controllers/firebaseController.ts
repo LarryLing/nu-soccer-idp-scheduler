@@ -1,63 +1,101 @@
-import { Request, Response, NextFunction } from "express";
-import {
-  getAuth,
-  createUserWithEmailAndPassword,
-  signInWithEmailAndPassword,
-  signOut,
-} from "firebase/auth";
+import { Request, Response } from "express";
+import { adminAuth } from "../config/firebase";
+import { IGetUserAuthInfoRequest } from "../types";
 
-export function register(req: Request, res: Response, next: NextFunction) {
+export const createUser = async (req: Request, res: Response) => {
+  const { email, password } = req.body;
+
   try {
-    const { email, password } = req.body;
+    const userRecord = await adminAuth.createUser({ email, password });
 
-    const auth = getAuth();
-    createUserWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
-        const user = userCredential.user;
-        res.status(200).send("User registered");
-      })
-      .catch((err) => {
-        const errorCode = err.statusCode || 500;
-        const errorMessage = err.message;
-        res.status(errorCode).send(errorMessage);
-      });
+    res.status(201).json({
+      uid: userRecord.uid,
+      email: userRecord.email,
+    });
+  } catch (error: any) {
+    console.error("Error creating user", error);
 
-    res.redirect("/");
-  } catch (error) {
-    res.redirect("/signin");
+    res.status(400).json({
+      error: error.message,
+    });
   }
-}
+};
 
-export function signin(req: Request, res: Response, next: NextFunction) {
+export const signinUser = async (req: Request, res: Response) => {
   try {
-    const { email, password } = req.body;
+    const { idToken } = req.body;
 
-    const auth = getAuth();
-    signInWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
-        const user = userCredential.user;
-        res.status(200).send("User registered");
-      })
-      .catch((err) => {
-        const errorCode = err.statusCode || 500;
-        const errorMessage = err.message;
-        res.status(errorCode).send(errorMessage);
-      });
+    // Verify ID token using Firebase Admin SDK
+    const decodedToken = await adminAuth.verifyIdToken(idToken);
 
-    res.redirect("/");
+    // Get user data
+    const user = await adminAuth.getUser(decodedToken.uid);
+
+    res.status(200).json({
+      uid: user.uid,
+      email: user.email,
+    });
   } catch (error) {
-    res.redirect("/signin");
+    console.error("Login error:", error);
+    res.status(401).json({ error: "Authentication failed" });
   }
-}
+};
 
-export function signout(req: Request, res: Response, next: NextFunction) {
+export const signoutUser = async (req: Request, res: Response) => {
   try {
-    const auth = getAuth();
+    const { uid } = req.body;
 
-    signOut(auth);
+    if (uid) {
+      await adminAuth.revokeRefreshTokens(uid);
+    }
 
-    res.redirect("/signin");
+    res.status(200).json({ message: "Logged out successfully" });
   } catch (error) {
-    console.log(error);
+    console.error("Logout error:", error);
+    res.status(500).json({ error: "Logout failed" });
   }
-}
+};
+
+export const checkUser = async (
+  req: IGetUserAuthInfoRequest,
+  res: Response,
+) => {
+  try {
+    const userRecord = await adminAuth.getUser(req.user.uid);
+
+    res.status(200).json({
+      uid: userRecord.uid,
+      email: userRecord.email,
+    });
+  } catch (error) {
+    console.error("Error fetching user data:", error);
+    res.status(500).json({
+      message: "Error fetching user data",
+    });
+  }
+};
+
+export const resetUserPassword = async (req: Request, res: Response) => {
+  const { uid, password } = req.body;
+
+  try {
+    const userRecord = await adminAuth.updateUser(uid, {
+      password: password,
+    });
+
+    res.status(200).json({
+      isAuthenticated: true,
+      data: {
+        uid: userRecord.uid,
+        email: userRecord.email,
+      },
+    });
+  } catch (error: any) {
+    console.error(error);
+
+    res.status(500).json({
+      isAuthenticated: false,
+      message: "Failed to reset user password",
+    });
+  }
+};

@@ -1,6 +1,6 @@
-export interface Item {
-  id: number;
-  name: string;
-}
+import { DecodedIdToken } from "firebase-admin/auth";
+import { Request } from "express";
 
-export let items: Item[] = [];
+export interface IGetUserAuthInfoRequest extends Request {
+  user: DecodedIdToken;
+}

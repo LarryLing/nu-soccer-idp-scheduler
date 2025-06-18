@@ -4,14 +4,17 @@ import { Box } from "@radix-ui/themes";
 import { useEffect } from "react";
 
 export default function ProtectedLayout() {
-  const user = null;
+  const user = {
+    id: 123,
+    username: "test",
+  };
   const navigate = useNavigate();
 
   useEffect(() => {
     if (user === null) {
       navigate("/signin", { replace: true });
     }
-  }, [navigate]);
+  }, [navigate, user]);
 
   return (
     <>
