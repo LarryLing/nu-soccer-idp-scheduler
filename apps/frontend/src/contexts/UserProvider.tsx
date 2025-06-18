@@ -1,6 +1,6 @@
 import { type PropsWithChildren, useEffect, useState } from "react";
 import type { User } from "../utils/types.ts";
-import { UserContext } from "./user-context.tsx";
+import { UserContext } from "./UserContext.tsx";
 import { clientAuth } from "../utils/firebase.ts";
 import {
     confirmPasswordReset,

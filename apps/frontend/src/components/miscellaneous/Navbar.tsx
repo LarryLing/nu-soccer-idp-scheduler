@@ -1,7 +1,8 @@
-import NorthwesternLogo from "../../assets/northwestern-logo.tsx";
+import NorthwesternLogo from "../../assets/NorthwesternLogo.tsx";
 import { Button, Flex, Text, Link } from "@radix-ui/themes";
 import { Link as ReactRouterLink } from "react-router";
 import { useUser } from "../../hooks/useUser.ts";
+import { ExitIcon } from "@radix-ui/react-icons";
 
 export default function Navbar() {
     const context = useUser();
@@ -35,6 +36,7 @@ export default function Navbar() {
                     </ReactRouterLink>
                 </Link>
                 <Button type="button" onClick={() => context.signOut()}>
+                    <ExitIcon />
                     Sign Out
                 </Button>
             </Flex>
