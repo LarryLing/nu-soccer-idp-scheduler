@@ -28,8 +28,8 @@ export function ActionRow<TData>({ table }: ActionRowProps<TData>) {
         .getFilteredSelectedRowModel()
         .rows.map((row) => (row.original as Player).id);
 
-    const handleRemovePlayers = () => {
-        removePlayers(selectedPlayerIds);
+    const handleRemovePlayers = async () => {
+        await removePlayers(selectedPlayerIds);
         table.resetRowSelection();
     };
 

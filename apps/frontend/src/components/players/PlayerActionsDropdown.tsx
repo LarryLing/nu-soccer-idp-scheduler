@@ -14,6 +14,11 @@ export default function PlayerActionsDropdown<TData>({
 }: PlayerActionsDropdownProps<TData>) {
     const { removePlayer } = useFirestore();
 
+    const handleRemovePlayer = async () => {
+        await removePlayer(playerId);
+        table.resetRowSelection();
+    };
+
     return (
         <DropdownMenu.Root>
             <DropdownMenu.Trigger>
@@ -25,10 +30,7 @@ export default function PlayerActionsDropdown<TData>({
                 <DropdownMenu.Item>Edit</DropdownMenu.Item>
                 <DropdownMenu.Item
                     color="red"
-                    onClick={() => {
-                        removePlayer(playerId);
-                        table.resetRowSelection();
-                    }}
+                    onClick={handleRemovePlayer}
                 >
                     Delete
                 </DropdownMenu.Item>

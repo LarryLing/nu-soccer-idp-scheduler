@@ -1,7 +1,14 @@
 import { type PropsWithChildren, useEffect, useState } from "react";
 import type { Player, TrainingBlock } from "../utils/types.ts";
 import { FirestoreContext } from "./FirestoreContext.tsx";
-import { collection, query, getDocs, orderBy } from "firebase/firestore";
+import {
+    collection,
+    query,
+    getDocs,
+    orderBy,
+    deleteDoc,
+    doc,
+} from "firebase/firestore";
 import { clientFirestore } from "../utils/firebase.ts";
 import { FirebaseError } from "firebase/app";
 
@@ -17,7 +24,7 @@ export function FirestoreProvider({
     const [trainingBlocks, setTrainingBlocks] = useState<TrainingBlock[]>([]);
     const [isLoading, setIsLoading] = useState<boolean>(true);
 
-    const addPlayer = (player?: Player) => {
+    const addPlayer = async (player?: Player) => {
         if (!player) {
             throw new Error("Player is required");
         }
@@ -25,15 +32,17 @@ export function FirestoreProvider({
         setPlayers((prev) => [...prev, player]);
     };
 
-    const removePlayer = (playerId?: string) => {
+    const removePlayer = async (playerId?: string) => {
         if (!playerId) {
             throw new Error("Player ID is required");
         }
 
         setPlayers((prev) => prev.filter((player) => player.id !== playerId));
+
+        await deleteDoc(doc(clientFirestore, `users/${userId!}/players/${playerId}`))
     };
 
-    const removePlayers = (playerIds?: string[]) => {
+    const removePlayers = async (playerIds?: string[]) => {
         if (!playerIds) {
             throw new Error("Player IDs are required");
         }
@@ -43,7 +52,7 @@ export function FirestoreProvider({
         );
     };
 
-    const addTrainingBlock = (trainingBlock?: TrainingBlock) => {
+    const addTrainingBlock = async (trainingBlock?: TrainingBlock) => {
         if (!trainingBlock) {
             throw new Error("Training block is required");
         }
@@ -51,7 +60,7 @@ export function FirestoreProvider({
         setTrainingBlocks((prev) => [...prev, trainingBlock]);
     };
 
-    const removeTrainingBlock = (trainingBlockId?: string) => {
+    const removeTrainingBlock = async (trainingBlockId?: string) => {
         if (!trainingBlockId) {
             throw new Error("Training block ID is required");
         }
@@ -63,7 +72,7 @@ export function FirestoreProvider({
         );
     };
 
-    const assignPlayerToTrainingBlock = (
+    const assignPlayerToTrainingBlock = async (
         trainingBlockId?: string,
         playerId?: string,
     ) => {
@@ -74,7 +83,7 @@ export function FirestoreProvider({
         return;
     };
 
-    const unassignPlayerFromTrainingBlock = (
+    const unassignPlayerFromTrainingBlock = async (
         trainingBlockId?: string,
         playerId?: string,
     ) => {

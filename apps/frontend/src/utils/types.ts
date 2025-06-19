@@ -35,19 +35,19 @@ export type FirestoreContextType = {
     players: Player[];
     trainingBlocks: TrainingBlock[];
     isLoading: boolean;
-    addPlayer: (player?: Player) => void;
-    removePlayer: (playerId?: string) => void;
-    removePlayers: (playerIds?: string[]) => void;
-    addTrainingBlock: (trainingBlock?: TrainingBlock) => void;
-    removeTrainingBlock: (trainingBlockId?: string) => void;
+    addPlayer: (player?: Player) => Promise<void>;
+    removePlayer: (playerId?: string) => Promise<void>;
+    removePlayers: (playerIds?: string[]) => Promise<void>;
+    addTrainingBlock: (trainingBlock?: TrainingBlock) => Promise<void>;
+    removeTrainingBlock: (trainingBlockId?: string) => Promise<void>;
     assignPlayerToTrainingBlock: (
         trainingBlockId?: string,
         playerId?: string,
-    ) => void;
+    ) => Promise<void>;
     unassignPlayerFromTrainingBlock: (
         trainingBlockId?: string,
         playerId?: string,
-    ) => void;
+    ) => Promise<void>;
 };
 
 export type AuthFormState = {
