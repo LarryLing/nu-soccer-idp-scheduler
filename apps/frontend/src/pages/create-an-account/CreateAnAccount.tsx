@@ -73,83 +73,73 @@ export default function CreateAnAccountCard() {
                             <Text size="2" weight="medium" mb="1" as="p">
                                 Email
                             </Text>
-                            <TextField.Root
-                                id="email"
-                                name="email"
-                                placeholder="Enter your email address"
-                                className="w-full"
-                            />
-                            {state?.errors?.email && (
-                                <Text
-                                    size="2"
-                                    weight="regular"
-                                    as="p"
-                                    color="red"
-                                >
-                                    {state.errors.email}
-                                </Text>
-                            )}
                         </label>
+                        <TextField.Root
+                            id="email"
+                            name="email"
+                            placeholder="Enter your email address"
+                            className="w-full"
+                        />
+                        {state?.errors?.email && (
+                            <Text size="2" weight="regular" as="p" color="red">
+                                {state.errors.email}
+                            </Text>
+                        )}
                     </Box>
                     <Box mb="5">
                         <label htmlFor="password">
                             <Text size="2" weight="medium" mb="1" as="p">
                                 Password
                             </Text>
-                            <TextField.Root
-                                id="password"
-                                name="password"
-                                type="password"
-                                placeholder="Enter your password"
-                                className="w-full"
-                            />
-                            {state?.errors?.password && (
-                                <>
-                                    <Text
-                                        size="2"
-                                        weight="regular"
-                                        as="p"
-                                        color="red"
-                                    >
-                                        Password must:
-                                    </Text>
-                                    {state.errors.password.map((value) => (
-                                        <Text
-                                            size="2"
-                                            weight="regular"
-                                            as="p"
-                                            color="red"
-                                        >
-                                            - {value}
-                                        </Text>
-                                    ))}
-                                </>
-                            )}
                         </label>
-                    </Box>
-                    <Box mb="5">
-                        <label htmlFor="confirmPassword">
-                            <Text size="2" weight="medium" mb="1" as="p">
-                                Confirm Password
-                            </Text>
-                            <TextField.Root
-                                id="confirmPassword"
-                                name="confirmPassword"
-                                type="password"
-                                placeholder="Confirm your password"
-                                className="w-full"
-                            />
-                            {state?.errors?.confirmPassword && (
+                        <TextField.Root
+                            id="password"
+                            name="password"
+                            type="password"
+                            placeholder="Enter your password"
+                            className="w-full"
+                        />
+                        {state?.errors?.password && (
+                            <>
                                 <Text
                                     size="2"
                                     weight="regular"
                                     as="p"
                                     color="red"
                                 >
-                                    {state.errors.confirmPassword}
+                                    Password must:
                                 </Text>
-                            )}
+                                {state.errors.password.map((value) => (
+                                    <Text
+                                        size="2"
+                                        weight="regular"
+                                        as="p"
+                                        color="red"
+                                    >
+                                        - {value}
+                                    </Text>
+                                ))}
+                            </>
+                        )}
+                    </Box>
+                    <Box mb="5">
+                        <label htmlFor="confirmPassword">
+                            <Text size="2" weight="medium" mb="1" as="p">
+                                Confirm Password
+                            </Text>
                         </label>
+                        <TextField.Root
+                            id="confirmPassword"
+                            name="confirmPassword"
+                            type="password"
+                            placeholder="Confirm your password"
+                            className="w-full"
+                        />
+                        {state?.errors?.confirmPassword && (
+                            <Text size="2" weight="regular" as="p" color="red">
+                                {state.errors.confirmPassword}
+                            </Text>
+                        )}
                     </Box>
                     <Flex direction="row-reverse" gap="4">
                         <Button type="submit" disabled={isPending}>

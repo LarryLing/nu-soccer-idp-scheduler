@@ -7,15 +7,10 @@ import {
     TextField,
 } from "@radix-ui/themes";
 import type { Table } from "@tanstack/react-table";
-import {
-    DownloadIcon,
-    PlusIcon,
-    SearchIcon,
-    TrashIcon,
-    UploadIcon,
-} from "lucide-react";
+import { DownloadIcon, SearchIcon, TrashIcon, UploadIcon } from "lucide-react";
 import { useFirestore } from "../../hooks/useFirestore.ts";
 import type { Player } from "../../utils/types.ts";
+import AddPlayerDialog from "./AddPlayerDialog.tsx";
 
 type ActionRowProps<TData> = {
     table: Table<TData>;
@@ -36,10 +31,7 @@ export function ActionRow<TData>({ table }: ActionRowProps<TData>) {
     return (
         <Flex justify="between" align="center" mb="5">
             <Flex align="center" gap="3">
-                <Button>
-                    <PlusIcon size={15} />
-                    Add Player
-                </Button>
+                <AddPlayerDialog />
                 <Button variant="outline">
                     <DownloadIcon size={15} />
                     Export JSON

@@ -58,23 +58,18 @@ export default function ForgotPasswordCard() {
                             <Text size="2" weight="medium" mb="1" as="p">
                                 Email
                             </Text>
-                            <TextField.Root
-                                id="email"
-                                name="email"
-                                placeholder="Enter your email address"
-                                className="w-full"
-                            />
-                            {state?.errors?.email && (
-                                <Text
-                                    size="2"
-                                    weight="regular"
-                                    as="p"
-                                    color="red"
-                                >
-                                    {state.errors.email}
-                                </Text>
-                            )}
                         </label>
+                        <TextField.Root
+                            id="email"
+                            name="email"
+                            placeholder="Enter your email address"
+                            className="w-full"
+                        />
+                        {state?.errors?.email && (
+                            <Text size="2" weight="regular" as="p" color="red">
+                                {state.errors.email}
+                            </Text>
+                        )}
                     </Box>
                     <Flex direction="row-reverse" gap="4">
                         <Button type="submit" disabled={isPending}>

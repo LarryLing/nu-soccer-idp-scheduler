@@ -114,9 +114,14 @@ export const PlayerSchema = z.object({
         .regex(/^[A-Za-z]+(?:[ '-.][A-Za-z]+)*$/, {
             message: "Name cannot contain special characters",
         }),
-    number: z.number().min(0, {
-        message: "Number must be greater than or equal to 0",
-    }),
+    number: z
+        .number()
+        .min(0, {
+            message: "Number must be greater than or equal to 0",
+        })
+        .max(99, {
+            message: "Number must be less than or equal to 99",
+        }),
     position: z.enum(["Goalkeeper", "Defender", "Midfielder", "Forward"]),
     availabilities: z.array(AvailabilitySchema),
 });

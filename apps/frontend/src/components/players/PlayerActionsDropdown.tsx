@@ -28,10 +28,7 @@ export default function PlayerActionsDropdown<TData>({
             </DropdownMenu.Trigger>
             <DropdownMenu.Content align="center">
                 <DropdownMenu.Item>Edit</DropdownMenu.Item>
-                <DropdownMenu.Item
-                    color="red"
-                    onClick={handleRemovePlayer}
-                >
+                <DropdownMenu.Item color="red" onClick={handleRemovePlayer}>
                     Delete
                 </DropdownMenu.Item>
             </DropdownMenu.Content>

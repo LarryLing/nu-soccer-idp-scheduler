@@ -8,9 +8,13 @@ import {
     orderBy,
     deleteDoc,
     doc,
+    writeBatch,
+    addDoc,
 } from "firebase/firestore";
 import { clientFirestore } from "../utils/firebase.ts";
 import { FirebaseError } from "firebase/app";
+import { z } from "zod";
+import { PlayerSchema, TrainingBlockSchema } from "../utils/schemas.ts";
 
 type FirestoreProviderProps = {
     userId: string;
@@ -24,12 +28,24 @@ export function FirestoreProvider({
     const [trainingBlocks, setTrainingBlocks] = useState<TrainingBlock[]>([]);
     const [isLoading, setIsLoading] = useState<boolean>(true);
 
-    const addPlayer = async (player?: Player) => {
+    const addPlayer = async (player?: z.infer<typeof PlayerSchema>) => {
         if (!player) {
             throw new Error("Player is required");
         }
 
-        setPlayers((prev) => [...prev, player]);
+        const docRef = await addDoc(
+            collection(clientFirestore, `users/${userId!}/players/`),
+            player,
+        );
+        console.log("Document written with ID: ", docRef.id);
+
+        setPlayers((prev) => [
+            ...prev,
+            {
+                ...player,
+                id: docRef.id,
+            } as Player,
+        ]);
     };
 
     const removePlayer = async (playerId?: string) => {
@@ -39,7 +55,9 @@ export function FirestoreProvider({
 
         setPlayers((prev) => prev.filter((player) => player.id !== playerId));
 
-        await deleteDoc(doc(clientFirestore, `users/${userId!}/players/${playerId}`))
+        await deleteDoc(
+            doc(clientFirestore, `users/${userId!}/players/${playerId}`),
+        );
     };
 
     const removePlayers = async (playerIds?: string[]) => {
@@ -50,14 +68,32 @@ export function FirestoreProvider({
         setPlayers((prev) =>
             prev.filter((player) => !playerIds.includes(player.id)),
         );
+
+        const batch = writeBatch(clientFirestore);
+        playerIds.forEach((playerId) => {
+            batch.delete(
+                doc(clientFirestore, `users/${userId!}/players/${playerId}`),
+            );
+        });
+
+        await batch.commit();
     };
 
-    const addTrainingBlock = async (trainingBlock?: TrainingBlock) => {
+    const addTrainingBlock = async (
+        trainingBlock?: z.infer<typeof TrainingBlockSchema>,
+    ) => {
         if (!trainingBlock) {
             throw new Error("Training block is required");
         }
 
-        setTrainingBlocks((prev) => [...prev, trainingBlock]);
+        setTrainingBlocks((prev) => [
+            ...prev,
+            {
+                ...trainingBlock,
+                id: "",
+                assignedPlayers: [],
+            } as TrainingBlock,
+        ]);
     };
 
     const removeTrainingBlock = async (trainingBlockId?: string) => {

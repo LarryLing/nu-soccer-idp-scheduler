@@ -35,10 +35,12 @@ export type FirestoreContextType = {
     players: Player[];
     trainingBlocks: TrainingBlock[];
     isLoading: boolean;
-    addPlayer: (player?: Player) => Promise<void>;
+    addPlayer: (player?: z.infer<typeof PlayerSchema>) => Promise<void>;
     removePlayer: (playerId?: string) => Promise<void>;
     removePlayers: (playerIds?: string[]) => Promise<void>;
-    addTrainingBlock: (trainingBlock?: TrainingBlock) => Promise<void>;
+    addTrainingBlock: (
+        trainingBlock?: z.infer<typeof TrainingBlockSchema>,
+    ) => Promise<void>;
     removeTrainingBlock: (trainingBlockId?: string) => Promise<void>;
     assignPlayerToTrainingBlock: (
         trainingBlockId?: string,
