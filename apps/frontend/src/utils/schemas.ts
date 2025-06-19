@@ -81,10 +81,10 @@ export const AvailabilitySchema = z
             "Saturday",
             "Sunday",
         ]),
-        start: z.string().regex(/^(1[0-2]|0?[1-9]):([0-5][0-9])([AaPp][Mm])$/, {
+        start: z.string().regex(/^(1[0-2]|0?[1-9]):([0-5][0-9])([AP]M)$/, {
             message: "Start time must be in format '9:30AM' or '12:45PM'",
         }),
-        end: z.string().regex(/^(1[0-2]|0?[1-9]):([0-5][0-9])([AaPp][Mm])$/, {
+        end: z.string().regex(/^(1[0-2]|0?[1-9]):([0-5][0-9])([AP]M)$/, {
             message: "End time must be in format '9:30AM' or '12:45PM'",
         }),
     })
@@ -106,9 +106,6 @@ export const AvailabilitySchema = z
     );
 
 export const PlayerSchema = z.object({
-    number: z.number().min(0, {
-        message: "Number must be greater than 0",
-    }),
     name: z
         .string()
         .min(1, {
@@ -117,6 +114,27 @@ export const PlayerSchema = z.object({
         .regex(/^[A-Za-z]+(?:[ '-.][A-Za-z]+)*$/, {
             message: "Name cannot contain special characters",
         }),
+    number: z.number().min(0, {
+        message: "Number must be greater than or equal to 0",
+    }),
     position: z.enum(["Goalkeeper", "Defender", "Midfielder", "Forward"]),
     availabilities: z.array(AvailabilitySchema),
+});
+
+export const TrainingBlockSchema = z.object({
+    day: z.enum([
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday",
+        "Friday",
+        "Saturday",
+        "Sunday",
+    ]),
+    start: z.string().regex(/^(1[0-2]|0?[1-9]):([0-5][0-9])([AP]M)$/, {
+        message: "Start time must be in format '9:30AM' or '12:45PM'",
+    }),
+    end: z.string().regex(/^(1[0-2]|0?[1-9]):([0-5][0-9])([AP]M)$/, {
+        message: "End time must be in format '9:30AM' or '12:45PM'",
+    }),
 });

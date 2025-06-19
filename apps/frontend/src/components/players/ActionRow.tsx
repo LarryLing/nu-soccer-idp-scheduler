@@ -14,7 +14,7 @@ import {
     TrashIcon,
     UploadIcon,
 } from "lucide-react";
-import { usePlayers } from "../../hooks/usePlayers.ts";
+import { useFirestore } from "../../hooks/useFirestore.ts";
 import type { Player } from "../../utils/types.ts";
 
 type ActionRowProps<TData> = {
@@ -22,7 +22,7 @@ type ActionRowProps<TData> = {
 };
 
 export function ActionRow<TData>({ table }: ActionRowProps<TData>) {
-    const { removePlayers } = usePlayers();
+    const { removePlayers } = useFirestore();
 
     const selectedPlayerIds = table
         .getFilteredSelectedRowModel()

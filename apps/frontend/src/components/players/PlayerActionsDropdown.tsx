@@ -1,6 +1,6 @@
 import { DropdownMenu, IconButton } from "@radix-ui/themes";
 import { EllipsisIcon } from "lucide-react";
-import { usePlayers } from "../../hooks/usePlayers.ts";
+import { useFirestore } from "../../hooks/useFirestore.ts";
 import type { Table } from "@tanstack/react-table";
 
 type PlayerActionsDropdownProps<TData> = {
@@ -12,7 +12,7 @@ export default function PlayerActionsDropdown<TData>({
     playerId,
     table,
 }: PlayerActionsDropdownProps<TData>) {
-    const { removePlayer } = usePlayers();
+    const { removePlayer } = useFirestore();
 
     return (
         <DropdownMenu.Root>

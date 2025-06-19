@@ -3,18 +3,18 @@ import Navbar from "../components/miscellaneous/Navbar.tsx";
 import { Flex } from "@radix-ui/themes";
 import { useEffect } from "react";
 import { useUser } from "../hooks/useUser.ts";
+import { FirestoreProvider } from "../contexts/FirestoreProvider.tsx";
 import trianglify from "../../public/images/trianglify.png";
-import { PlayersProvider } from "../contexts/PlayersProvider.tsx";
 
 export default function ProtectedLayout() {
-    const context = useUser();
+    const { user } = useUser();
     const navigate = useNavigate();
 
     useEffect(() => {
-        if (context.user === null) {
+        if (user === null) {
             navigate("/signin", { replace: true });
         }
-    }, [navigate, context.user]);
+    }, [navigate, user]);
 
     return (
         <Flex
@@ -33,9 +33,9 @@ export default function ProtectedLayout() {
                 width="100%"
                 height="100%"
             >
-                <PlayersProvider>
+                <FirestoreProvider userId={user!.uid}>
                     <Outlet />
-                </PlayersProvider>
+                </FirestoreProvider>
             </Flex>
         </Flex>
     );

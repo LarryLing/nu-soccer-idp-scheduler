@@ -1,5 +1,6 @@
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
+import { getFirestore } from "firebase/firestore";
 
 if (
     !import.meta.env.VITE_FIREBASE_API_KEY ||
@@ -24,5 +25,6 @@ const clientApp = initializeApp({
 });
 
 const clientAuth = getAuth(clientApp);
+const clientFirestore = getFirestore(clientApp);
 
-export { clientApp, clientAuth };
+export { clientApp, clientAuth, clientFirestore };

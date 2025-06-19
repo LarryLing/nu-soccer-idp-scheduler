@@ -1,10 +1,10 @@
 import { Heading, Section, Text } from "@radix-ui/themes";
 import { DataTable } from "./DataTable.tsx";
 import { columns } from "./Column.tsx";
-import { usePlayers } from "../../hooks/usePlayers.ts";
+import { useFirestore } from "../../hooks/useFirestore.ts";
 
 export default function Players() {
-    const { players } = usePlayers();
+    const { players } = useFirestore();
 
     return (
         <>
