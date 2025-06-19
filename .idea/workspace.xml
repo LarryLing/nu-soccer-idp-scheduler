@@ -5,16 +5,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b05902af-5cdc-4fb0-944c-d2d26c9f2b39" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/apps/frontend/src/components/players/AddPlayerDialog.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/apps/frontend/src/components/players/AvailabilityRow.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/apps/frontend/src/hooks/usePlayerDialog.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/apps/frontend/src/components/authentication/ResetPasswordCard.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/components/authentication/ResetPasswordCard.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/src/components/players/ActionRow.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/components/players/ActionRow.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/src/components/players/PlayerActionsDropdown.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/components/players/PlayerActionsDropdown.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/components/players/AddPlayerDialog.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/components/players/AddPlayerDialog.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/components/players/AvailabilityRow.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/components/players/AvailabilityRow.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/apps/frontend/src/contexts/FirestoreProvider.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/contexts/FirestoreProvider.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/apps/frontend/src/pages/create-an-account/CreateAnAccount.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/pages/create-an-account/CreateAnAccount.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/src/pages/forgot-password/ForgotPassword.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/pages/forgot-password/ForgotPassword.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/src/pages/signin/SignIn.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/pages/signin/SignIn.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/apps/frontend/src/utils/schemas.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/utils/schemas.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/apps/frontend/src/utils/types.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/utils/types.ts" afterDir="false" />
     </list>
@@ -27,8 +24,8 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="CSS File" />
-        <option value="TypeScript File" />
         <option value="TypeScript JSX File" />
+        <option value="TypeScript File" />
       </list>
     </option>
   </component>
@@ -127,7 +124,8 @@
       <updated>1750053541637</updated>
       <workItem from="1750053542606" duration="243000" />
       <workItem from="1750053895745" duration="106881000" />
-      <workItem from="1750312053135" duration="18073000" />
+      <workItem from="1750312053135" duration="22487000" />
+      <workItem from="1750368658431" duration="2088000" />
     </task>
     <servers />
   </component>

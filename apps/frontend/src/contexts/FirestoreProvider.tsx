@@ -37,7 +37,6 @@ export function FirestoreProvider({
             collection(clientFirestore, `users/${userId!}/players/`),
             player,
         );
-        console.log("Document written with ID: ", docRef.id);
 
         setPlayers((prev) => [
             ...prev,

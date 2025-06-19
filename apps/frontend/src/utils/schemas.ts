@@ -81,18 +81,21 @@ export const AvailabilitySchema = z
             "Saturday",
             "Sunday",
         ]),
-        start: z.string().regex(/^(1[0-2]|0?[1-9]):([0-5][0-9])([AP]M)$/, {
+        start: z.string().min(1, {
+            message: "Start time is required",
+        }).regex(/^(1[0-2]|0?[1-9]):([0-5][0-9])([AP]M)$/, {
             message: "Start time must be in format '9:30AM' or '12:45PM'",
         }),
-        end: z.string().regex(/^(1[0-2]|0?[1-9]):([0-5][0-9])([AP]M)$/, {
+        end: z.string().min(1, {
+            message: "End time is required",
+        }).regex(/^(1[0-2]|0?[1-9]):([0-5][0-9])([AP]M)$/, {
             message: "End time must be in format '9:30AM' or '12:45PM'",
         }),
     })
     .refine(
         (data) => {
-            // Custom validation: Ensure end time is after start time
             const parseTime = (timeStr: string) => {
-                const [hours, minutes] = timeStr.split(":").map(Number);
+                const [hours, minutes] = timeStr.slice(0, -2).split(":").map(Number);
                 const period = timeStr.slice(-2).toUpperCase();
                 const totalHours = (hours % 12) + (period === "PM" ? 12 : 0);
                 return totalHours * 60 + minutes;
@@ -109,10 +112,10 @@ export const PlayerSchema = z.object({
     name: z
         .string()
         .min(1, {
-            message: "Name is required",
+            message: "contain at least 1 character",
         })
         .regex(/^[A-Za-z]+(?:[ '-.][A-Za-z]+)*$/, {
-            message: "Name cannot contain special characters",
+            message: "not cannot contain special characters",
         }),
     number: z
         .number()

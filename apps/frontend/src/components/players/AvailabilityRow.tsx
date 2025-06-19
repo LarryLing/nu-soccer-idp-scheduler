@@ -1,21 +1,18 @@
 import type { Availability } from "../../utils/types.ts";
-import { Flex, Select, TextField, Text, Button } from "@radix-ui/themes";
+import { Flex, Select, TextField, Text, IconButton } from "@radix-ui/themes";
+import { XIcon } from "lucide-react";
 
 type AvailabilityRowProps = {
     index: number;
     availability: Availability;
     handleRemoveAvailability: (index: number) => void;
-    handleEditAvailabilityDay: (
+    handleEditAvailability: (
         index: number,
-        day: Availability["day"],
-    ) => void;
-    handleEditAvailabilityStart: (
-        index: number,
-        end: Availability["end"],
-    ) => void;
-    handleEditAvailabilityEnd: (
-        index: number,
-        end: Availability["end"],
+        field: "day" | "start" | "end",
+        value:
+            | Availability["day"]
+            | Availability["start"]
+            | Availability["end"],
     ) => void;
 };
 
@@ -23,9 +20,7 @@ export default function AvailabilityRow({
     index,
     availability,
     handleRemoveAvailability,
-    handleEditAvailabilityDay,
-    handleEditAvailabilityStart,
-    handleEditAvailabilityEnd,
+    handleEditAvailability,
 }: AvailabilityRowProps) {
     return (
         <Flex justify="between">
@@ -34,13 +29,14 @@ export default function AvailabilityRow({
                     defaultValue="Monday"
                     value={availability.day}
                     onValueChange={(value) =>
-                        handleEditAvailabilityDay(
+                        handleEditAvailability(
                             index,
+                            "day",
                             value as Availability["day"],
                         )
                     }
                 >
-                    <Select.Trigger style={{ width: "125px" }} />
+                    <Select.Trigger style={{ width: "120px" }} />
                     <Select.Content>
                         <Select.Item value="Monday">Monday</Select.Item>
                         <Select.Item value="Tuesday">Tuesday</Select.Item>
@@ -52,12 +48,13 @@ export default function AvailabilityRow({
                     </Select.Content>
                 </Select.Root>
                 <TextField.Root
-                    style={{ width: "115px" }}
+                    style={{ width: "100px" }}
                     placeholder="ie: 9:30AM"
                     value={availability.start}
                     onChange={(e) =>
-                        handleEditAvailabilityStart(
+                        handleEditAvailability(
                             index,
+                            "start",
                             e.target.value as Availability["start"],
                         )
                     }
@@ -66,24 +63,26 @@ export default function AvailabilityRow({
                     to
                 </Text>
                 <TextField.Root
-                    style={{ width: "115px" }}
+                    style={{ width: "100px" }}
                     placeholder="ie: 10:00AM"
                     value={availability.end}
                     onChange={(e) =>
-                        handleEditAvailabilityEnd(
+                        handleEditAvailability(
                             index,
+                            "end",
                             e.target.value as Availability["end"],
                         )
                     }
                 />
             </Flex>
-            <Button
+            <IconButton
                 variant="outline"
                 color="red"
                 onClick={() => handleRemoveAvailability(index)}
+                type="button"
             >
-                Remove
-            </Button>
+                <XIcon size={15} />
+            </IconButton>
         </Flex>
     );
 }

@@ -59,3 +59,12 @@ export type AuthFormState = {
         confirmPassword?: string[];
     };
 } | null;
+
+export type PlayerDialogFormState = {
+    errors?: {
+        name?: string[];
+        number?: string[];
+        position?: string[];
+        availabilities?: string[];
+    };
+} | null;

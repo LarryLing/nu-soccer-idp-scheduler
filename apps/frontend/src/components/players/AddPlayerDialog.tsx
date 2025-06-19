@@ -8,90 +8,112 @@ import {
     Select,
 } from "@radix-ui/themes";
 import { PlusIcon } from "lucide-react";
-import type { Availability, Player } from "../../utils/types.ts";
+import type {
+    Availability,
+    Player,
+    PlayerDialogFormState,
+} from "../../utils/types.ts";
 import { useState } from "react";
 import AvailabilityRow from "./AvailabilityRow.tsx";
-import type { PlayerSchema } from "../../utils/schemas.ts";
+import {
+    PlayerSchema,
+    type PlayerSchema as PlayerSchemaType,
+} from "../../utils/schemas.ts";
 import { z } from "zod";
 import { useFirestore } from "../../hooks/useFirestore.ts";
+import { FirebaseError } from "firebase/app";
 
 export default function AddPlayerDialog() {
     const { addPlayer } = useFirestore();
-    const [formData, setFormData] = useState<z.infer<typeof PlayerSchema>>({
+    const [playerData, setPlayerData] = useState<
+        z.infer<typeof PlayerSchemaType>
+    >({
         name: "",
         number: 0,
         position: "Goalkeeper",
         availabilities: [],
     });
 
+    const [isOpen, setIsOpen] = useState(false);
+    const [state, setState] = useState<PlayerDialogFormState>(null);
+    const [isPending, setIsPending] = useState(false);
+
+    const handleSubmit = async () => {
+        setIsPending(true);
+
+        const result = PlayerSchema.safeParse(playerData);
+
+        if (!result.success) {
+            setState({errors: result.error.flatten().fieldErrors});
+            setIsPending(false);
+            return;
+        }
+
+        try {
+            await addPlayer(playerData);
+            handleClose()
+        } catch (error) {
+            if (error instanceof FirebaseError) {
+                console.error(error);
+            }
+        } finally {
+            setIsPending(false);
+        }
+    }
+
+    const handleClose = () => {
+        setIsOpen(false);
+        setState(null);
+        setPlayerData({
+            name: "",
+            number: 0,
+            position: "Goalkeeper",
+            availabilities: [],
+        });
+    };
+
     const handleAddAvailability = () => {
-        setFormData({
-            ...formData,
+        setPlayerData({
+            ...playerData,
             availabilities: [
-                ...formData.availabilities,
-                { day: "Monday", start: "", end: "" },
+                ...playerData.availabilities,
+                { day: "Monday", start: "9:30AM", end: "10:00AM" },
             ],
         });
     };
 
     const handleRemoveAvailability = (index: number) => {
-        const availabilities = [...formData.availabilities];
+        const availabilities = [...playerData.availabilities];
         availabilities.splice(index, 1);
-        setFormData({
-            ...formData,
+        setPlayerData({
+            ...playerData,
             availabilities,
         });
     };
 
-    const handleEditAvailabilityDay = (
+    const handleEditAvailability = (
         index: number,
-        day: Availability["day"],
+        field: "day" | "start" | "end",
+        value:
+            | Availability["day"]
+            | Availability["start"]
+            | Availability["end"],
     ) => {
-        const availabilities = [...formData.availabilities];
+        const availabilities = [...playerData.availabilities];
         availabilities[index] = {
             ...availabilities[index],
-            day: day,
+            [field]: value,
         };
-        setFormData({
-            ...formData,
-            availabilities,
-        });
-    };
-
-    const handleEditAvailabilityStart = (
-        index: number,
-        start: Availability["start"],
-    ) => {
-        const availabilities = [...formData.availabilities];
-        availabilities[index] = {
-            ...availabilities[index],
-            start: start,
-        };
-        setFormData({
-            ...formData,
-            availabilities,
-        });
-    };
-
-    const handleEditAvailabilityEnd = (
-        index: number,
-        end: Availability["end"],
-    ) => {
-        const availabilities = [...formData.availabilities];
-        availabilities[index] = {
-            ...availabilities[index],
-            end: end,
-        };
-        setFormData({
-            ...formData,
+        setPlayerData({
+            ...playerData,
             availabilities,
         });
     };
 
     return (
-        <Dialog.Root>
+        <Dialog.Root open={isOpen} onOpenChange={setIsOpen}>
             <Dialog.Trigger>
-                <Button>
+                <Button onClick={() => setIsOpen(true)}>
                     <PlusIcon size={15} />
                     Add Player
                 </Button>
@@ -101,7 +123,6 @@ export default function AddPlayerDialog() {
                 <Dialog.Description mb="5">
                     Insert player information.
                 </Dialog.Description>
-                <form action={() => {}}>
                     <Box mb="5">
                         <label htmlFor="name">
                             <Text size="2" weight="medium" mb="1" as="p">
@@ -112,14 +133,37 @@ export default function AddPlayerDialog() {
                             id="name"
                             name="name"
                             placeholder="Enter player name"
-                            value={formData.name}
+                            value={playerData.name}
                             onChange={(e) =>
-                                setFormData({
-                                    ...formData,
+                                setPlayerData({
+                                    ...playerData,
                                     name: e.target.value,
                                 })
                             }
                         />
+                        {state?.errors?.name && (
+                            <>
+                                <Text
+                                    size="2"
+                                    weight="regular"
+                                    as="p"
+                                    color="red"
+                                >
+                                    Name must:
+                                </Text>
+                                {state.errors.name.map((value) => (
+                                    <Text
+                                        key={value}
+                                        size="2"
+                                        weight="regular"
+                                        as="p"
+                                        color="red"
+                                    >
+                                        - {value}
+                                    </Text>
+                                ))}
+                            </>
+                        )}
                     </Box>
                     <Flex justify="between" mb="5" gap="4">
                         <Box width="100%">
@@ -133,10 +177,10 @@ export default function AddPlayerDialog() {
                                 name="number"
                                 type="number"
                                 placeholder="Enter player number"
-                                value={formData.number}
+                                value={playerData.number}
                                 onChange={(e) =>
-                                    setFormData({
-                                        ...formData,
+                                    setPlayerData({
+                                        ...playerData,
                                         number: parseInt(e.target.value),
                                     })
                                 }
@@ -145,6 +189,16 @@ export default function AddPlayerDialog() {
                                 step="1"
                                 inputMode="numeric"
                             />
+                            {state?.errors?.number && (
+                                <Text
+                                    size="2"
+                                    weight="regular"
+                                    as="p"
+                                    color="red"
+                                >
+                                    {state.errors.number}
+                                </Text>
+                            )}
                         </Box>
                         <Box width="100%">
                             <label htmlFor="position">
@@ -155,10 +209,10 @@ export default function AddPlayerDialog() {
                             <Select.Root
                                 defaultValue="Goalkeeper"
                                 name="position"
-                                value={formData.position}
+                                value={playerData.position}
                                 onValueChange={(value) =>
-                                    setFormData({
-                                        ...formData,
+                                    setPlayerData({
+                                        ...playerData,
                                         position: value as Player["position"],
                                     })
                                 }
@@ -183,6 +237,16 @@ export default function AddPlayerDialog() {
                                     </Select.Item>
                                 </Select.Content>
                             </Select.Root>
+                            {state?.errors?.position && (
+                                <Text
+                                    size="2"
+                                    weight="regular"
+                                    as="p"
+                                    color="red"
+                                >
+                                    {state.errors.position}
+                                </Text>
+                            )}
                         </Box>
                     </Flex>
                     <Box mb="5">
@@ -197,11 +261,12 @@ export default function AddPlayerDialog() {
                                     variant="outline"
                                     color="gray"
                                     onClick={handleAddAvailability}
+                                    type="button"
                                 >
                                     Add Availability
                                 </Button>
                             </Flex>
-                            {formData.availabilities.map(
+                            {playerData.availabilities.map(
                                 (availability, index) => (
                                     <AvailabilityRow
                                         key={index}
@@ -210,36 +275,50 @@ export default function AddPlayerDialog() {
                                         handleRemoveAvailability={
                                             handleRemoveAvailability
                                         }
-                                        handleEditAvailabilityDay={
-                                            handleEditAvailabilityDay
-                                        }
-                                        handleEditAvailabilityStart={
-                                            handleEditAvailabilityStart
-                                        }
-                                        handleEditAvailabilityEnd={
-                                            handleEditAvailabilityEnd
+                                        handleEditAvailability={
+                                            handleEditAvailability
                                         }
                                     />
                                 ),
                             )}
                         </Flex>
+                        {state?.errors?.availabilities && (
+                            <>
+                                <Text
+                                    size="2"
+                                    weight="regular"
+                                    as="p"
+                                    color="red"
+                                >
+                                    Please fix the following errors:
+                                </Text>
+                                {state.errors.availabilities.map((value) => (
+                                    <Text
+                                        key={value}
+                                        size="2"
+                                        weight="regular"
+                                        as="p"
+                                        color="red"
+                                    >
+                                        - {value}
+                                    </Text>
+                                ))}
+                            </>
+                        )}
                     </Box>
                     <Flex direction="row-reverse" gap="4">
-                        <Dialog.Close>
-                            <Button
-                                type="submit"
-                                onClick={() => addPlayer(formData)}
-                            >
-                                Add Player
-                            </Button>
-                        </Dialog.Close>
-                        <Dialog.Close>
-                            <Button variant="soft" type="button">
-                                Cancel
-                            </Button>
-                        </Dialog.Close>
+                        <Button type="submit" disabled={isPending} onClick={handleSubmit}>
+                            Add Player
+                        </Button>
+                        <Button
+                            variant="soft"
+                            type="button"
+                            disabled={isPending}
+                            onClick={handleClose}
+                        >
+                            Cancel
+                        </Button>
                     </Flex>
-                </form>
             </Dialog.Content>
         </Dialog.Root>
     );

@@ -107,6 +107,7 @@ export default function ResetPasswordCard({
                                 </Text>
                                 {state.errors.password.map((value) => (
                                     <Text
+                                        key={value}
                                         size="2"
                                         weight="regular"
                                         as="p"
