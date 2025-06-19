@@ -107,8 +107,8 @@ export const columns: ColumnDef<Player>[] = [
         cell: ({ row }) => {
             const availabilities: Availability[] =
                 row.getValue("availabilities");
-            return availabilities.map((availability) => (
-                <AvailabilityBadge {...availability} />
+            return availabilities.map((availability, index) => (
+                <AvailabilityBadge key={index} {...availability} />
             ));
         },
     },
@@ -121,8 +121,13 @@ export const columns: ColumnDef<Player>[] = [
                 </Text>
             );
         },
-        cell: () => {
-            return <PlayerActionsDropdown />;
+        cell: ({ table, row }) => {
+            return (
+                <PlayerActionsDropdown
+                    playerId={row.original.id}
+                    table={table}
+                />
+            );
         },
     },
 ];

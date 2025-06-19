@@ -1,7 +1,19 @@
 import { DropdownMenu, IconButton } from "@radix-ui/themes";
 import { EllipsisIcon } from "lucide-react";
+import { usePlayers } from "../../hooks/usePlayers.ts";
+import type { Table } from "@tanstack/react-table";
 
-export default function PlayerActionsDropdown() {
+type PlayerActionsDropdownProps<TData> = {
+    playerId: string;
+    table: Table<TData>;
+};
+
+export default function PlayerActionsDropdown<TData>({
+    playerId,
+    table,
+}: PlayerActionsDropdownProps<TData>) {
+    const { removePlayer } = usePlayers();
+
     return (
         <DropdownMenu.Root>
             <DropdownMenu.Trigger>
@@ -9,9 +21,15 @@ export default function PlayerActionsDropdown() {
                     <EllipsisIcon size={15} />
                 </IconButton>
             </DropdownMenu.Trigger>
-            <DropdownMenu.Content>
-                <DropdownMenu.Item shortcut="⌘ E">Edit</DropdownMenu.Item>
-                <DropdownMenu.Item color="red" shortcut="Del">
+            <DropdownMenu.Content align="center">
+                <DropdownMenu.Item>Edit</DropdownMenu.Item>
+                <DropdownMenu.Item
+                    color="red"
+                    onClick={() => {
+                        removePlayer(playerId);
+                        table.resetRowSelection();
+                    }}
+                >
                     Delete
                 </DropdownMenu.Item>
             </DropdownMenu.Content>

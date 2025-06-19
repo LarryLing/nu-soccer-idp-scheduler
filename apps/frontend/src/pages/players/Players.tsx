@@ -1,61 +1,11 @@
 import { Heading, Section, Text } from "@radix-ui/themes";
-import type { Player } from "../../utils/types.ts";
 import { DataTable } from "./DataTable.tsx";
 import { columns } from "./Column.tsx";
-
-const players: Player[] = [
-    {
-        id: "0",
-        number: 0,
-        name: "Dominic Pereira",
-        position: "Goalkeeper",
-        availabilities: [
-            {
-                day: "Monday",
-                start: "8:00am",
-                end: "10:30am",
-            },
-            {
-                day: "Monday",
-                start: "8:00am",
-                end: "10:30am",
-            },
-        ],
-    },
-    {
-        id: "1",
-        number: 1,
-        name: "Rafael Ponce de Leon",
-        position: "Goalkeeper",
-        availabilities: [
-            {
-                day: "Friday",
-                start: "6:30pm",
-                end: "8:00pm",
-            },
-            {
-                day: "Thursday",
-                start: "7:00pm",
-                end: "8:30pm",
-            },
-        ],
-    },
-    {
-        id: "2",
-        number: 2,
-        name: "Brandon Clagette",
-        position: "Defender",
-        availabilities: [
-            {
-                day: "Tuesday",
-                start: "7:00pm",
-                end: "9:00pm",
-            },
-        ],
-    },
-];
+import { usePlayers } from "../../hooks/usePlayers.ts";
 
 export default function Players() {
+    const { players } = usePlayers();
+
     return (
         <>
             <Section p="0">

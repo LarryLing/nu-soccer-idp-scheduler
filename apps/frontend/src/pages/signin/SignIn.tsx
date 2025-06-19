@@ -16,7 +16,7 @@ import type { AuthFormState } from "../../utils/types.ts";
 import { FirebaseError } from "firebase/app";
 
 export default function SignIn() {
-    const context = useUser();
+    const { signIn } = useUser();
     const navigate = useNavigate();
     const [state, formAction, isPending] = useActionState<
         AuthFormState,
@@ -36,7 +36,7 @@ export default function SignIn() {
         }
 
         try {
-            await context.signIn(result.data.email, result.data.password);
+            await signIn(result.data.email, result.data.password);
         } catch (error: unknown) {
             if (error instanceof FirebaseError) {
                 console.error(error);

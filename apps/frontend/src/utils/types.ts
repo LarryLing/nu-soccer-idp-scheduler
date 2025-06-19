@@ -22,6 +22,14 @@ export type UserContextType = {
     resetPassword: (actionCode?: string, newPassword?: string) => Promise<void>;
 };
 
+export type PlayersContextType = {
+    players: Player[];
+    isLoading: boolean;
+    addPlayer: (player?: Player) => void;
+    removePlayer: (playerId?: string) => void;
+    removePlayers: (playerIds?: string[]) => void;
+};
+
 export type AuthFormState = {
     errors?: {
         email?: string[];

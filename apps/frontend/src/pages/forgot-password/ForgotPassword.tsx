@@ -14,7 +14,7 @@ import { ForgotPasswordFormSchema } from "../../utils/schemas.ts";
 import type { AuthFormState } from "../../utils/types.ts";
 
 export default function ForgotPasswordCard() {
-    const context = useUser();
+    const { requestPasswordReset } = useUser();
     const [state, formAction, isPending] = useActionState<
         AuthFormState,
         FormData
@@ -32,7 +32,7 @@ export default function ForgotPasswordCard() {
         }
 
         try {
-            await context.requestPasswordReset(result.data.email);
+            await requestPasswordReset(result.data.email);
         } catch (error) {
             console.error(error);
 

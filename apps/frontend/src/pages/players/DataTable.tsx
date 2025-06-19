@@ -8,23 +8,9 @@ import {
     getSortedRowModel,
     useReactTable,
 } from "@tanstack/react-table";
-import {
-    Box,
-    Button,
-    Flex,
-    Separator,
-    Table,
-    Text,
-    TextField,
-} from "@radix-ui/themes";
+import { Table } from "@radix-ui/themes";
 import { useState } from "react";
-import {
-    DownloadIcon,
-    PlusIcon,
-    SearchIcon,
-    TrashIcon,
-    UploadIcon,
-} from "lucide-react";
+import { ActionRow } from "../../components/players/ActionRow.tsx";
 
 type DataTableProps<TData, TValue> = {
     columns: ColumnDef<TData, TValue>[];
@@ -38,6 +24,7 @@ export function DataTable<TData, TValue>({
     const [sorting, setSorting] = useState<SortingState>([]);
     const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
     const [rowSelection, setRowSelection] = useState({});
+
     const table = useReactTable({
         data,
         columns,
@@ -56,55 +43,7 @@ export function DataTable<TData, TValue>({
 
     return (
         <>
-            <Flex justify="between" align="center" mb="5">
-                <Flex align="center" gap="3">
-                    <Button>
-                        <PlusIcon size={15} />
-                        Add Player
-                    </Button>
-                    <Button variant="outline">
-                        <DownloadIcon size={15} />
-                        Export JSON
-                    </Button>
-                    <Button variant="outline">
-                        <UploadIcon size={15} />
-                        Import JSON
-                    </Button>
-                    {table.getFilteredSelectedRowModel().rows.length > 0 && (
-                        <>
-                            <Separator size="2" orientation="vertical" />
-                            <Text>
-                                {`${table.getFilteredSelectedRowModel().rows.length} selected`}
-                            </Text>
-                            <Button color="red">
-                                <TrashIcon size={15} />
-                                Delete JSON
-                            </Button>
-                        </>
-                    )}
-                </Flex>
-                <Box width="250px" maxWidth="250px">
-                    <TextField.Root
-                        id="search"
-                        name="search"
-                        placeholder="Search players by name..."
-                        value={
-                            (table
-                                .getColumn("name")
-                                ?.getFilterValue() as string) ?? ""
-                        }
-                        onChange={(event) =>
-                            table
-                                .getColumn("name")
-                                ?.setFilterValue(event.target.value)
-                        }
-                    >
-                        <TextField.Slot>
-                            <SearchIcon size={15} />
-                        </TextField.Slot>
-                    </TextField.Root>
-                </Box>
-            </Flex>
+            <ActionRow table={table} />
             <Table.Root variant="surface">
                 <Table.Header>
                     {table.getHeaderGroups().map((headerGroup) => (

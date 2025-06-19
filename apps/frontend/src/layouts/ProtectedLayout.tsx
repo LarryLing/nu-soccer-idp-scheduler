@@ -4,6 +4,7 @@ import { Flex } from "@radix-ui/themes";
 import { useEffect } from "react";
 import { useUser } from "../hooks/useUser.ts";
 import trianglify from "../../public/images/trianglify.png";
+import { PlayersProvider } from "../contexts/PlayersProvider.tsx";
 
 export default function ProtectedLayout() {
     const context = useUser();
@@ -32,7 +33,9 @@ export default function ProtectedLayout() {
                 width="100%"
                 height="100%"
             >
-                <Outlet />
+                <PlayersProvider>
+                    <Outlet />
+                </PlayersProvider>
             </Flex>
         </Flex>
     );

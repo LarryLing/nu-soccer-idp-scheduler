@@ -5,14 +5,14 @@ import { Flex } from "@radix-ui/themes";
 import trianglify from "../../public/images/trianglify.png";
 
 export default function PublicLayout() {
-    const context = useUser();
+    const { user } = useUser();
     const navigate = useNavigate();
 
     useEffect(() => {
-        if (context.user !== null) {
+        if (user !== null) {
             navigate("/players", { replace: true });
         }
-    }, [navigate, context.user]);
+    }, [navigate, user]);
 
     return (
         <Flex
