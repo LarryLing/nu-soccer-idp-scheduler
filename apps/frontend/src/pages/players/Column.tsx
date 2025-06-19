@@ -96,16 +96,17 @@ export const columns: ColumnDef<Player>[] = [
         },
     },
     {
-        accessorKey: "availability",
+        accessorKey: "availabilities",
         header: () => {
             return (
                 <Text color="gray" weight="bold" mr="1">
-                    Availability
+                    Availabilities
                 </Text>
             );
         },
         cell: ({ row }) => {
-            const availabilities: Availability[] = row.getValue("availability");
+            const availabilities: Availability[] =
+                row.getValue("availabilities");
             return availabilities.map((availability) => (
                 <AvailabilityBadge {...availability} />
             ));

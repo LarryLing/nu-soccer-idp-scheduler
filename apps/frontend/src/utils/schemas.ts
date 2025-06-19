@@ -69,3 +69,54 @@ export const CreateAnAccountSchema = z
         message: "Passwords do not match",
         path: ["confirmPassword"],
     });
+
+export const AvailabilitySchema = z
+    .object({
+        day: z.enum([
+            "Monday",
+            "Tuesday",
+            "Wednesday",
+            "Thursday",
+            "Friday",
+            "Saturday",
+            "Sunday",
+        ]),
+        start: z.string().regex(/^(1[0-2]|0?[1-9]):([0-5][0-9])([AaPp][Mm])$/, {
+            message: "Start time must be in format '9:30AM' or '12:45PM'",
+        }),
+        end: z.string().regex(/^(1[0-2]|0?[1-9]):([0-5][0-9])([AaPp][Mm])$/, {
+            message: "End time must be in format '9:30AM' or '12:45PM'",
+        }),
+    })
+    .refine(
+        (data) => {
+            // Custom validation: Ensure end time is after start time
+            const parseTime = (timeStr: string) => {
+                const [hours, minutes] = timeStr.split(":").map(Number);
+                const period = timeStr.slice(-2).toUpperCase();
+                const totalHours = (hours % 12) + (period === "PM" ? 12 : 0);
+                return totalHours * 60 + minutes;
+            };
+            return parseTime(data.end) > parseTime(data.start);
+        },
+        {
+            message: "End time must be after start time",
+            path: ["end"],
+        },
+    );
+
+export const PlayerSchema = z.object({
+    number: z.number().min(0, {
+        message: "Number must be greater than 0",
+    }),
+    name: z
+        .string()
+        .min(1, {
+            message: "Name is required",
+        })
+        .regex(/^[A-Za-z]+(?:[ '-.][A-Za-z]+)*$/, {
+            message: "Name cannot contain special characters",
+        }),
+    position: z.enum(["Goalkeeper", "Defender", "Midfielder", "Forward"]),
+    availabilities: z.array(AvailabilitySchema),
+});

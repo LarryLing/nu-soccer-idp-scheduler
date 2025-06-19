@@ -9,7 +9,12 @@ const players: Player[] = [
         number: 0,
         name: "Dominic Pereira",
         position: "Goalkeeper",
-        availability: [
+        availabilities: [
+            {
+                day: "Monday",
+                start: "8:00am",
+                end: "10:30am",
+            },
             {
                 day: "Monday",
                 start: "8:00am",
@@ -22,7 +27,7 @@ const players: Player[] = [
         number: 1,
         name: "Rafael Ponce de Leon",
         position: "Goalkeeper",
-        availability: [
+        availabilities: [
             {
                 day: "Friday",
                 start: "6:30pm",
@@ -40,7 +45,7 @@ const players: Player[] = [
         number: 2,
         name: "Brandon Clagette",
         position: "Defender",
-        availability: [
+        availabilities: [
             {
                 day: "Tuesday",
                 start: "7:00pm",

@@ -1,3 +1,6 @@
+import { z } from "zod";
+import { AvailabilitySchema, PlayerSchema } from "./schemas.ts";
+
 export type User = {
     uid: string;
     email: string;
@@ -5,24 +8,9 @@ export type User = {
 
 export type Player = {
     id: string;
-    number: number;
-    name: string;
-    position: "Goalkeeper" | "Defender" | "Midfielder" | "Forward";
-    availability: Availability[];
-};
+} & z.infer<typeof PlayerSchema>;
 
-export type Availability = {
-    day:
-        | "Monday"
-        | "Tuesday"
-        | "Wednesday"
-        | "Thursday"
-        | "Friday"
-        | "Saturday"
-        | "Sunday";
-    start: string;
-    end: string;
-};
+export type Availability = z.infer<typeof AvailabilitySchema>;
 
 export type UserContextType = {
     user: User | null;
