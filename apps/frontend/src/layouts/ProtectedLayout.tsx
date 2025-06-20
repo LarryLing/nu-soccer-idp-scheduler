@@ -18,26 +18,28 @@ export default function ProtectedLayout() {
     }, [navigate, user]);
 
     return (
-        <Flex
-            direction="column"
-            height="100vh"
-            style={{
-                background: `url(${trianglify}) no-repeat center center fixed`,
-            }}
-        >
-            <Navbar />
+        user && (
             <Flex
                 direction="column"
-                gap="5"
-                px="72px"
-                py="6"
-                width="100%"
-                height="100%"
+                height="100vh"
+                style={{
+                    background: `url(${trianglify}) no-repeat center center fixed`,
+                }}
             >
-                <FirestoreProvider userId={user!.uid}>
-                    <Outlet />
-                </FirestoreProvider>
+                <Navbar />
+                <Flex
+                    direction="column"
+                    gap="5"
+                    px="72px"
+                    py="6"
+                    width="100%"
+                    height="100%"
+                >
+                    <FirestoreProvider userId={user.uid}>
+                        <Outlet />
+                    </FirestoreProvider>
+                </Flex>
             </Flex>
-        </Flex>
+        )
     );
 }
