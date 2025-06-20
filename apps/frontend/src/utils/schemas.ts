@@ -2,10 +2,10 @@ import { z } from "zod";
 
 export const SignInFormSchema = z.object({
     email: z.string().email({
-        message: "Email is required",
+        message: "Email is required.",
     }),
     password: z.string().min(1, {
-        message: "Password is required",
+        message: "Password is required.",
     }),
 });
 
@@ -13,60 +13,60 @@ export const ResetPasswordFormSchema = z
     .object({
         password: z
             .string()
-            .min(8, { message: "contain at least 8 characters" })
+            .min(8, { message: "contain at least 8 characters." })
             .refine((password) => /[A-Z]/.test(password), {
-                message: "contain at least one uppercase letter",
+                message: "contain at least one uppercase letter.",
             })
             .refine((password) => /[a-z]/.test(password), {
-                message: "contain at least one lowercase letter",
+                message: "contain at least one lowercase letter.",
             })
             .refine((password) => /[0-9]/.test(password), {
-                message: "contain at least one number",
+                message: "contain at least one number.",
             })
             .refine((password) => /[!@#$%^&*]/.test(password), {
-                message: "contain at least one special character",
+                message: "contain at least one special character.",
             }),
         confirmPassword: z.string().min(1, {
-            message: "Password confirmation is required",
+            message: "Password confirmation is required.",
         }),
     })
     .refine((data) => data.password === data.confirmPassword, {
-        message: "Passwords do not match",
+        message: "Passwords do not match.",
         path: ["confirmPassword"],
     });
 
 export const ForgotPasswordFormSchema = z.object({
     email: z.string().email({
-        message: "Email is required",
+        message: "Email is required.",
     }),
 });
 
 export const CreateAnAccountSchema = z
     .object({
         email: z.string().email({
-            message: "Email is required",
+            message: "Email is required.",
         }),
         password: z
             .string()
-            .min(8, { message: "contain at least 8 characters" })
+            .min(8, { message: "contain at least 8 characters." })
             .refine((password) => /[A-Z]/.test(password), {
-                message: "contain at least one uppercase letter",
+                message: "contain at least one uppercase letter.",
             })
             .refine((password) => /[a-z]/.test(password), {
-                message: "contain at least one lowercase letter",
+                message: "contain at least one lowercase letter.",
             })
             .refine((password) => /[0-9]/.test(password), {
-                message: "contain at least one number",
+                message: "contain at least one number.",
             })
             .refine((password) => /[!@#$%^&*]/.test(password), {
-                message: "contain at least one special character",
+                message: "contain at least one special character.",
             }),
         confirmPassword: z.string().min(1, {
-            message: "Password confirmation is required",
+            message: "Password confirmation is required.",
         }),
     })
     .refine((data) => data.password === data.confirmPassword, {
-        message: "Passwords do not match",
+        message: "Passwords do not match.",
         path: ["confirmPassword"],
     });
 
@@ -87,7 +87,7 @@ export const AvailabilitySchema = z
                 message: "Start time is required",
             })
             .regex(/^(1[0-2]|0?[1-9]):([0-5][0-9])([AP]M)$/, {
-                message: "Start time must be in format '9:30AM' or '12:45PM'",
+                message: "Start time must be in format '9:30AM' or '12:45PM'.",
             }),
         end: z
             .string()
@@ -95,7 +95,7 @@ export const AvailabilitySchema = z
                 message: "End time is required",
             })
             .regex(/^(1[0-2]|0?[1-9]):([0-5][0-9])([AP]M)$/, {
-                message: "End time must be in format '9:30AM' or '12:45PM'",
+                message: "End time must be in format '9:30AM' or '12:45PM'.",
             }),
     })
     .refine(
@@ -112,7 +112,7 @@ export const AvailabilitySchema = z
             return parseTime(data.end) > parseTime(data.start);
         },
         {
-            message: "End time must be after start time",
+            message: "End time must be after start time.",
             path: ["end"],
         },
     );
@@ -124,15 +124,15 @@ export const PlayerSchema = z.object({
             message: "Name is required",
         })
         .regex(/^[A-Za-z]+(?:[ '-.][A-Za-z]+)*$/, {
-            message: "Name cannot contain special characters",
+            message: "Name cannot contain special characters.",
         }),
     number: z
         .number()
         .min(0, {
-            message: "Number must be greater than or equal to 0",
+            message: "Number must be greater than or equal to 0.",
         })
         .max(99, {
-            message: "Number must be less than or equal to 99",
+            message: "Number must be less than or equal to 99.",
         }),
     position: z.enum(["Goalkeeper", "Defender", "Midfielder", "Forward"]),
     availabilities: z.array(AvailabilitySchema),
@@ -149,9 +149,9 @@ export const TrainingBlockSchema = z.object({
         "Sunday",
     ]),
     start: z.string().regex(/^(1[0-2]|0?[1-9]):([0-5][0-9])([AP]M)$/, {
-        message: "Start time must be in format '9:30AM' or '12:45PM'",
+        message: "Start time must be in format '9:30AM' or '12:45PM'.",
     }),
     end: z.string().regex(/^(1[0-2]|0?[1-9]):([0-5][0-9])([AP]M)$/, {
-        message: "End time must be in format '9:30AM' or '12:45PM'",
+        message: "End time must be in format '9:30AM' or '12:45PM'.",
     }),
 });

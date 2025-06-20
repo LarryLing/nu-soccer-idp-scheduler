@@ -5,25 +5,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b05902af-5cdc-4fb0-944c-d2d26c9f2b39" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/apps/frontend/src/components/players/AddPlayerDialog.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/apps/frontend/src/hooks/usePlayers.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/apps/frontend/src/components/players/PlayerTableActionRow.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/src/components/authentication/ResetPasswordCard.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/components/authentication/ResetPasswordCard.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/components/players/AddPlayerDialog.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/components/players/PlayerDialog.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/apps/frontend/src/components/players/AvailabilityRow.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/components/players/AvailabilityRow.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/apps/frontend/src/components/players/PlayerActionsDropdown.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/components/players/PlayerActionsDropdown.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/src/contexts/FirestoreContext.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/src/contexts/FirestoreProvider.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/hooks/useTrainingBlocks.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/src/contexts/PlayerDialogContext.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/src/contexts/PlayerDialogProvider.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/src/hooks/useFirestore.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/src/hooks/usePlayerDialog.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/src/layouts/ProtectedLayout.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/layouts/ProtectedLayout.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/src/pages/players/DataTable.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/pages/players/DataTable.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/pages/players/Column.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/pages/players/Column.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/pages/players/DataTable.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/components/players/PlayerTable.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/apps/frontend/src/pages/players/Players.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/pages/players/Players.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/apps/frontend/src/utils/schemas.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/utils/schemas.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/src/utils/types.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/utils/types.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pnpm-lock.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/pnpm-lock.yaml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -95,11 +85,11 @@
       <recent name="$PROJECT_DIR$/apps/frontend/src/components/authentication" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/apps/frontend/src/components/players" />
       <recent name="$PROJECT_DIR$/apps/frontend/src/contexts" />
       <recent name="$PROJECT_DIR$/apps/frontend/public/images" />
       <recent name="$PROJECT_DIR$/apps/frontend/src/pages/actions" />
       <recent name="$PROJECT_DIR$/apps/backend/src" />
-      <recent name="$PROJECT_DIR$/apps/frontend/public" />
     </key>
   </component>
   <component name="RunManager">
@@ -137,7 +127,7 @@
       <workItem from="1750053895745" duration="106881000" />
       <workItem from="1750312053135" duration="22487000" />
       <workItem from="1750368658431" duration="36650000" />
-      <workItem from="1750452312080" duration="1419000" />
+      <workItem from="1750452312080" duration="4604000" />
     </task>
     <servers />
   </component>

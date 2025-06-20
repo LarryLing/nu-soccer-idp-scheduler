@@ -4,15 +4,15 @@ import { usePlayers } from "../../hooks/usePlayers.ts";
 import type { Table } from "@tanstack/react-table";
 import type { Player } from "../../utils/types.ts";
 
-type PlayerActionsDropdownProps<TData> = {
+type PlayerActionsDropdownProps = {
     player: Player;
-    table: Table<TData>;
+    table: Table<Player>;
 };
 
-export default function PlayerActionsDropdown<TData>({
+export default function PlayerActionsDropdown({
     player,
     table,
-}: PlayerActionsDropdownProps<TData>) {
+}: PlayerActionsDropdownProps) {
     const { removePlayer } = usePlayers();
 
     const handleRemovePlayer = async () => {
@@ -28,9 +28,7 @@ export default function PlayerActionsDropdown<TData>({
                 </IconButton>
             </DropdownMenu.Trigger>
             <DropdownMenu.Content align="center">
-                <DropdownMenu.Item>
-                    Edit
-                </DropdownMenu.Item>
+                <DropdownMenu.Item>Edit</DropdownMenu.Item>
                 <DropdownMenu.Item color="red" onClick={handleRemovePlayer}>
                     Delete
                 </DropdownMenu.Item>

@@ -19,7 +19,7 @@ type AddPlayerDialogProps = {
     addPlayer: (player: z.infer<typeof PlayerSchema>) => void;
 };
 
-export default function AddPlayerDialog({ addPlayer }: AddPlayerDialogProps) {
+export default function PlayerDialog({ addPlayer }: AddPlayerDialogProps) {
     const [isOpen, setIsOpen] = useState(false);
 
     const {
@@ -190,40 +190,11 @@ export default function AddPlayerDialog({ addPlayer }: AddPlayerDialogProps) {
                                         index={index}
                                         register={register}
                                         remove={remove}
+                                        errors={errors}
                                     />
                                 );
                             })}
                         </Flex>
-                        {/*{errors?.availabilities && (*/}
-                        {/*    <>*/}
-                        {/*        <Text*/}
-                        {/*            size="2"*/}
-                        {/*            weight="regular"*/}
-                        {/*            as="p"*/}
-                        {/*            color="red"*/}
-                        {/*        >*/}
-                        {/*            Please fix the following errors:*/}
-                        {/*        </Text>*/}
-                        {/*        {*/}
-                        {/*            errors.availabilities.length >= 1 && (*/}
-                        {/*                <Text*/}
-                        {/*                    key={value.message}*/}
-                        {/*                    size="2"*/}
-                        {/*                    weight="regular"*/}
-                        {/*                    as="p"*/}
-                        {/*                    color="red"*/}
-                        {/*                >*/}
-                        {/*                    - {value.message}*/}
-                        {/*                </Text>*/}
-                        {/*            )*/}
-                        {/*        }*/}
-                        {/*        {errors.availabilities.map((value) => (*/}
-                        {/*            value && (*/}
-                        {/*                */}
-                        {/*            )*/}
-                        {/*        ))}*/}
-                        {/*    </>*/}
-                        {/*)}*/}
                     </Box>
                     <Flex direction="row-reverse" gap="4">
                         <Button
