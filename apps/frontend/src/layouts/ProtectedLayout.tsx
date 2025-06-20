@@ -3,7 +3,6 @@ import Navbar from "../components/miscellaneous/Navbar.tsx";
 import { Flex } from "@radix-ui/themes";
 import { useEffect } from "react";
 import { useUser } from "../hooks/useUser.ts";
-import { FirestoreProvider } from "../contexts/FirestoreProvider.tsx";
 import trianglify from "../../public/images/trianglify.png";
 
 export default function ProtectedLayout() {
@@ -35,9 +34,7 @@ export default function ProtectedLayout() {
                     width="100%"
                     height="100%"
                 >
-                    <FirestoreProvider userId={user.uid}>
-                        <Outlet />
-                    </FirestoreProvider>
+                    <Outlet />
                 </Flex>
             </Flex>
         )

@@ -18,16 +18,10 @@ import {
     TextField,
 } from "@radix-ui/themes";
 import { useState } from "react";
-import {
-    DownloadIcon,
-    PlusIcon,
-    SearchIcon,
-    TrashIcon,
-    UploadIcon,
-} from "lucide-react";
-import { useFirestore } from "../../hooks/useFirestore.ts";
+import { DownloadIcon, SearchIcon, TrashIcon, UploadIcon } from "lucide-react";
+import { usePlayers } from "../../hooks/usePlayers.ts";
 import type { Player } from "../../utils/types.ts";
-import { usePlayerDialog } from "../../hooks/usePlayerDialog.ts";
+import AddPlayerDialog from "../../components/players/AddPlayerDialog.tsx";
 
 type DataTableProps<TData, TValue> = {
     columns: ColumnDef<TData, TValue>[];
@@ -58,8 +52,7 @@ export function DataTable<TData, TValue>({
         },
     });
 
-    const { removePlayers } = useFirestore();
-    const { handleOpen, PlayerDialog } = usePlayerDialog();
+    const { addPlayer, removePlayers } = usePlayers();
 
     const selectedPlayerIds = table
         .getFilteredSelectedRowModel()
@@ -74,10 +67,7 @@ export function DataTable<TData, TValue>({
         <>
             <Flex justify="between" align="center" mb="5">
                 <Flex align="center" gap="3">
-                    <Button onClick={() => handleOpen()}>
-                        <PlusIcon size={15} />
-                        Add Player
-                    </Button>
+                    <AddPlayerDialog addPlayer={addPlayer} />
                     <Button variant="outline">
                         <DownloadIcon size={15} />
                         Export JSON
@@ -168,7 +158,6 @@ export function DataTable<TData, TValue>({
                     )}
                 </Table.Body>
             </Table.Root>
-            <PlayerDialog />
         </>
     );
 }

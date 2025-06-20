@@ -1,9 +1,8 @@
 import { DropdownMenu, IconButton } from "@radix-ui/themes";
 import { EllipsisIcon } from "lucide-react";
-import { useFirestore } from "../../hooks/useFirestore.ts";
+import { usePlayers } from "../../hooks/usePlayers.ts";
 import type { Table } from "@tanstack/react-table";
 import type { Player } from "../../utils/types.ts";
-import { usePlayerDialog } from "../../hooks/usePlayerDialog.ts";
 
 type PlayerActionsDropdownProps<TData> = {
     player: Player;
@@ -14,9 +13,7 @@ export default function PlayerActionsDropdown<TData>({
     player,
     table,
 }: PlayerActionsDropdownProps<TData>) {
-    const { removePlayer } = useFirestore();
-
-    const { handleOpen } = usePlayerDialog();
+    const { removePlayer } = usePlayers();
 
     const handleRemovePlayer = async () => {
         await removePlayer(player.id);
@@ -31,7 +28,7 @@ export default function PlayerActionsDropdown<TData>({
                 </IconButton>
             </DropdownMenu.Trigger>
             <DropdownMenu.Content align="center">
-                <DropdownMenu.Item onClick={() => handleOpen(player)}>
+                <DropdownMenu.Item>
                     Edit
                 </DropdownMenu.Item>
                 <DropdownMenu.Item color="red" onClick={handleRemovePlayer}>

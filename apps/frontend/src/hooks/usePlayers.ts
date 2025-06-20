@@ -1,0 +1,111 @@
+import { useCallback, useEffect, useState } from "react";
+import type { Player } from "../utils/types.ts";
+import { z } from "zod";
+import { PlayerSchema } from "../utils/schemas.ts";
+import {
+    addDoc,
+    collection,
+    deleteDoc,
+    doc,
+    onSnapshot,
+    orderBy,
+    query,
+    writeBatch,
+} from "firebase/firestore";
+import { clientFirestore } from "../utils/firebase.ts";
+import { useUser } from "./useUser.ts";
+
+export const usePlayers = () => {
+    const [players, setPlayers] = useState<Player[]>([]);
+
+    const { user } = useUser();
+
+    const addPlayer = useCallback(
+        async (player?: z.infer<typeof PlayerSchema>) => {
+            if (!player) {
+                throw new Error("Player is required");
+            }
+
+            if (!user) {
+                throw new Error("User not authenticated");
+            }
+
+            await addDoc(
+                collection(clientFirestore, `users/${user.uid}/players/`),
+                player,
+            );
+        },
+        [user],
+    );
+
+    const removePlayer = useCallback(
+        async (playerId?: string) => {
+            if (!playerId) {
+                throw new Error("Player ID is required");
+            }
+
+            if (!user) {
+                throw new Error("User not authenticated");
+            }
+
+            await deleteDoc(
+                doc(clientFirestore, `users/${user.uid!}/players/${playerId}`),
+            );
+        },
+        [user],
+    );
+
+    const removePlayers = useCallback(
+        async (playerIds?: string[]) => {
+            if (!playerIds) {
+                throw new Error("Player IDs are required");
+            }
+
+            if (!user) {
+                throw new Error("User not authenticated");
+            }
+
+            const batch = writeBatch(clientFirestore);
+            playerIds.forEach((playerId) => {
+                batch.delete(
+                    doc(
+                        clientFirestore,
+                        `users/${user.uid!}/players/${playerId}`,
+                    ),
+                );
+            });
+
+            await batch.commit();
+        },
+        [user],
+    );
+
+    useEffect(() => {
+        if (!user) {
+            return;
+        }
+
+        const playersQuery = query(
+            collection(clientFirestore, `users/${user.uid}/players`),
+            orderBy("number", "asc"),
+        );
+
+        const unsubscribe = onSnapshot(playersQuery, (snapshot) => {
+            setPlayers(
+                snapshot.docs.map((doc) => ({
+                    id: doc.id,
+                    ...doc.data(),
+                })) as Player[],
+            );
+        });
+
+        return () => unsubscribe();
+    }, [user]);
+
+    return {
+        players: players,
+        addPlayer: addPlayer,
+        removePlayer: removePlayer,
+        removePlayers: removePlayers,
+    };
+};

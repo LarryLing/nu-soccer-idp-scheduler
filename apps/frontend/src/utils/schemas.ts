@@ -121,10 +121,10 @@ export const PlayerSchema = z.object({
     name: z
         .string()
         .min(1, {
-            message: "contain at least 1 character",
+            message: "Name is required",
         })
         .regex(/^[A-Za-z]+(?:[ '-.][A-Za-z]+)*$/, {
-            message: "not cannot contain special characters",
+            message: "Name cannot contain special characters",
         }),
     number: z
         .number()

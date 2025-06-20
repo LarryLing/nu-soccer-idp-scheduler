@@ -1,91 +1,65 @@
-import type { Availability } from "../../utils/types.ts";
-import { Flex, Select, TextField, Text, IconButton } from "@radix-ui/themes";
+import { Flex, IconButton, Select, Text, TextField } from "@radix-ui/themes";
 import { XIcon } from "lucide-react";
-import { type ChangeEvent, useCallback } from "react";
+import type { UseFieldArrayRemove, UseFormRegister } from "react-hook-form";
+import type { PlayerSchema } from "../../utils/schemas.ts";
+import { z } from "zod";
+
+const DAYS = [
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+    "Sunday",
+] as const;
 
 type AvailabilityRowProps = {
     index: number;
-    removeAvailabilityAtIndex: (index: number) => void;
-    updateAvailabilityDayAtIndex: (index: number, value: string) => void;
-    updateAvailabilityStartAtIndex: (index: number, value: string) => void;
-    updateAvailabilityEndAtIndex: (index: number, value: string) => void;
-} & Availability;
+    register: UseFormRegister<z.infer<typeof PlayerSchema>>;
+    remove: UseFieldArrayRemove;
+};
 
 export default function AvailabilityRow({
     index,
-    day,
-    start,
-    end,
-    removeAvailabilityAtIndex,
-    updateAvailabilityDayAtIndex,
-    updateAvailabilityStartAtIndex,
-    updateAvailabilityEndAtIndex,
+    register,
+    remove,
 }: AvailabilityRowProps) {
-    const handleRemoveAvailability = useCallback(() => {
-        removeAvailabilityAtIndex(index);
-    }, [index, removeAvailabilityAtIndex]);
-
-    const handleAvailabilityDayChange = useCallback(
-        (value: string) => {
-            updateAvailabilityDayAtIndex(index, value);
-        },
-        [index, updateAvailabilityDayAtIndex],
-    );
-
-    const handleAvailabilityStartChange = useCallback(
-        (e: ChangeEvent<HTMLInputElement>) => {
-            updateAvailabilityStartAtIndex(index, e.target.value);
-        },
-        [index, updateAvailabilityStartAtIndex],
-    );
-
-    const handleAvailabilityEndChange = useCallback(
-        (e: ChangeEvent<HTMLInputElement>) => {
-            updateAvailabilityEndAtIndex(index, e.target.value);
-        },
-        [index, updateAvailabilityEndAtIndex],
-    );
-
     return (
         <Flex justify="between">
             <Flex align="center" gap="3">
                 <Select.Root
                     defaultValue="Monday"
-                    value={day}
-                    onValueChange={handleAvailabilityDayChange}
+                    {...register(`availabilities.${index}.day`)}
                 >
                     <Select.Trigger style={{ width: "120px" }} />
                     <Select.Content>
-                        <Select.Item value="Monday">Monday</Select.Item>
-                        <Select.Item value="Tuesday">Tuesday</Select.Item>
-                        <Select.Item value="Wednesday">Wednesday</Select.Item>
-                        <Select.Item value="Thursday">Thursday</Select.Item>
-                        <Select.Item value="Friday">Friday</Select.Item>
-                        <Select.Item value="Saturday">Saturday</Select.Item>
-                        <Select.Item value="Sunday">Sunday</Select.Item>
+                        {DAYS.map((dayOption) => (
+                            <Select.Item key={dayOption} value={dayOption}>
+                                {dayOption}
+                            </Select.Item>
+                        ))}
                     </Select.Content>
                 </Select.Root>
                 <TextField.Root
-                    style={{ width: "100px" }}
-                    placeholder="ie: 9:30AM"
-                    value={start}
-                    onChange={handleAvailabilityStartChange}
+                    style={{ width: "80px" }}
+                    placeholder="9:30AM"
+                    {...register(`availabilities.${index}.start`)}
                 />
                 <Text size="2" weight="medium">
-                    to
+                    -
                 </Text>
                 <TextField.Root
-                    style={{ width: "100px" }}
-                    placeholder="ie: 10:00AM"
-                    value={end}
-                    onChange={handleAvailabilityEndChange}
+                    style={{ width: "80px" }}
+                    placeholder="10:00AM"
+                    {...register(`availabilities.${index}.end`)}
                 />
             </Flex>
             <IconButton
-                variant="outline"
+                variant="soft"
                 color="red"
-                onClick={handleRemoveAvailability}
                 type="button"
+                onClick={() => remove(index)}
             >
                 <XIcon size={15} />
             </IconButton>

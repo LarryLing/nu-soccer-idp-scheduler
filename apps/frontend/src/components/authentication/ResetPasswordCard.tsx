@@ -22,7 +22,7 @@ type ResetPasswordCardProps = {
 export default function ResetPasswordCard({
     actionCode,
 }: ResetPasswordCardProps) {
-    const context = useUser();
+    const { resetPassword } = useUser();
 
     const navigate = useNavigate();
 
@@ -58,7 +58,7 @@ export default function ResetPasswordCard({
         }
 
         try {
-            await context.resetPassword(actionCode, result.data.password);
+            await resetPassword(actionCode, result.data.password);
         } catch (error) {
             console.error(error);
 

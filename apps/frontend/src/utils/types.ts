@@ -4,7 +4,6 @@ import {
     PlayerSchema,
     TrainingBlockSchema,
 } from "./schemas.ts";
-import type { JSX } from "react";
 export type User = {
     uid: string;
     email: string;
@@ -31,30 +30,33 @@ export type UserContextType = {
     resetPassword: (actionCode?: string, newPassword?: string) => Promise<void>;
 };
 
-export type FirestoreContextType = {
-    players: Player[];
-    trainingBlocks: TrainingBlock[];
-    isLoading: boolean;
-    addPlayer: (player?: z.infer<typeof PlayerSchema>) => Promise<void>;
-    removePlayer: (playerId?: string) => Promise<void>;
-    removePlayers: (playerIds?: string[]) => Promise<void>;
-    addTrainingBlock: (
-        trainingBlock?: z.infer<typeof TrainingBlockSchema>,
-    ) => Promise<void>;
-    removeTrainingBlock: (trainingBlockId?: string) => Promise<void>;
-    assignPlayerToTrainingBlock: (
-        trainingBlockId?: string,
-        playerId?: string,
-    ) => Promise<void>;
-    unassignPlayerFromTrainingBlock: (
-        trainingBlockId?: string,
-        playerId?: string,
-    ) => Promise<void>;
+export type PlayerDialogContextType = {
+    isOpen: boolean;
+    playerDialogContent: PlayerDialogContent;
+    updatePlayer: (
+        field: "name" | "number" | "position",
+        value: Player["name"] | Player["number"] | Player["position"],
+    ) => void;
+    addAvailability: () => void;
+    removeAvailabilityAtIndex: (index: number) => void;
+    updateAvailabilityAtIndex: (
+        index: number,
+        field: "day" | "start" | "end",
+        value:
+            | Availability["day"]
+            | Availability["start"]
+            | Availability["end"],
+    ) => void;
+    openDialog: (config: PlayerDialogContent) => void;
+    closeDialog: () => void;
 };
 
-export type PlayerDialogContextType = {
-    handleOpen: (presetPlayerData?: z.infer<typeof PlayerSchema>) => void;
-    PlayerDialog: () => JSX.Element;
+export type PlayerDialogContent = {
+    title: string;
+    description: string;
+    player: z.infer<typeof PlayerSchema>;
+    onSubmit: () => void;
+    submitText: string;
 };
 
 export type AuthFormState = {
