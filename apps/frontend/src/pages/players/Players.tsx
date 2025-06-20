@@ -2,6 +2,7 @@ import { Heading, Section, Text } from "@radix-ui/themes";
 import { DataTable } from "./DataTable.tsx";
 import { columns } from "./Column.tsx";
 import { useFirestore } from "../../hooks/useFirestore.ts";
+import { PlayerDialogProvider } from "../../contexts/PlayerDialogProvider.tsx";
 
 export default function Players() {
     const { players } = useFirestore();
@@ -17,7 +18,9 @@ export default function Players() {
                 </Text>
             </Section>
             <Section p="0">
-                <DataTable columns={columns} data={players} />
+                <PlayerDialogProvider>
+                    <DataTable columns={columns} data={players} />
+                </PlayerDialogProvider>
             </Section>
         </>
     );

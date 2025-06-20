@@ -3,6 +3,7 @@ import ResetPasswordCard from "../../components/authentication/ResetPasswordCard
 
 export default function EmailActions() {
     const navigate = useNavigate();
+
     const [searchParams] = useSearchParams();
 
     const mode = searchParams.get("mode");

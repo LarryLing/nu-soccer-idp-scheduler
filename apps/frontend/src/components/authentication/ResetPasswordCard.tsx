@@ -23,12 +23,27 @@ export default function ResetPasswordCard({
     actionCode,
 }: ResetPasswordCardProps) {
     const context = useUser();
+
     const navigate = useNavigate();
+
     const [isActionCodeVerified, setIsActionCodeVerified] = useState(true);
+
     const [state, formAction, isPending] = useActionState<
         AuthFormState,
         FormData
     >(submitForm, null);
+
+    useEffect(() => {
+        async function verifyActionCode() {
+            try {
+                await verifyPasswordResetCode(clientAuth, actionCode);
+            } catch {
+                setIsActionCodeVerified(false);
+            }
+        }
+
+        verifyActionCode();
+    }, [navigate, actionCode]);
 
     async function submitForm(prevState: AuthFormState, formData: FormData) {
         const result = ResetPasswordFormSchema.safeParse({
@@ -57,18 +72,6 @@ export default function ResetPasswordCard({
         navigate("/players");
         return prevState;
     }
-
-    useEffect(() => {
-        async function verifyActionCode() {
-            try {
-                await verifyPasswordResetCode(clientAuth, actionCode);
-            } catch {
-                setIsActionCodeVerified(false);
-            }
-        }
-
-        verifyActionCode();
-    }, [navigate, actionCode]);
 
     return (
         <Box width="400px">

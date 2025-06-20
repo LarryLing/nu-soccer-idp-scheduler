@@ -5,7 +5,7 @@ import { useUser } from "../../hooks/useUser.ts";
 import { LogOutIcon } from "lucide-react";
 
 export default function Navbar() {
-    const context = useUser();
+    const { signOut } = useUser();
 
     return (
         <Flex
@@ -35,7 +35,7 @@ export default function Navbar() {
                         Training Blocks
                     </ReactRouterLink>
                 </Link>
-                <Button type="button" onClick={() => context.signOut()}>
+                <Button type="button" onClick={signOut}>
                     <LogOutIcon size={15} />
                     Sign Out
                 </Button>

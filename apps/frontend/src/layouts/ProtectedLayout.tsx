@@ -8,6 +8,7 @@ import trianglify from "../../public/images/trianglify.png";
 
 export default function ProtectedLayout() {
     const { user } = useUser();
+
     const navigate = useNavigate();
 
     useEffect(() => {

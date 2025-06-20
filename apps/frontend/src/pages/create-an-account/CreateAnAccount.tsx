@@ -16,7 +16,9 @@ import { FirebaseError } from "firebase/app";
 
 export default function CreateAnAccountCard() {
     const context = useUser();
+
     const navigate = useNavigate();
+
     const [state, formAction, isPending] = useActionState<
         AuthFormState,
         FormData

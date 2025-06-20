@@ -4,7 +4,7 @@ import {
     PlayerSchema,
     TrainingBlockSchema,
 } from "./schemas.ts";
-
+import type { JSX } from "react";
 export type User = {
     uid: string;
     email: string;
@@ -50,6 +50,11 @@ export type FirestoreContextType = {
         trainingBlockId?: string,
         playerId?: string,
     ) => Promise<void>;
+};
+
+export type PlayerDialogContextType = {
+    handleOpen: (presetPlayerData?: z.infer<typeof PlayerSchema>) => void;
+    PlayerDialog: () => JSX.Element;
 };
 
 export type AuthFormState = {

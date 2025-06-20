@@ -1,4 +1,10 @@
-import { type PropsWithChildren, useEffect, useState } from "react";
+import {
+    type PropsWithChildren,
+    useCallback,
+    useEffect,
+    useMemo,
+    useState,
+} from "react";
 import type { Player, TrainingBlock } from "../utils/types.ts";
 import { FirestoreContext } from "./FirestoreContext.tsx";
 import {
@@ -28,106 +34,124 @@ export function FirestoreProvider({
     const [trainingBlocks, setTrainingBlocks] = useState<TrainingBlock[]>([]);
     const [isLoading, setIsLoading] = useState<boolean>(true);
 
-    const addPlayer = async (player?: z.infer<typeof PlayerSchema>) => {
-        if (!player) {
-            throw new Error("Player is required");
-        }
+    const addPlayer = useCallback(
+        async (player?: z.infer<typeof PlayerSchema>) => {
+            if (!player) {
+                throw new Error("Player is required");
+            }
 
-        const docRef = await addDoc(
-            collection(clientFirestore, `users/${userId!}/players/`),
-            player,
-        );
+            const docRef = await addDoc(
+                collection(clientFirestore, `users/${userId!}/players/`),
+                player,
+            );
 
-        setPlayers((prev) => [
-            ...prev,
-            {
-                ...player,
-                id: docRef.id,
-            } as Player,
-        ]);
-    };
+            setPlayers((prev) => [
+                ...prev,
+                {
+                    ...player,
+                    id: docRef.id,
+                } as Player,
+            ]);
+        },
+        [userId],
+    );
 
-    const removePlayer = async (playerId?: string) => {
-        if (!playerId) {
-            throw new Error("Player ID is required");
-        }
+    const removePlayer = useCallback(
+        async (playerId?: string) => {
+            if (!playerId) {
+                throw new Error("Player ID is required");
+            }
 
-        setPlayers((prev) => prev.filter((player) => player.id !== playerId));
+            setPlayers((prev) =>
+                prev.filter((player) => player.id !== playerId),
+            );
 
-        await deleteDoc(
-            doc(clientFirestore, `users/${userId!}/players/${playerId}`),
-        );
-    };
-
-    const removePlayers = async (playerIds?: string[]) => {
-        if (!playerIds) {
-            throw new Error("Player IDs are required");
-        }
-
-        setPlayers((prev) =>
-            prev.filter((player) => !playerIds.includes(player.id)),
-        );
-
-        const batch = writeBatch(clientFirestore);
-        playerIds.forEach((playerId) => {
-            batch.delete(
+            await deleteDoc(
                 doc(clientFirestore, `users/${userId!}/players/${playerId}`),
             );
-        });
+        },
+        [userId],
+    );
 
-        await batch.commit();
-    };
+    const removePlayers = useCallback(
+        async (playerIds?: string[]) => {
+            if (!playerIds) {
+                throw new Error("Player IDs are required");
+            }
 
-    const addTrainingBlock = async (
-        trainingBlock?: z.infer<typeof TrainingBlockSchema>,
-    ) => {
-        if (!trainingBlock) {
-            throw new Error("Training block is required");
-        }
+            setPlayers((prev) =>
+                prev.filter((player) => !playerIds.includes(player.id)),
+            );
 
-        setTrainingBlocks((prev) => [
-            ...prev,
-            {
-                ...trainingBlock,
-                id: "",
-                assignedPlayers: [],
-            } as TrainingBlock,
-        ]);
-    };
+            const batch = writeBatch(clientFirestore);
+            playerIds.forEach((playerId) => {
+                batch.delete(
+                    doc(
+                        clientFirestore,
+                        `users/${userId!}/players/${playerId}`,
+                    ),
+                );
+            });
 
-    const removeTrainingBlock = async (trainingBlockId?: string) => {
-        if (!trainingBlockId) {
-            throw new Error("Training block ID is required");
-        }
+            await batch.commit();
+        },
+        [userId],
+    );
 
-        setTrainingBlocks((prev) =>
-            prev.filter(
-                (trainingBlock) => trainingBlock.id !== trainingBlockId,
-            ),
-        );
-    };
+    const addTrainingBlock = useCallback(
+        async (trainingBlock?: z.infer<typeof TrainingBlockSchema>) => {
+            if (!trainingBlock) {
+                throw new Error("Training block is required");
+            }
 
-    const assignPlayerToTrainingBlock = async (
-        trainingBlockId?: string,
-        playerId?: string,
-    ) => {
-        if (!playerId || !trainingBlockId) {
-            throw new Error("Player ID and training block ID are required");
-        }
+            setTrainingBlocks((prev) => [
+                ...prev,
+                {
+                    ...trainingBlock,
+                    id: "",
+                    assignedPlayers: [],
+                } as TrainingBlock,
+            ]);
+        },
+        [],
+    );
 
-        return;
-    };
+    const removeTrainingBlock = useCallback(
+        async (trainingBlockId?: string) => {
+            if (!trainingBlockId) {
+                throw new Error("Training block ID is required");
+            }
 
-    const unassignPlayerFromTrainingBlock = async (
-        trainingBlockId?: string,
-        playerId?: string,
-    ) => {
-        if (!playerId || !trainingBlockId) {
-            throw new Error("Player ID and training block ID are required");
-        }
+            setTrainingBlocks((prev) =>
+                prev.filter(
+                    (trainingBlock) => trainingBlock.id !== trainingBlockId,
+                ),
+            );
+        },
+        [],
+    );
 
-        return;
-    };
+    const assignPlayerToTrainingBlock = useCallback(
+        async (trainingBlockId?: string, playerId?: string) => {
+            if (!playerId || !trainingBlockId) {
+                throw new Error("Player ID and training block ID are required");
+            }
+
+            return;
+        },
+        [],
+    );
+
+    const unassignPlayerFromTrainingBlock = useCallback(
+        async (trainingBlockId?: string, playerId?: string) => {
+            if (!playerId || !trainingBlockId) {
+                throw new Error("Player ID and training block ID are required");
+            }
+
+            return;
+        },
+        [],
+    );
 
     useEffect(() => {
         async function fetchData() {
@@ -176,18 +200,32 @@ export function FirestoreProvider({
         }
     }, [userId]);
 
-    const value = {
-        players: players,
-        trainingBlocks: trainingBlocks,
-        isLoading: isLoading,
-        addPlayer: addPlayer,
-        removePlayer: removePlayer,
-        removePlayers: removePlayers,
-        addTrainingBlock: addTrainingBlock,
-        removeTrainingBlock: removeTrainingBlock,
-        assignPlayerToTrainingBlock: assignPlayerToTrainingBlock,
-        unassignPlayerFromTrainingBlock: unassignPlayerFromTrainingBlock,
-    };
+    const value = useMemo(
+        () => ({
+            players: players,
+            trainingBlocks: trainingBlocks,
+            isLoading: isLoading,
+            addPlayer: addPlayer,
+            removePlayer: removePlayer,
+            removePlayers: removePlayers,
+            addTrainingBlock: addTrainingBlock,
+            removeTrainingBlock: removeTrainingBlock,
+            assignPlayerToTrainingBlock: assignPlayerToTrainingBlock,
+            unassignPlayerFromTrainingBlock: unassignPlayerFromTrainingBlock,
+        }),
+        [
+            addPlayer,
+            addTrainingBlock,
+            assignPlayerToTrainingBlock,
+            isLoading,
+            players,
+            removePlayer,
+            removePlayers,
+            removeTrainingBlock,
+            trainingBlocks,
+            unassignPlayerFromTrainingBlock,
+        ],
+    );
 
     return (
         <FirestoreContext.Provider value={value}>

@@ -15,6 +15,7 @@ import type { AuthFormState } from "../../utils/types.ts";
 
 export default function ForgotPasswordCard() {
     const { requestPasswordReset } = useUser();
+
     const [state, formAction, isPending] = useActionState<
         AuthFormState,
         FormData

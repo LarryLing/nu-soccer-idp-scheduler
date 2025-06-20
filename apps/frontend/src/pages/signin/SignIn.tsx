@@ -17,7 +17,9 @@ import { FirebaseError } from "firebase/app";
 
 export default function SignIn() {
     const { signIn } = useUser();
+
     const navigate = useNavigate();
+
     const [state, formAction, isPending] = useActionState<
         AuthFormState,
         FormData

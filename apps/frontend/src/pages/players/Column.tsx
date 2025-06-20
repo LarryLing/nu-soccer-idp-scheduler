@@ -1,9 +1,7 @@
 import type { ColumnDef } from "@tanstack/react-table";
 import type { Availability, Player } from "../../utils/types.ts";
-import AvailabilityBadge from "../../components/players/AvailabilityBadge.tsx";
-import PositionBadge from "../../components/players/PositionBadge.tsx";
 import PlayerActionsDropdown from "../../components/players/PlayerActionsDropdown.tsx";
-import { Button, Checkbox, Text } from "@radix-ui/themes";
+import { Badge, Button, Checkbox, Text } from "@radix-ui/themes";
 import { ArrowDownUpIcon } from "lucide-react";
 
 export const columns: ColumnDef<Player>[] = [
@@ -87,12 +85,12 @@ export const columns: ColumnDef<Player>[] = [
             );
         },
         cell: ({ row }) => {
-            const position:
-                | "Goalkeeper"
-                | "Defender"
-                | "Midfielder"
-                | "Forward" = row.getValue("position");
-            return <PositionBadge position={position} />;
+            const position: Player["position"] = row.getValue("position");
+            return (
+                <Badge variant="soft" color="gray">
+                    {position}
+                </Badge>
+            );
         },
     },
     {
@@ -107,8 +105,15 @@ export const columns: ColumnDef<Player>[] = [
         cell: ({ row }) => {
             const availabilities: Availability[] =
                 row.getValue("availabilities");
-            return availabilities.map((availability, index) => (
-                <AvailabilityBadge key={index} {...availability} />
+            return availabilities.map((availability) => (
+                <Badge
+                    key={`${availability.day} ${availability.start} ${availability.end}`}
+                    variant="outline"
+                    color="gray"
+                    mr="2"
+                >
+                    {availability.day} {availability.start} - {availability.end}
+                </Badge>
             ));
         },
     },
@@ -123,10 +128,7 @@ export const columns: ColumnDef<Player>[] = [
         },
         cell: ({ table, row }) => {
             return (
-                <PlayerActionsDropdown
-                    playerId={row.original.id}
-                    table={table}
-                />
+                <PlayerActionsDropdown player={row.original} table={table} />
             );
         },
     },

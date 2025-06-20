@@ -6,6 +6,7 @@ import trianglify from "../../public/images/trianglify.png";
 
 export default function PublicLayout() {
     const { user } = useUser();
+
     const navigate = useNavigate();
 
     useEffect(() => {
