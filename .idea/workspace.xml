@@ -7,7 +7,6 @@
     <list default="true" id="b05902af-5cdc-4fb0-944c-d2d26c9f2b39" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/apps/frontend/src/contexts/PlayerDialogProvider.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/contexts/PlayerDialogProvider.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/src/layouts/ProtectedLayout.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/layouts/ProtectedLayout.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -39,7 +38,7 @@
   }
 }</component>
   <component name="ProblemsViewState">
-    <option name="selectedTabId" value="CurrentFile" />
+    <option name="selectedTabId" value="ProjectErrors" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 3
@@ -119,7 +118,7 @@
       <workItem from="1750053542606" duration="243000" />
       <workItem from="1750053895745" duration="106881000" />
       <workItem from="1750312053135" duration="22487000" />
-      <workItem from="1750368658431" duration="14144000" />
+      <workItem from="1750368658431" duration="14449000" />
     </task>
     <servers />
   </component>

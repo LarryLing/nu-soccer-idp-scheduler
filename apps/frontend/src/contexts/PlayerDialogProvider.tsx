@@ -1,7 +1,7 @@
 import {
     type ChangeEvent,
     type PropsWithChildren,
-    useCallback, useMemo,
+    useCallback,
     useState,
 } from "react";
 import {
@@ -186,7 +186,7 @@ export function PlayerDialogProvider({ children }: PropsWithChildren) {
         [playerDialogFormData],
     );
 
-    const PlayerDialog = useMemo(() => {
+    const PlayerDialog = () => {
         return (
             <Dialog.Root open={isOpen} onOpenChange={setIsOpen}>
                 <Dialog.Content>
@@ -389,16 +389,13 @@ export function PlayerDialogProvider({ children }: PropsWithChildren) {
                     </Flex>
                 </Dialog.Content>
             </Dialog.Root>
-        );
-    }, [action, handleAddAvailability, handleClose, handleNameChange, handleNumberChange, handlePositionChange, handleSubmit, isOpen, isPending, playerDialogFormData.availabilities, playerDialogFormData.name, playerDialogFormData.number, playerDialogFormData.position, removeAvailabilityAtIndex, state, updateAvailabilityDayAtIndex, updateAvailabilityEndAtIndex, updateAvailabilityStartAtIndex]);
+        )
+    }
 
-    const value = useMemo(
-        () => ({
-            handleOpen,
-            PlayerDialog,
-        }),
-        [handleOpen, PlayerDialog],
-    );
+    const value = {
+        handleOpen,
+        PlayerDialog
+    }
 
     return (
         <PlayerDialogContext.Provider value={value}>
