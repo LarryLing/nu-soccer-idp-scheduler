@@ -3,6 +3,7 @@ import { EllipsisIcon } from "lucide-react";
 import { usePlayers } from "../../hooks/usePlayers.ts";
 import type { Table } from "@tanstack/react-table";
 import type { Player } from "../../utils/types.ts";
+import { useEditPlayerDialog } from "../../hooks/useEditPlayerDialog.ts";
 
 type PlayerActionsDropdownProps = {
     player: Player;
@@ -14,6 +15,8 @@ export default function PlayerActionsDropdown({
     table,
 }: PlayerActionsDropdownProps) {
     const { removePlayer } = usePlayers();
+
+    const { handleOpen } = useEditPlayerDialog();
 
     const handleRemovePlayer = async () => {
         await removePlayer(player.id);
@@ -28,7 +31,9 @@ export default function PlayerActionsDropdown({
                 </IconButton>
             </DropdownMenu.Trigger>
             <DropdownMenu.Content align="center">
-                <DropdownMenu.Item>Edit</DropdownMenu.Item>
+                <DropdownMenu.Item onClick={() => handleOpen(player)}>
+                    Edit
+                </DropdownMenu.Item>
                 <DropdownMenu.Item color="red" onClick={handleRemovePlayer}>
                     Delete
                 </DropdownMenu.Item>

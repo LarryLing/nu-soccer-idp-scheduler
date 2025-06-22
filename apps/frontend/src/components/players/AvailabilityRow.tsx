@@ -1,9 +1,11 @@
 import { Flex, IconButton, Select, Text, TextField } from "@radix-ui/themes";
 import { XIcon } from "lucide-react";
-import type {
-    FormState,
-    UseFieldArrayRemove,
-    UseFormRegister,
+import {
+    type Control,
+    Controller,
+    type FormState,
+    type UseFieldArrayRemove,
+    type UseFormRegister,
 } from "react-hook-form";
 import type { PlayerSchema } from "../../utils/schemas.ts";
 import { z } from "zod";
@@ -23,6 +25,7 @@ type AvailabilityRowProps = {
     register: UseFormRegister<z.infer<typeof PlayerSchema>>;
     remove: UseFieldArrayRemove;
     errors: FormState<z.infer<typeof PlayerSchema>>["errors"];
+    control: Control<z.infer<typeof PlayerSchema>>;
 };
 
 export default function AvailabilityRow({
@@ -30,24 +33,34 @@ export default function AvailabilityRow({
     register,
     remove,
     errors,
+    control,
 }: AvailabilityRowProps) {
     return (
         <>
             <Flex justify="between">
                 <Flex align="center" gap="3">
-                    <Select.Root
-                        defaultValue="Monday"
-                        {...register(`availabilities.${index}.day`)}
-                    >
-                        <Select.Trigger style={{ width: "120px" }} />
-                        <Select.Content>
-                            {DAYS.map((dayOption) => (
-                                <Select.Item key={dayOption} value={dayOption}>
-                                    {dayOption}
-                                </Select.Item>
-                            ))}
-                        </Select.Content>
-                    </Select.Root>
+                    <Controller
+                        name={`availabilities.${index}.day`}
+                        control={control}
+                        render={({ field }) => (
+                            <Select.Root
+                                value={field.value}
+                                onValueChange={field.onChange}
+                            >
+                                <Select.Trigger style={{ width: "120px" }} />
+                                <Select.Content>
+                                    {DAYS.map((dayOption) => (
+                                        <Select.Item
+                                            key={dayOption}
+                                            value={dayOption}
+                                        >
+                                            {dayOption}
+                                        </Select.Item>
+                                    ))}
+                                </Select.Content>
+                            </Select.Root>
+                        )}
+                    />
                     <TextField.Root
                         style={{ width: "80px" }}
                         placeholder="9:30AM"

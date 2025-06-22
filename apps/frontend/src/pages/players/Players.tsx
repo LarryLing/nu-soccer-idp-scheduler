@@ -22,6 +22,7 @@ import type { Availability, Player } from "../../utils/types.ts";
 import PlayerTableActionRow from "../../components/players/PlayerTableActionRow.tsx";
 import { ArrowDownUpIcon } from "lucide-react";
 import PlayerActionsDropdown from "../../components/players/PlayerActionsDropdown.tsx";
+import { EditPlayerDialogProvider } from "../../contexts/EditPlayerDialogProvider.tsx";
 
 const createPlayerColumns = (): ColumnDef<Player>[] => [
     {
@@ -204,7 +205,9 @@ export default function Players() {
                     addPlayer={addPlayer}
                     handleRemovePlayers={handleRemovePlayers}
                 />
-                <PlayerTable table={table} numColumns={columns.length} />
+                <EditPlayerDialogProvider>
+                    <PlayerTable table={table} numColumns={columns.length} />
+                </EditPlayerDialogProvider>
             </Section>
         </>
     );

@@ -127,7 +127,7 @@ export const PlayerSchema = z.object({
             message: "Name cannot contain special characters.",
         }),
     number: z
-        .number()
+        .number({ message: "Number is required" })
         .min(0, {
             message: "Number must be greater than or equal to 0.",
         })

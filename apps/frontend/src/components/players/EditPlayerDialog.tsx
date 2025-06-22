@@ -8,72 +8,53 @@ import {
     TextField,
 } from "@radix-ui/themes";
 import AvailabilityRow from "./AvailabilityRow.tsx";
-import { useForm, useFieldArray } from "react-hook-form";
+import {
+    Controller,
+    type UseFormRegister,
+    type Control,
+    type FormState,
+    type FieldArrayWithId,
+    type UseFieldArrayAppend,
+    type UseFieldArrayRemove,
+} from "react-hook-form";
 import { PlayerSchema } from "../../utils/schemas.ts";
 import { z } from "zod";
-import { PlusIcon } from "lucide-react";
-import { useEffect, useState } from "react";
-import { zodResolver } from "@hookform/resolvers/zod";
 
-type AddPlayerDialogProps = {
-    addPlayer: (player: z.infer<typeof PlayerSchema>) => void;
+type EditPlayerDialogProps = {
+    isOpen: boolean;
+    setIsOpen: (isOpen: boolean) => void;
+    register: UseFormRegister<z.infer<typeof PlayerSchema>>;
+    control: Control<z.infer<typeof PlayerSchema>>;
+    isSubmitting: boolean;
+    isValidating: boolean;
+    errors: FormState<z.infer<typeof PlayerSchema>>["errors"];
+    fields: FieldArrayWithId<z.infer<typeof PlayerSchema>>[];
+    append: UseFieldArrayAppend<z.infer<typeof PlayerSchema>>;
+    remove: UseFieldArrayRemove;
+    handleClose: () => void;
+    onSubmit: (e?: React.BaseSyntheticEvent) => Promise<void>;
 };
 
-export default function PlayerDialog({ addPlayer }: AddPlayerDialogProps) {
-    const [isOpen, setIsOpen] = useState(false);
-
-    const {
-        register,
-        handleSubmit,
-        reset,
-        control,
-        formState: { isSubmitSuccessful, isSubmitting, isValidating, errors },
-    } = useForm<z.infer<typeof PlayerSchema>>({
-        resolver: zodResolver(PlayerSchema),
-        defaultValues: {
-            name: "",
-            number: 0,
-            position: "Goalkeeper",
-            availabilities: [
-                {
-                    day: "Monday",
-                    start: "9:30AM",
-                    end: "10:00AM",
-                },
-            ],
-        },
-    });
-
-    const { fields, append, remove } = useFieldArray<
-        z.infer<typeof PlayerSchema>
-    >({
-        control,
-        name: "availabilities",
-    });
-
-    useEffect(() => {
-        if (isSubmitSuccessful) {
-            setIsOpen(false);
-            reset();
-        }
-    }, [isSubmitSuccessful, reset]);
-
-    const onSubmit = handleSubmit((data) => {
-        addPlayer(data);
-    });
-
+export default function EditPlayerDialog({
+    isOpen,
+    setIsOpen,
+    register,
+    control,
+    isSubmitting,
+    isValidating,
+    errors,
+    fields,
+    append,
+    remove,
+    handleClose,
+    onSubmit,
+}: EditPlayerDialogProps) {
     return (
         <Dialog.Root open={isOpen} onOpenChange={setIsOpen}>
-            <Dialog.Trigger>
-                <Button>
-                    <PlusIcon size={15} />
-                    Add Player
-                </Button>
-            </Dialog.Trigger>
             <Dialog.Content width="450px">
-                <Dialog.Title>Add Player</Dialog.Title>
+                <Dialog.Title>Edit Player</Dialog.Title>
                 <Dialog.Description mb="3">
-                    Insert player information
+                    Update player information
                 </Dialog.Description>
                 <form onSubmit={onSubmit}>
                     <Box mb="3">
@@ -130,30 +111,35 @@ export default function PlayerDialog({ addPlayer }: AddPlayerDialogProps) {
                                 Position
                             </Text>
                         </label>
-                        <Select.Root
-                            defaultValue="Goalkeeper"
-                            {...register("position")}
-                        >
-                            <Select.Trigger
-                                style={{ width: "100%" }}
-                                id="position"
-                                name="position"
-                            />
-                            <Select.Content>
-                                <Select.Item value="Goalkeeper">
-                                    Goalkeeper
-                                </Select.Item>
-                                <Select.Item value="Defender">
-                                    Defender
-                                </Select.Item>
-                                <Select.Item value="Midfielder">
-                                    Midfielder
-                                </Select.Item>
-                                <Select.Item value="Forward">
-                                    Forward
-                                </Select.Item>
-                            </Select.Content>
-                        </Select.Root>
+                        <Controller
+                            name="position"
+                            control={control}
+                            render={({ field }) => (
+                                <Select.Root
+                                    value={field.value}
+                                    onValueChange={field.onChange}
+                                >
+                                    <Select.Trigger
+                                        style={{ width: "100%" }}
+                                        id="position"
+                                    />
+                                    <Select.Content>
+                                        <Select.Item value="Goalkeeper">
+                                            Goalkeeper
+                                        </Select.Item>
+                                        <Select.Item value="Defender">
+                                            Defender
+                                        </Select.Item>
+                                        <Select.Item value="Midfielder">
+                                            Midfielder
+                                        </Select.Item>
+                                        <Select.Item value="Forward">
+                                            Forward
+                                        </Select.Item>
+                                    </Select.Content>
+                                </Select.Root>
+                            )}
+                        />
                         {errors?.position && (
                             <Text size="2" weight="regular" as="p" color="red">
                                 {errors.position.message}
@@ -191,6 +177,7 @@ export default function PlayerDialog({ addPlayer }: AddPlayerDialogProps) {
                                         register={register}
                                         remove={remove}
                                         errors={errors}
+                                        control={control}
                                     />
                                 );
                             })}
@@ -201,17 +188,16 @@ export default function PlayerDialog({ addPlayer }: AddPlayerDialogProps) {
                             type="submit"
                             disabled={isSubmitting || isValidating}
                         >
-                            Add Player
+                            Save Changes
                         </Button>
-                        <Dialog.Close>
-                            <Button
-                                variant="soft"
-                                type="button"
-                                disabled={isSubmitting || isValidating}
-                            >
-                                Cancel
-                            </Button>
-                        </Dialog.Close>
+                        <Button
+                            variant="soft"
+                            type="button"
+                            disabled={isSubmitting || isValidating}
+                            onClick={handleClose}
+                        >
+                            Cancel
+                        </Button>
                     </Flex>
                 </form>
             </Dialog.Content>

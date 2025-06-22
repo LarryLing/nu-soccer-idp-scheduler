@@ -6,6 +6,7 @@ import {
     addDoc,
     collection,
     deleteDoc,
+    updateDoc,
     doc,
     onSnapshot,
     orderBy,
@@ -80,6 +81,24 @@ export const usePlayers = () => {
         [user],
     );
 
+    const editPlayer = useCallback(
+        async (playerId?: string, data?: z.infer<typeof PlayerSchema>) => {
+            if (!playerId) {
+                throw new Error("Player ID is required");
+            }
+
+            if (!data) {
+                throw new Error("Data is required");
+            }
+
+            await updateDoc(
+                doc(clientFirestore, `users/${user!.uid}/players/${playerId}`),
+                data,
+            );
+        },
+        [user],
+    );
+
     useEffect(() => {
         if (!user) {
             return;
@@ -107,5 +126,6 @@ export const usePlayers = () => {
         addPlayer: addPlayer,
         removePlayer: removePlayer,
         removePlayers: removePlayers,
+        editPlayer,
     };
 };

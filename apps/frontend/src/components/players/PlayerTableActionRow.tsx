@@ -6,7 +6,7 @@ import {
     Text,
     TextField,
 } from "@radix-ui/themes";
-import PlayerDialog from "./PlayerDialog.tsx";
+import AddPlayerDialog from "./AddPlayerDialog.tsx";
 import { DownloadIcon, SearchIcon, TrashIcon, UploadIcon } from "lucide-react";
 import type { Player } from "../../utils/types.ts";
 import type { Table } from "@tanstack/react-table";
@@ -29,7 +29,7 @@ export default function PlayerTableActionRow({
     return (
         <Flex justify="between" align="center" mb="5">
             <Flex align="center" gap="3">
-                <PlayerDialog addPlayer={addPlayer} />
+                <AddPlayerDialog addPlayer={addPlayer} />
                 <Button variant="outline">
                     <DownloadIcon size={15} />
                     Export JSON

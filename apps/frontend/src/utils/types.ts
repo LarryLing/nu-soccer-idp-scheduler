@@ -4,6 +4,14 @@ import {
     PlayerSchema,
     TrainingBlockSchema,
 } from "./schemas.ts";
+import type {
+    Control,
+    FieldArrayWithId,
+    FormState,
+    UseFieldArrayAppend,
+    UseFieldArrayRemove,
+    UseFormRegister,
+} from "react-hook-form";
 export type User = {
     uid: string;
     email: string;
@@ -30,33 +38,20 @@ export type UserContextType = {
     resetPassword: (actionCode?: string, newPassword?: string) => Promise<void>;
 };
 
-export type PlayerDialogContextType = {
+export type EditPlayerDialogContextType = {
     isOpen: boolean;
-    playerDialogContent: PlayerDialogContent;
-    updatePlayer: (
-        field: "name" | "number" | "position",
-        value: Player["name"] | Player["number"] | Player["position"],
-    ) => void;
-    addAvailability: () => void;
-    removeAvailabilityAtIndex: (index: number) => void;
-    updateAvailabilityAtIndex: (
-        index: number,
-        field: "day" | "start" | "end",
-        value:
-            | Availability["day"]
-            | Availability["start"]
-            | Availability["end"],
-    ) => void;
-    openDialog: (config: PlayerDialogContent) => void;
-    closeDialog: () => void;
-};
-
-export type PlayerDialogContent = {
-    title: string;
-    description: string;
-    player: z.infer<typeof PlayerSchema>;
-    onSubmit: () => void;
-    submitText: string;
+    setIsOpen: (isOpen: boolean) => void;
+    register: UseFormRegister<z.infer<typeof PlayerSchema>>;
+    control: Control<z.infer<typeof PlayerSchema>>;
+    isSubmitting: boolean;
+    isValidating: boolean;
+    errors: FormState<z.infer<typeof PlayerSchema>>["errors"];
+    fields: FieldArrayWithId<z.infer<typeof PlayerSchema>>[];
+    append: UseFieldArrayAppend<z.infer<typeof PlayerSchema>>;
+    remove: UseFieldArrayRemove;
+    handleOpen: (player: Player) => void;
+    handleClose: () => void;
+    onSubmit: (e?: React.BaseSyntheticEvent) => Promise<void>;
 };
 
 export type AuthFormState = {
@@ -64,14 +59,5 @@ export type AuthFormState = {
         email?: string[];
         password?: string[];
         confirmPassword?: string[];
-    };
-} | null;
-
-export type PlayerDialogFormState = {
-    errors?: {
-        name?: string[];
-        number?: string[];
-        position?: string[];
-        availabilities?: string[];
     };
 } | null;
