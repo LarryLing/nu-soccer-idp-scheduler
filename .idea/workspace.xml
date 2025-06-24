@@ -5,22 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b05902af-5cdc-4fb0-944c-d2d26c9f2b39" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/apps/frontend/src/components/players/EditPlayerDialog.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/apps/frontend/src/contexts/EditPlayerDialogContext.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/apps/frontend/src/contexts/EditPlayerDialogProvider.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/apps/frontend/src/hooks/useEditPlayerDialog.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/src/components/players/AvailabilityRow.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/components/players/AvailabilityRow.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/src/components/players/PlayerActionsDropdown.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/components/players/PlayerActionsDropdown.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/src/components/players/PlayerDialog.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/components/players/AddPlayerDialog.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/src/components/players/PlayerTable.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/components/players/PlayerTable.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/apps/frontend/src/components/players/PlayerTableActionRow.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/components/players/PlayerTableActionRow.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/src/contexts/UserContext.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/contexts/UserContext.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/apps/frontend/src/hooks/usePlayers.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/hooks/usePlayers.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/src/pages/players/Column.tsx" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/apps/frontend/src/pages/players/Players.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/pages/players/Players.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/src/utils/schemas.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/utils/schemas.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/src/utils/types.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/utils/types.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -134,7 +122,7 @@
       <workItem from="1750053895745" duration="106881000" />
       <workItem from="1750312053135" duration="22487000" />
       <workItem from="1750368658431" duration="36650000" />
-      <workItem from="1750452312080" duration="14800000" />
+      <workItem from="1750452312080" duration="19683000" />
     </task>
     <servers />
   </component>

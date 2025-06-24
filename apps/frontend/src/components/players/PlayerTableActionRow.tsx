@@ -17,6 +17,7 @@ type PlayerTableActionRowProps = {
     table: Table<Player>;
     selectedPlayerIds: string[];
     addPlayer: (player?: z.infer<typeof PlayerSchema>) => Promise<void>;
+    exportJSON: () => void;
     handleRemovePlayers: () => void;
 };
 
@@ -24,13 +25,14 @@ export default function PlayerTableActionRow({
     table,
     selectedPlayerIds,
     addPlayer,
+    exportJSON,
     handleRemovePlayers,
 }: PlayerTableActionRowProps) {
     return (
         <Flex justify="between" align="center" mb="5">
             <Flex align="center" gap="3">
                 <AddPlayerDialog addPlayer={addPlayer} />
-                <Button variant="outline">
+                <Button variant="outline" onClick={exportJSON}>
                     <DownloadIcon size={15} />
                     Export JSON
                 </Button>

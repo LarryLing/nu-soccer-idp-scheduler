@@ -99,6 +99,17 @@ export const usePlayers = () => {
         [user],
     );
 
+    const exportJSON = useCallback(() => {
+        const jsonData = new Blob([JSON.stringify(players)], { type: "application/json" });
+        const jsonURL = URL.createObjectURL(jsonData);
+        const link = document.createElement("a");
+        link.href = jsonURL;
+        link.download = "players.json";
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }, [players])
+
     useEffect(() => {
         if (!user) {
             return;
@@ -122,10 +133,11 @@ export const usePlayers = () => {
     }, [user]);
 
     return {
-        players: players,
-        addPlayer: addPlayer,
-        removePlayer: removePlayer,
-        removePlayers: removePlayers,
+        players,
+        addPlayer,
+        removePlayer,
+        removePlayers,
         editPlayer,
+        exportJSON,
     };
 };

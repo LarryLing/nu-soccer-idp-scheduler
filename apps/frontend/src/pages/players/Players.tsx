@@ -159,7 +159,7 @@ export default function Players() {
     const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
     const [rowSelection, setRowSelection] = useState({});
 
-    const { players, addPlayer, removePlayers } = usePlayers();
+    const { players, addPlayer, removePlayers, exportJSON } = usePlayers();
 
     const columns = useMemo(() => createPlayerColumns(), []);
 
@@ -203,6 +203,7 @@ export default function Players() {
                     table={table}
                     selectedPlayerIds={selectedPlayerIds}
                     addPlayer={addPlayer}
+                    exportJSON={exportJSON}
                     handleRemovePlayers={handleRemovePlayers}
                 />
                 <EditPlayerDialogProvider>
