@@ -6,7 +6,7 @@ import { collection, getDocs, query } from "firebase/firestore";
 import { clientFirestore } from "../utils/firebase.ts";
 import { FirebaseError } from "firebase/app";
 
-export const usePlayers = (userId: string) => {
+export const useTrainingBlocks = (userId: string) => {
     const [trainingBlocks, setTrainingBlocks] = useState<TrainingBlock[]>([]);
     const [isLoading, setIsLoading] = useState<boolean>(true);
 

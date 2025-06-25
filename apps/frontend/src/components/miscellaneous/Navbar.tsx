@@ -1,5 +1,5 @@
 import NorthwesternLogo from "./NorthwesternLogo.tsx";
-import { Button, Flex, Text, Link, IconButton, Box } from "@radix-ui/themes";
+import { Button, Flex, Link, IconButton, Box, Heading } from "@radix-ui/themes";
 import { Link as ReactRouterLink } from "react-router";
 import { useUser } from "../../hooks/useUser.ts";
 import { LogOutIcon } from "lucide-react";
@@ -27,9 +27,9 @@ export default function Navbar() {
             <Flex gap="4" align="center">
                 <NorthwesternLogo height={40} width={25.51} />
                 <Box display={{ initial: "none", xs: "block" }}>
-                    <Text size="6" align="left" weight="bold">
+                    <Heading size="6" align="left">
                         IDP Scheduler
-                    </Text>
+                    </Heading>
                 </Box>
             </Flex>
             <Flex gap="4" align="center">
