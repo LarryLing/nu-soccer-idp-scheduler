@@ -6,20 +6,8 @@
   <component name="ChangeListManager">
     <list default="true" id="b05902af-5cdc-4fb0-944c-d2d26c9f2b39" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/public/images/trianglify.png" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/public/images/trianglify.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/src/components/miscellaneous/navbar.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/components/miscellaneous/navbar.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/src/index.css" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/index.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/src/layouts/protected-layout.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/layouts/protected-layout.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/src/layouts/public-layout.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/layouts/public-layout.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/src/pages/create-an-account/create-an-account.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/pages/create-an-account/create-an-account.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/src/pages/email-actions/email-actions.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/pages/email-actions/email-actions.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/src/pages/forgot-password/forgot-password.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/pages/forgot-password/forgot-password.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/src/pages/players/players.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/pages/players/players.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/src/pages/signin/signin.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/pages/signin/signin.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/src/pages/training-blocks/training-blocks.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/pages/training-blocks/training-blocks.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/vite.config.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/vite.config.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pnpm-lock.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/pnpm-lock.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/components/miscellaneous/Navbar.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/components/miscellaneous/Navbar.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/hooks/useTrainingBlocks.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/hooks/useTrainingBlocks.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -30,23 +18,23 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="CSS File" />
-        <option value="TypeScript JSX File" />
         <option value="TypeScript File" />
+        <option value="TypeScript JSX File" />
       </list>
     </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
-  "lastFilter": {
-    "state": "OPEN",
-    "assignee": "LarryLing"
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;LarryLing&quot;
   }
-}]]></component>
+}</component>
   <component name="GithubPullRequestsUISettings"><![CDATA[{
   "selectedUrlAndAccountId": {
-    "url": "https://github.com/LarryLing/nu-soccer-idp-scheduler.git",
+    "url": "git@github.com:LarryLing/nu-soccer-idp-scheduler.git",
     "accountId": "e7172309-50cd-48e0-8108-749b6d263992"
   }
 }]]></component>
@@ -61,40 +49,41 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ModuleVcsDetector.initialDetectionPerformed": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "feature/firebase-authentication",
-    "junie.onboarding.icon.badge.shown": "true",
-    "last_opened_file_path": "/Users/larryling/WebstormProjects/nu-soccer-idp-scheduler",
-    "list.type.of.created.stylesheet": "CSS",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "npm.backend > build.executor": "Run",
-    "settings.editor.selected.configurable": "settings.json.schema",
-    "ts.external.directory.path": "/Users/larryling/WebstormProjects/nu-soccer-idp-scheduler/apps/backend/node_modules/typescript/lib",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;feature/players-page&quot;,
+    &quot;junie.onboarding.icon.badge.shown&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/Users/larryling/WebstormProjects/nu-soccer-idp-scheduler/apps/frontend/src/components/players&quot;,
+    &quot;list.type.of.created.stylesheet&quot;: &quot;CSS&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;npm.backend &gt; build.executor&quot;: &quot;Run&quot;,
+    &quot;prettierjs.PrettierConfiguration.Package&quot;: &quot;/Users/larryling/WebstormProjects/nu-soccer-idp-scheduler/node_modules/prettier&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;settings.json.schema&quot;,
+    &quot;ts.external.directory.path&quot;: &quot;/Users/larryling/WebstormProjects/nu-soccer-idp-scheduler/apps/backend/node_modules/typescript/lib&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/apps/frontend/src/components/players" />
+      <recent name="$PROJECT_DIR$/apps/frontend/src/hooks" />
+      <recent name="$PROJECT_DIR$/apps/frontend/src/contexts" />
       <recent name="$PROJECT_DIR$" />
       <recent name="$PROJECT_DIR$/apps/frontend/src/components/authentication" />
-      <recent name="$PROJECT_DIR$/apps/frontend/src/layouts" />
-      <recent name="$PROJECT_DIR$/apps/frontend" />
-      <recent name="$PROJECT_DIR$/apps/frontend/src/pages" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/apps/frontend/src/images" />
+      <recent name="$PROJECT_DIR$/apps/frontend/src/components/miscellaneous" />
+      <recent name="$PROJECT_DIR$/apps/frontend/src/components/players" />
+      <recent name="$PROJECT_DIR$/apps/frontend/src/contexts" />
       <recent name="$PROJECT_DIR$/apps/frontend/public/images" />
-      <recent name="$PROJECT_DIR$/apps/frontend/src/pages/actions" />
-      <recent name="$PROJECT_DIR$/apps/backend/src" />
-      <recent name="$PROJECT_DIR$/apps/frontend/public" />
-      <recent name="$PROJECT_DIR$/apps/frontend/src/pages" />
     </key>
   </component>
   <component name="RunManager">
@@ -130,6 +119,10 @@
       <updated>1750053541637</updated>
       <workItem from="1750053542606" duration="243000" />
       <workItem from="1750053895745" duration="106881000" />
+      <workItem from="1750312053135" duration="22487000" />
+      <workItem from="1750368658431" duration="36650000" />
+      <workItem from="1750452312080" duration="26836000" />
+      <workItem from="1750814721487" duration="8388000" />
     </task>
     <servers />
   </component>
@@ -153,12 +146,10 @@
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/apps/frontend/node_modules/@radix-ui/themes/src/components/theme.tsx</url>
           <line>2</line>
-          <properties lambdaOrdinal="-1" />
           <option name="timeStamp" value="2" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/apps/frontend/node_modules/@radix-ui/themes/src/components/theme.props.tsx</url>
-          <properties lambdaOrdinal="-1" />
           <option name="timeStamp" value="3" />
         </line-breakpoint>
       </breakpoints>

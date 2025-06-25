@@ -1,8 +1,9 @@
 import { useNavigate, useSearchParams } from "react-router";
-import ResetPasswordCard from "../../components/authentication/reset-password-card.tsx";
+import ResetPasswordCard from "../../components/authentication/ResetPasswordCard.tsx";
 
 export default function EmailActions() {
     const navigate = useNavigate();
+
     const [searchParams] = useSearchParams();
 
     const mode = searchParams.get("mode");
