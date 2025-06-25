@@ -12,12 +12,14 @@ import type { Player } from "../../utils/types.ts";
 import type { Table } from "@tanstack/react-table";
 import type { PlayerSchema } from "../../utils/schemas.ts";
 import { z } from "zod";
+import { type ChangeEvent, useRef } from "react";
 
 type PlayerTableActionRowProps = {
     table: Table<Player>;
     selectedPlayerIds: string[];
     addPlayer: (player?: z.infer<typeof PlayerSchema>) => Promise<void>;
     exportJSON: () => void;
+    importJSON: (file: Blob) => void;
     handleRemovePlayers: () => void;
 };
 
@@ -26,8 +28,17 @@ export default function PlayerTableActionRow({
     selectedPlayerIds,
     addPlayer,
     exportJSON,
+    importJSON,
     handleRemovePlayers,
 }: PlayerTableActionRowProps) {
+    const fileInputRef = useRef<HTMLInputElement | null>(null);
+
+    const onChange = (event: ChangeEvent<HTMLInputElement>) => {
+        if (event.target.files) {
+            importJSON(event.target.files[0]);
+        }
+    };
+
     return (
         <Flex justify="between" align="center" mb="5">
             <Flex align="center" gap="3">
@@ -36,10 +47,24 @@ export default function PlayerTableActionRow({
                     <DownloadIcon size={15} />
                     Export JSON
                 </Button>
-                <Button variant="outline">
-                    <UploadIcon size={15} />
-                    Import JSON
-                </Button>
+                <input
+                    id="import-json"
+                    ref={fileInputRef}
+                    name="import-json"
+                    type="file"
+                    accept=".json, application/json"
+                    onChange={onChange}
+                    style={{ display: "none" }}
+                />
+                <label htmlFor="import-json">
+                    <Button
+                        variant="outline"
+                        onClick={() => fileInputRef.current?.click()}
+                    >
+                        <UploadIcon size={15} />
+                        Import JSON
+                    </Button>
+                </label>
                 {selectedPlayerIds.length > 0 && (
                     <>
                         <Separator size="2" orientation="vertical" />

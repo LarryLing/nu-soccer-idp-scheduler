@@ -100,15 +100,74 @@ export const usePlayers = () => {
     );
 
     const exportJSON = useCallback(() => {
-        const jsonData = new Blob([JSON.stringify(players)], { type: "application/json" });
+        const jsonData = new Blob([JSON.stringify(players)], {
+            type: "application/json",
+        });
+
         const jsonURL = URL.createObjectURL(jsonData);
+
         const link = document.createElement("a");
+
         link.href = jsonURL;
         link.download = "players.json";
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
-    }, [players])
+    }, [players]);
+
+    const importJSON = useCallback(
+        (file: Blob) => {
+            if (!user) {
+                throw new Error("User not authenticated");
+            }
+
+            const fileReader = new FileReader();
+
+            fileReader.onload = async (event) => {
+                if (event.target) {
+                    const deletePlayerBatch = writeBatch(clientFirestore);
+
+                    players.forEach((player) => {
+                        deletePlayerBatch.delete(
+                            doc(
+                                clientFirestore,
+                                `users/${user.uid!}/players/${player.id!}`,
+                            ),
+                        );
+                    });
+
+                    const addPlayerBatch = writeBatch(clientFirestore);
+
+                    const parsedPlayers: Player[] = JSON.parse(
+                        event.target.result as string,
+                    );
+
+                    parsedPlayers.forEach((player) => {
+                        addPlayerBatch.set(
+                            doc(
+                                clientFirestore,
+                                `users/${user.uid!}/players`,
+                                player.id,
+                            ),
+                            {
+                                name: player.name,
+                                number: player.number,
+                                position: player.position,
+                                availabilities: player.availabilities,
+                            },
+                        );
+                    });
+
+                    await deletePlayerBatch.commit();
+
+                    await addPlayerBatch.commit();
+                }
+            };
+
+            fileReader.readAsText(file);
+        },
+        [players, user],
+    );
 
     useEffect(() => {
         if (!user) {
@@ -139,5 +198,6 @@ export const usePlayers = () => {
         removePlayers,
         editPlayer,
         exportJSON,
+        importJSON,
     };
 };

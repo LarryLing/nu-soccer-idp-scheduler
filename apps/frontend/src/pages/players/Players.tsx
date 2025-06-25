@@ -125,9 +125,9 @@ const createPlayerColumns = (): ColumnDef<Player>[] => [
         cell: ({ row }) => {
             const availabilities: Availability[] =
                 row.getValue("availabilities");
-            return availabilities.map((availability) => (
+            return availabilities.map((availability, index) => (
                 <Badge
-                    key={`${availability.day} ${availability.start} ${availability.end}`}
+                    key={`${availability.day}.${availability.start}.${availability.end}.${index}`}
                     variant="outline"
                     color="gray"
                     mr="2"
@@ -159,7 +159,8 @@ export default function Players() {
     const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
     const [rowSelection, setRowSelection] = useState({});
 
-    const { players, addPlayer, removePlayers, exportJSON } = usePlayers();
+    const { players, addPlayer, removePlayers, exportJSON, importJSON } =
+        usePlayers();
 
     const columns = useMemo(() => createPlayerColumns(), []);
 
@@ -204,6 +205,7 @@ export default function Players() {
                     selectedPlayerIds={selectedPlayerIds}
                     addPlayer={addPlayer}
                     exportJSON={exportJSON}
+                    importJSON={importJSON}
                     handleRemovePlayers={handleRemovePlayers}
                 />
                 <EditPlayerDialogProvider>

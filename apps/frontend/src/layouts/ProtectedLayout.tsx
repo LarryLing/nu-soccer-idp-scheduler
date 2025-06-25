@@ -32,7 +32,6 @@ export default function ProtectedLayout() {
                     px="72px"
                     py="6"
                     width="100%"
-                    height="100%"
                 >
                     <Outlet />
                 </Flex>
