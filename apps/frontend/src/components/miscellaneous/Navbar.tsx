@@ -1,5 +1,5 @@
 import NorthwesternLogo from "./NorthwesternLogo.tsx";
-import { Button, Flex, Text, Link } from "@radix-ui/themes";
+import { Button, Flex, Text, Link, IconButton, Box } from "@radix-ui/themes";
 import { Link as ReactRouterLink } from "react-router";
 import { useUser } from "../../hooks/useUser.ts";
 import { LogOutIcon } from "lucide-react";
@@ -9,7 +9,11 @@ export default function Navbar() {
 
     return (
         <Flex
-            px="72px"
+            px={{
+                initial: "20px",
+                xs: "36px",
+                sm: "72px",
+            }}
             py="20px"
             width="100%"
             justify="between"
@@ -22,11 +26,13 @@ export default function Navbar() {
         >
             <Flex gap="4" align="center">
                 <NorthwesternLogo height={40} width={25.51} />
-                <Text size="6" align="left" weight="bold">
-                    IDP Scheduler
-                </Text>
+                <Box display={{ initial: "none", xs: "block" }}>
+                    <Text size="6" align="left" weight="bold">
+                        IDP Scheduler
+                    </Text>
+                </Box>
             </Flex>
-            <Flex gap="5" align="center">
+            <Flex gap="4" align="center">
                 <Link weight="medium" color="gray" asChild>
                     <ReactRouterLink to="/players">Players</ReactRouterLink>
                 </Link>
@@ -35,10 +41,17 @@ export default function Navbar() {
                         Training Blocks
                     </ReactRouterLink>
                 </Link>
-                <Button type="button" onClick={signOut}>
-                    <LogOutIcon size={15} />
-                    Sign Out
-                </Button>
+                <Box display={{ initial: "none", sm: "block" }}>
+                    <Button type="button" onClick={signOut}>
+                        <LogOutIcon size={15} />
+                        Sign Out
+                    </Button>
+                </Box>
+                <Box display={{ initial: "block", sm: "none" }}>
+                    <IconButton type="button" onClick={signOut}>
+                        <LogOutIcon size={15} />
+                    </IconButton>
+                </Box>
             </Flex>
         </Flex>
     );

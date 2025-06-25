@@ -2,6 +2,7 @@ import {
     Box,
     Button,
     Flex,
+    IconButton,
     Separator,
     Text,
     TextField,
@@ -41,12 +42,29 @@ export default function PlayerTableActionRow({
 
     return (
         <Flex justify="between" align="center" mb="5">
-            <Flex align="center" gap="3">
+            <Flex align="center" gap="4">
                 <AddPlayerDialog addPlayer={addPlayer} />
-                <Button variant="outline" onClick={exportJSON}>
-                    <DownloadIcon size={15} />
-                    Export JSON
-                </Button>
+                <Box
+                    display={{
+                        initial: "none",
+                        sm: "block",
+                    }}
+                >
+                    <Button variant="outline" onClick={exportJSON}>
+                        <DownloadIcon size={15} />
+                        Export JSON
+                    </Button>
+                </Box>
+                <Box
+                    display={{
+                        initial: "block",
+                        sm: "none",
+                    }}
+                >
+                    <IconButton variant="outline" onClick={exportJSON}>
+                        <DownloadIcon size={15} />
+                    </IconButton>
+                </Box>
                 <input
                     id="import-json"
                     ref={fileInputRef}
@@ -56,31 +74,85 @@ export default function PlayerTableActionRow({
                     onChange={onChange}
                     style={{ display: "none" }}
                 />
-                <label htmlFor="import-json">
-                    <Button
-                        variant="outline"
-                        onClick={() => fileInputRef.current?.click()}
-                    >
-                        <UploadIcon size={15} />
-                        Import JSON
-                    </Button>
-                </label>
-                {selectedPlayerIds.length > 0 && (
-                    <>
-                        <Separator size="2" orientation="vertical" />
-                        <Text>{selectedPlayerIds.length} selected</Text>
-                        <Button color="red" onClick={handleRemovePlayers}>
-                            <TrashIcon size={15} />
-                            Delete Selected
+                <Box
+                    display={{
+                        initial: "none",
+                        sm: "block",
+                    }}
+                >
+                    <label htmlFor="import-json">
+                        <Button
+                            variant="outline"
+                            onClick={() => fileInputRef.current?.click()}
+                        >
+                            <UploadIcon size={15} />
+                            Import JSON
                         </Button>
-                    </>
-                )}
+                    </label>
+                    {selectedPlayerIds.length > 0 && (
+                        <>
+                            <Separator size="2" orientation="vertical" />
+                            <Text>{selectedPlayerIds.length} selected</Text>
+                            <Button color="red" onClick={handleRemovePlayers}>
+                                <TrashIcon size={15} />
+                                Delete Selected
+                            </Button>
+                        </>
+                    )}
+                </Box>
+                <Box
+                    display={{
+                        initial: "block",
+                        sm: "none",
+                    }}
+                >
+                    <label htmlFor="import-json">
+                        <IconButton
+                            variant="outline"
+                            onClick={() => fileInputRef.current?.click()}
+                        >
+                            <UploadIcon size={15} />
+                        </IconButton>
+                    </label>
+                </Box>
             </Flex>
-            <Box width="250px" maxWidth="250px">
+            <Box
+                width="200px"
+                display={{
+                    initial: "none",
+                    xs: "block",
+                }}
+            >
                 <TextField.Root
                     id="search"
                     name="search"
-                    placeholder="Search players by name..."
+                    placeholder="Search players by name"
+                    value={
+                        (table.getColumn("name")?.getFilterValue() as string) ??
+                        ""
+                    }
+                    onChange={(event) =>
+                        table
+                            .getColumn("name")
+                            ?.setFilterValue(event.target.value)
+                    }
+                >
+                    <TextField.Slot>
+                        <SearchIcon size={15} />
+                    </TextField.Slot>
+                </TextField.Root>
+            </Box>
+            <Box
+                width="90px"
+                display={{
+                    initial: "block",
+                    xs: "none",
+                }}
+            >
+                <TextField.Root
+                    id="search"
+                    name="search"
+                    placeholder="Search"
                     value={
                         (table.getColumn("name")?.getFilterValue() as string) ??
                         ""
