@@ -13,18 +13,19 @@ export const ResetPasswordFormSchema = z
     .object({
         password: z
             .string()
-            .min(8, { message: "contain at least 8 characters." })
+            .min(8, { message: "Password must contain at least 8 characters." })
             .refine((password) => /[A-Z]/.test(password), {
-                message: "contain at least one uppercase letter.",
+                message: "Password must contain at least one uppercase letter.",
             })
             .refine((password) => /[a-z]/.test(password), {
-                message: "contain at least one lowercase letter.",
+                message: "Password must contain at least one lowercase letter.",
             })
             .refine((password) => /[0-9]/.test(password), {
-                message: "contain at least one number.",
+                message: "Password must contain at least one number.",
             })
             .refine((password) => /[!@#$%^&*]/.test(password), {
-                message: "contain at least one special character.",
+                message:
+                    "Password must contain at least one special character.",
             }),
         confirmPassword: z.string().min(1, {
             message: "Password confirmation is required.",
@@ -48,18 +49,19 @@ export const CreateAnAccountSchema = z
         }),
         password: z
             .string()
-            .min(8, { message: "contain at least 8 characters." })
+            .min(8, { message: "Password must contain at least 8 characters." })
             .refine((password) => /[A-Z]/.test(password), {
-                message: "contain at least one uppercase letter.",
+                message: "Password must contain at least one uppercase letter.",
             })
             .refine((password) => /[a-z]/.test(password), {
-                message: "contain at least one lowercase letter.",
+                message: "Password must contain at least one lowercase letter.",
             })
             .refine((password) => /[0-9]/.test(password), {
-                message: "contain at least one number.",
+                message: "Password must contain at least one number.",
             })
             .refine((password) => /[!@#$%^&*]/.test(password), {
-                message: "contain at least one special character.",
+                message:
+                    "Password must contain at least one special character.",
             }),
         confirmPassword: z.string().min(1, {
             message: "Password confirmation is required.",

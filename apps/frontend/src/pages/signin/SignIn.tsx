@@ -9,64 +9,55 @@ import {
     TextField,
 } from "@radix-ui/themes";
 import { Link as ReactRouterLink, useNavigate } from "react-router";
-import { useActionState } from "react";
 import { useUser } from "../../hooks/useUser.ts";
 import { SignInFormSchema } from "../../utils/schemas.ts";
-import type { AuthFormState } from "../../utils/types.ts";
 import { FirebaseError } from "firebase/app";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
 
 export default function SignIn() {
     const { signIn } = useUser();
 
     const navigate = useNavigate();
 
-    const [state, formAction, isPending] = useActionState<
-        AuthFormState,
-        FormData
-    >(submitForm, null);
+    const {
+        register,
+        handleSubmit,
+        setError,
+        formState: { isSubmitting, isValidating, errors },
+    } = useForm<z.infer<typeof SignInFormSchema>>({
+        resolver: zodResolver(SignInFormSchema),
+    });
 
-    async function submitForm(prevState: AuthFormState, formData: FormData) {
-        const result = SignInFormSchema.safeParse({
-            email: formData.get("email"),
-            password: formData.get("password"),
-        });
-
-        if (!result.success) {
-            return {
-                errors: result.error.flatten().fieldErrors,
-            };
-        }
-
+    const onSubmit = handleSubmit(async (data) => {
         try {
-            await signIn(result.data.email, result.data.password);
+            await signIn(data.email, data.password);
+
+            navigate("/players");
         } catch (error: unknown) {
             if (error instanceof FirebaseError) {
                 console.error(error);
 
                 if (error.code === "auth/invalid-credential") {
-                    return {
-                        errors: {
-                            email: ["Incorrect email or password"],
-                        },
-                    };
+                    setError("email", {
+                        type: "manual",
+                        message: "Incorrect email or password",
+                    });
                 } else {
-                    return {
-                        errors: {
-                            email: ["An unexpected error occurred"],
-                        },
-                    };
+                    setError("email", {
+                        type: "manual",
+                        message: "An unexpected error occurred",
+                    });
                 }
             }
         }
-
-        navigate("/players");
-        return prevState;
-    }
+    });
 
     return (
         <Box width="400px">
             <Card size="4">
-                <form action={formAction}>
+                <form onSubmit={onSubmit}>
                     <Heading size="6" mb="5">
                         Sign In
                     </Heading>
@@ -78,13 +69,12 @@ export default function SignIn() {
                         </label>
                         <TextField.Root
                             id="email"
-                            name="email"
-                            type="email"
                             placeholder="Enter your email address"
+                            {...register("email")}
                         />
-                        {state?.errors?.email && (
+                        {errors.email && (
                             <Text size="2" weight="regular" as="p" color="red">
-                                {state.errors.email}
+                                {errors.email.message}
                             </Text>
                         )}
                     </Box>
@@ -103,25 +93,28 @@ export default function SignIn() {
                         </Flex>
                         <TextField.Root
                             id="password"
-                            name="password"
                             type="password"
                             placeholder="Enter your password"
+                            {...register("password")}
                         />
-                        {state?.errors?.password && (
+                        {errors.password && (
                             <Text size="2" weight="regular" as="p" color="red">
-                                {state.errors.password}
+                                {errors.password.message}
                             </Text>
                         )}
                     </Box>
                     <Flex direction="row-reverse" gap="4">
-                        <Button type="submit" disabled={isPending}>
+                        <Button
+                            type="submit"
+                            disabled={isSubmitting || isValidating}
+                        >
                             Sign In
                         </Button>
                         <ReactRouterLink to="/create-an-account">
                             <Button
                                 variant="soft"
                                 type="button"
-                                disabled={isPending}
+                                disabled={isSubmitting || isValidating}
                             >
                                 Create An Account
                             </Button>

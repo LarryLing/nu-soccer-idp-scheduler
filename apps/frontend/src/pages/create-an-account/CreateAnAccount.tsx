@@ -9,64 +9,54 @@ import {
 } from "@radix-ui/themes";
 import { Link, useNavigate } from "react-router";
 import { useUser } from "../../hooks/useUser.ts";
-import { useActionState } from "react";
 import { CreateAnAccountSchema } from "../../utils/schemas.ts";
-import type { AuthFormState } from "../../utils/types.ts";
 import { FirebaseError } from "firebase/app";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 export default function CreateAnAccountCard() {
-    const context = useUser();
+    const { signUp } = useUser();
 
     const navigate = useNavigate();
 
-    const [state, formAction, isPending] = useActionState<
-        AuthFormState,
-        FormData
-    >(submitForm, null);
+    const {
+        register,
+        handleSubmit,
+        setError,
+        formState: { isSubmitting, isValidating, errors },
+    } = useForm<z.infer<typeof CreateAnAccountSchema>>({
+        resolver: zodResolver(CreateAnAccountSchema),
+    });
 
-    async function submitForm(prevState: AuthFormState, formData: FormData) {
-        const result = CreateAnAccountSchema.safeParse({
-            email: formData.get("email"),
-            password: formData.get("password"),
-            confirmPassword: formData.get("confirmPassword"),
-        });
-
-        if (!result.success) {
-            return {
-                errors: result.error.flatten().fieldErrors,
-            };
-        }
-
+    const onSubmit = handleSubmit(async (data) => {
         try {
-            await context.signUp(result.data.email, result.data.password);
+            await signUp(data.email, data.password);
+
+            navigate("/players");
         } catch (error: unknown) {
             if (error instanceof FirebaseError) {
                 console.error(error);
 
                 if (error.code === "auth/email-already-in-use") {
-                    return {
-                        errors: {
-                            email: ["Email already in use"],
-                        },
-                    };
+                    setError("email", {
+                        type: "manual",
+                        message: "Email already in use",
+                    });
                 } else {
-                    return {
-                        errors: {
-                            email: ["An unexpected error occurred"],
-                        },
-                    };
+                    setError("email", {
+                        type: "manual",
+                        message: "An unexpected error occurred",
+                    });
                 }
             }
         }
-
-        navigate("/players");
-        return prevState;
-    }
+    });
 
     return (
         <Box width="400px">
             <Card size="4">
-                <form action={formAction}>
+                <form onSubmit={onSubmit}>
                     <Heading size="6" mb="5">
                         Create An Account
                     </Heading>
@@ -78,13 +68,12 @@ export default function CreateAnAccountCard() {
                         </label>
                         <TextField.Root
                             id="email"
-                            name="email"
                             placeholder="Enter your email address"
-                            className="w-full"
+                            {...register("email")}
                         />
-                        {state?.errors?.email && (
+                        {errors.email && (
                             <Text size="2" weight="regular" as="p" color="red">
-                                {state.errors.email}
+                                {errors.email.message}
                             </Text>
                         )}
                     </Box>
@@ -96,12 +85,11 @@ export default function CreateAnAccountCard() {
                         </label>
                         <TextField.Root
                             id="password"
-                            name="password"
                             type="password"
                             placeholder="Enter your password"
-                            className="w-full"
+                            {...register("password")}
                         />
-                        {state?.errors?.password && (
+                        {errors.password && (
                             <>
                                 <Text
                                     size="2"
@@ -109,19 +97,8 @@ export default function CreateAnAccountCard() {
                                     as="p"
                                     color="red"
                                 >
-                                    Password must:
+                                    {errors.password.message}
                                 </Text>
-                                {state.errors.password.map((value) => (
-                                    <Text
-                                        key={value}
-                                        size="2"
-                                        weight="regular"
-                                        as="p"
-                                        color="red"
-                                    >
-                                        - {value}
-                                    </Text>
-                                ))}
                             </>
                         )}
                     </Box>
@@ -133,26 +110,28 @@ export default function CreateAnAccountCard() {
                         </label>
                         <TextField.Root
                             id="confirmPassword"
-                            name="confirmPassword"
                             type="password"
                             placeholder="Confirm your password"
-                            className="w-full"
+                            {...register("confirmPassword")}
                         />
-                        {state?.errors?.confirmPassword && (
+                        {errors.confirmPassword && (
                             <Text size="2" weight="regular" as="p" color="red">
-                                {state.errors.confirmPassword}
+                                {errors.confirmPassword.message}
                             </Text>
                         )}
                     </Box>
                     <Flex direction="row-reverse" gap="4">
-                        <Button type="submit" disabled={isPending}>
+                        <Button
+                            type="submit"
+                            disabled={isSubmitting || isValidating}
+                        >
                             Create Account
                         </Button>
                         <Link to="/signin">
                             <Button
                                 variant="soft"
                                 type="button"
-                                disabled={isPending}
+                                disabled={isSubmitting || isValidating}
                             >
                                 Go Back
                             </Button>

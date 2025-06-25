@@ -2,7 +2,7 @@ import { Outlet, useNavigate } from "react-router";
 import { useEffect } from "react";
 import { useUser } from "../hooks/useUser.ts";
 import { Flex } from "@radix-ui/themes";
-import trianglify from "../../public/images/trianglify.png";
+import trianglify from "../images/trianglify.png";
 
 export default function PublicLayout() {
     const { user } = useUser();

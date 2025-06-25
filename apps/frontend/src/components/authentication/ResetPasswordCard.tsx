@@ -8,12 +8,14 @@ import {
     TextField,
 } from "@radix-ui/themes";
 import { useUser } from "../../hooks/useUser.ts";
-import { useActionState, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router";
 import { ResetPasswordFormSchema } from "../../utils/schemas.ts";
-import type { AuthFormState } from "../../utils/types.ts";
 import { verifyPasswordResetCode } from "firebase/auth";
 import { clientAuth } from "../../utils/firebase.ts";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 type ResetPasswordCardProps = {
     actionCode: string;
@@ -28,10 +30,29 @@ export default function ResetPasswordCard({
 
     const [isActionCodeVerified, setIsActionCodeVerified] = useState(true);
 
-    const [state, formAction, isPending] = useActionState<
-        AuthFormState,
-        FormData
-    >(submitForm, null);
+    const {
+        register,
+        handleSubmit,
+        setError,
+        formState: { isSubmitting, isValidating, errors },
+    } = useForm<z.infer<typeof ResetPasswordFormSchema>>({
+        resolver: zodResolver(ResetPasswordFormSchema),
+    });
+
+    const onSubmit = handleSubmit(async (data) => {
+        try {
+            await resetPassword(actionCode, data.password);
+
+            navigate("/players");
+        } catch (error) {
+            console.error(error);
+
+            setError("password", {
+                type: "manual",
+                message: "An unexpected error occurred",
+            });
+        }
+    });
 
     useEffect(() => {
         async function verifyActionCode() {
@@ -39,53 +60,24 @@ export default function ResetPasswordCard({
                 await verifyPasswordResetCode(clientAuth, actionCode);
             } catch {
                 setIsActionCodeVerified(false);
+                setError("password", {
+                    type: "manual",
+                    message: "Provided action code is invalid or expired",
+                });
             }
         }
 
         verifyActionCode();
-    }, [navigate, actionCode]);
-
-    async function submitForm(prevState: AuthFormState, formData: FormData) {
-        const result = ResetPasswordFormSchema.safeParse({
-            password: formData.get("password"),
-            confirmPassword: formData.get("confirmPassword"),
-        });
-
-        if (!result.success) {
-            return {
-                errors: result.error.flatten().fieldErrors,
-            };
-        }
-
-        try {
-            await resetPassword(actionCode, result.data.password);
-        } catch (error) {
-            console.error(error);
-
-            return {
-                errors: {
-                    password: ["An unexpected error occurred"],
-                },
-            };
-        }
-
-        navigate("/players");
-        return prevState;
-    }
+    }, [navigate, actionCode, setError]);
 
     return (
         <Box width="400px">
             <Card size="4">
-                <form action={formAction}>
+                <form onSubmit={onSubmit}>
                     <Heading size="6" mb="5">
                         Reset Password
                     </Heading>
                     <Box mb="5">
-                        {!isActionCodeVerified && (
-                            <Text size="2" weight="regular" as="p" color="red">
-                                Provided action code is invalid or expired
-                            </Text>
-                        )}
                         <label htmlFor="password">
                             <Text size="2" weight="medium" mb="1" mt="1" as="p">
                                 Password
@@ -93,12 +85,12 @@ export default function ResetPasswordCard({
                         </label>
                         <TextField.Root
                             id="password"
-                            name="password"
                             type="password"
                             placeholder="Enter your password"
-                            className="w-full"
+                            {...register("password")}
+                            disabled={!isActionCodeVerified}
                         />
-                        {state?.errors?.password && (
+                        {errors?.password && (
                             <>
                                 <Text
                                     size="2"
@@ -106,19 +98,8 @@ export default function ResetPasswordCard({
                                     as="p"
                                     color="red"
                                 >
-                                    Password must:
+                                    {errors.password.message}
                                 </Text>
-                                {state.errors.password.map((value) => (
-                                    <Text
-                                        key={value}
-                                        size="2"
-                                        weight="regular"
-                                        as="p"
-                                        color="red"
-                                    >
-                                        - {value}
-                                    </Text>
-                                ))}
                             </>
                         )}
                     </Box>
@@ -130,21 +111,25 @@ export default function ResetPasswordCard({
                         </label>
                         <TextField.Root
                             id="confirmPassword"
-                            name="confirmPassword"
                             type="password"
                             placeholder="Confirm your password"
-                            className="w-full"
+                            {...register("confirmPassword")}
+                            disabled={!isActionCodeVerified}
                         />
-                        {state?.errors?.confirmPassword && (
+                        {errors?.confirmPassword && (
                             <Text size="2" weight="regular" as="p" color="red">
-                                {state.errors.confirmPassword}
+                                {errors.confirmPassword.message}
                             </Text>
                         )}
                     </Box>
                     <Flex direction="row-reverse" gap="4">
                         <Button
                             type="submit"
-                            disabled={isPending || !isActionCodeVerified}
+                            disabled={
+                                isSubmitting ||
+                                isValidating ||
+                                !isActionCodeVerified
+                            }
                         >
                             Reset Password
                         </Button>
@@ -152,7 +137,7 @@ export default function ResetPasswordCard({
                             <Button
                                 variant="soft"
                                 type="button"
-                                disabled={isPending}
+                                disabled={isSubmitting || isValidating}
                             >
                                 Go Back
                             </Button>

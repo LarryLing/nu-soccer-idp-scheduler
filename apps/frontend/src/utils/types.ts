@@ -12,6 +12,7 @@ import type {
     UseFieldArrayRemove,
     UseFormRegister,
 } from "react-hook-form";
+import type { BaseSyntheticEvent } from "react";
 export type User = {
     uid: string;
     email: string;
@@ -51,13 +52,5 @@ export type EditPlayerDialogContextType = {
     remove: UseFieldArrayRemove;
     handleOpen: (player: Player) => void;
     handleClose: () => void;
-    onSubmit: (e?: React.BaseSyntheticEvent) => Promise<void>;
+    onSubmit: (e?: BaseSyntheticEvent) => Promise<void>;
 };
-
-export type AuthFormState = {
-    errors?: {
-        email?: string[];
-        password?: string[];
-        confirmPassword?: string[];
-    };
-} | null;

@@ -9,48 +9,40 @@ import {
 } from "@radix-ui/themes";
 import { Link } from "react-router";
 import { useUser } from "../../hooks/useUser.ts";
-import { useActionState } from "react";
 import { ForgotPasswordFormSchema } from "../../utils/schemas.ts";
-import type { AuthFormState } from "../../utils/types.ts";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 export default function ForgotPasswordCard() {
     const { requestPasswordReset } = useUser();
 
-    const [state, formAction, isPending] = useActionState<
-        AuthFormState,
-        FormData
-    >(submitForm, null);
+    const {
+        register,
+        handleSubmit,
+        setError,
+        formState: { isSubmitting, isValidating, errors },
+    } = useForm<z.infer<typeof ForgotPasswordFormSchema>>({
+        resolver: zodResolver(ForgotPasswordFormSchema),
+    });
 
-    async function submitForm(prevState: AuthFormState, formData: FormData) {
-        const result = ForgotPasswordFormSchema.safeParse({
-            email: formData.get("email"),
-        });
-
-        if (!result.success) {
-            return {
-                errors: result.error.flatten().fieldErrors,
-            };
-        }
-
+    const onSubmit = handleSubmit(async (data) => {
         try {
-            await requestPasswordReset(result.data.email);
+            await requestPasswordReset(data.email);
         } catch (error) {
             console.error(error);
 
-            return {
-                errors: {
-                    email: ["An unexpected error occurred"],
-                },
-            };
+            setError("email", {
+                type: "manual",
+                message: "An unexpected error occurred",
+            });
         }
-
-        return prevState;
-    }
+    });
 
     return (
         <Box width="400px">
             <Card size="4">
-                <form action={formAction}>
+                <form onSubmit={onSubmit}>
                     <Heading size="6" mb="5">
                         Forgot Password
                     </Heading>
@@ -62,25 +54,27 @@ export default function ForgotPasswordCard() {
                         </label>
                         <TextField.Root
                             id="email"
-                            name="email"
                             placeholder="Enter your email address"
-                            className="w-full"
+                            {...register("email")}
                         />
-                        {state?.errors?.email && (
+                        {errors?.email && (
                             <Text size="2" weight="regular" as="p" color="red">
-                                {state.errors.email}
+                                {errors.email.message}
                             </Text>
                         )}
                     </Box>
                     <Flex direction="row-reverse" gap="4">
-                        <Button type="submit" disabled={isPending}>
+                        <Button
+                            type="submit"
+                            disabled={isSubmitting || isValidating}
+                        >
                             Send Password Recovery
                         </Button>
                         <Link to="/signin">
                             <Button
                                 variant="soft"
                                 type="button"
-                                disabled={isPending}
+                                disabled={isSubmitting || isValidating}
                             >
                                 Go Back
                             </Button>

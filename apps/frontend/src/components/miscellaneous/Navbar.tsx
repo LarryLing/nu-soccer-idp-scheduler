@@ -1,4 +1,4 @@
-import NorthwesternLogo from "../../assets/NorthwesternLogo.tsx";
+import NorthwesternLogo from "./NorthwesternLogo.tsx";
 import { Button, Flex, Text, Link } from "@radix-ui/themes";
 import { Link as ReactRouterLink } from "react-router";
 import { useUser } from "../../hooks/useUser.ts";

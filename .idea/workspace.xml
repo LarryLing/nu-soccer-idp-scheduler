@@ -6,10 +6,16 @@
   <component name="ChangeListManager">
     <list default="true" id="b05902af-5cdc-4fb0-944c-d2d26c9f2b39" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/src/components/players/PlayerTableActionRow.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/components/players/PlayerTableActionRow.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/src/hooks/usePlayers.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/hooks/usePlayers.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/public/images/trianglify.png" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/images/trianglify.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/assets/NorthwesternLogo.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/components/miscellaneous/NorthwesternLogo.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/components/authentication/ResetPasswordCard.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/components/authentication/ResetPasswordCard.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/components/miscellaneous/Navbar.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/components/miscellaneous/Navbar.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/apps/frontend/src/layouts/ProtectedLayout.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/layouts/ProtectedLayout.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/src/pages/players/Players.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/pages/players/Players.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/layouts/PublicLayout.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/layouts/PublicLayout.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/pages/create-an-account/CreateAnAccount.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/pages/create-an-account/CreateAnAccount.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/pages/forgot-password/ForgotPassword.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/pages/forgot-password/ForgotPassword.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/pages/signin/SignIn.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/pages/signin/SignIn.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/utils/types.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/utils/types.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -81,11 +87,11 @@
       <recent name="$PROJECT_DIR$/apps/frontend/src/components/authentication" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/apps/frontend/src/images" />
+      <recent name="$PROJECT_DIR$/apps/frontend/src/components/miscellaneous" />
       <recent name="$PROJECT_DIR$/apps/frontend/src/components/players" />
       <recent name="$PROJECT_DIR$/apps/frontend/src/contexts" />
       <recent name="$PROJECT_DIR$/apps/frontend/public/images" />
-      <recent name="$PROJECT_DIR$/apps/frontend/src/pages/actions" />
-      <recent name="$PROJECT_DIR$/apps/backend/src" />
     </key>
   </component>
   <component name="RunManager">
@@ -124,7 +130,7 @@
       <workItem from="1750312053135" duration="22487000" />
       <workItem from="1750368658431" duration="36650000" />
       <workItem from="1750452312080" duration="26836000" />
-      <workItem from="1750814721487" duration="432000" />
+      <workItem from="1750814721487" duration="3640000" />
     </task>
     <servers />
   </component>
