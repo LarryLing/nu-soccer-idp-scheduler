@@ -25,11 +25,15 @@ export default function PlayerActionsDropdown({
             throw new Error("User not authenticated");
         }
 
-        await deleteDoc(
-            doc(clientFirestore, `users/${user.uid!}/players/${player.id}`),
-        );
+        try {
+            await deleteDoc(
+                doc(clientFirestore, `users/${user.uid!}/players/${player.id}`),
+            );
 
-        table.resetRowSelection();
+            table.resetRowSelection();
+        } catch (error) {
+            console.error("Failed to delete player:", error);
+        }
     };
 
     return (

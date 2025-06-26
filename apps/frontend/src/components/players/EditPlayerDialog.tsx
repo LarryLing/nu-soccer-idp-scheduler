@@ -10,6 +10,7 @@ import {
 import AvailabilityRow from "./AvailabilityRow.tsx";
 import { Controller } from "react-hook-form";
 import type { EditPlayerDialogContextType } from "../../utils/types.ts";
+import { POSITION_OPTIONS } from "../../utils/constants.ts";
 
 export default function EditPlayerDialog({
     isOpen,
@@ -17,14 +18,17 @@ export default function EditPlayerDialog({
     register,
     control,
     isSubmitting,
+    isSaving,
     isValidating,
     errors,
     fields,
-    append,
     remove,
     handleClose,
+    addAvailability,
     onSubmit,
 }: EditPlayerDialogContextType) {
+    const isFormDisabled = isSubmitting || isValidating || isSaving;
+
     return (
         <Dialog.Root open={isOpen} onOpenChange={setIsOpen}>
             <Dialog.Content width="450px">
@@ -42,6 +46,7 @@ export default function EditPlayerDialog({
                         <TextField.Root
                             id="name"
                             placeholder="Enter player name"
+                            disabled={isFormDisabled}
                             {...register("name")}
                         />
                         {errors?.name && (
@@ -71,6 +76,7 @@ export default function EditPlayerDialog({
                             max="99"
                             step="1"
                             inputMode="numeric"
+                            disabled={isFormDisabled}
                             {...register("number", {
                                 valueAsNumber: true,
                             })}
@@ -94,25 +100,23 @@ export default function EditPlayerDialog({
                                 <Select.Root
                                     value={field.value}
                                     onValueChange={field.onChange}
-                                    name="position"
+                                    disabled={isFormDisabled}
                                 >
                                     <Select.Trigger
                                         style={{ width: "100%" }}
                                         id="position"
                                     />
                                     <Select.Content>
-                                        <Select.Item value="Goalkeeper">
-                                            Goalkeeper
-                                        </Select.Item>
-                                        <Select.Item value="Defender">
-                                            Defender
-                                        </Select.Item>
-                                        <Select.Item value="Midfielder">
-                                            Midfielder
-                                        </Select.Item>
-                                        <Select.Item value="Forward">
-                                            Forward
-                                        </Select.Item>
+                                        {POSITION_OPTIONS.map(
+                                            ({ value, label }) => (
+                                                <Select.Item
+                                                    key={value}
+                                                    value={value}
+                                                >
+                                                    {label}
+                                                </Select.Item>
+                                            ),
+                                        )}
                                     </Select.Content>
                                 </Select.Root>
                             )}
@@ -135,13 +139,8 @@ export default function EditPlayerDialog({
                                     variant="soft"
                                     color="gray"
                                     type="button"
-                                    onClick={() =>
-                                        append({
-                                            day: "Monday",
-                                            start: "9:30AM",
-                                            end: "10:00AM",
-                                        })
-                                    }
+                                    onClick={addAvailability}
+                                    disabled={isFormDisabled}
                                 >
                                     Add Availability
                                 </Button>
@@ -161,16 +160,13 @@ export default function EditPlayerDialog({
                         </Flex>
                     </Box>
                     <Flex direction="row-reverse" gap="2">
-                        <Button
-                            type="submit"
-                            disabled={isSubmitting || isValidating}
-                        >
-                            Save Changes
+                        <Button type="submit" disabled={isFormDisabled}>
+                            {isSaving ? "Saving..." : "Save Changes"}
                         </Button>
                         <Button
                             variant="soft"
                             type="button"
-                            disabled={isSubmitting || isValidating}
+                            disabled={isFormDisabled}
                             onClick={handleClose}
                         >
                             Cancel

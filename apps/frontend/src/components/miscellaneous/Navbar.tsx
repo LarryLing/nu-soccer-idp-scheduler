@@ -1,11 +1,14 @@
 import NorthwesternLogo from "./NorthwesternLogo.tsx";
 import { Button, Flex, Link, IconButton, Box, Heading } from "@radix-ui/themes";
 import { Link as ReactRouterLink } from "react-router";
-import { useUser } from "../../hooks/useUser.ts";
 import { LogOutIcon } from "lucide-react";
+import { signOut } from "firebase/auth";
+import { clientAuth } from "../../utils/firebase.ts";
 
 export default function Navbar() {
-    const { signOut } = useUser();
+    const handleSignout = async () => {
+        await signOut(clientAuth);
+    };
 
     return (
         <Flex
@@ -41,13 +44,13 @@ export default function Navbar() {
                     </ReactRouterLink>
                 </Link>
                 <Box display={{ initial: "none", xs: "block" }}>
-                    <Button type="button" onClick={signOut}>
+                    <Button type="button" onClick={handleSignout}>
                         <LogOutIcon size={15} />
                         Sign Out
                     </Button>
                 </Box>
                 <Box display={{ initial: "block", xs: "none" }}>
-                    <IconButton type="button" onClick={signOut}>
+                    <IconButton type="button" onClick={handleSignout}>
                         <LogOutIcon size={15} />
                     </IconButton>
                 </Box>

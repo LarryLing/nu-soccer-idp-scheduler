@@ -12,11 +12,16 @@ import { useForm, useFieldArray, Controller } from "react-hook-form";
 import { PlayerSchema } from "../../utils/schemas.ts";
 import { z } from "zod";
 import { PlusIcon } from "lucide-react";
-import { useCallback, useState } from "react";
+import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { addDoc, collection } from "firebase/firestore";
 import { clientFirestore } from "../../utils/firebase.ts";
 import type { User } from "../../utils/types.ts";
+import {
+    DEFAULT_AVAILABILITY,
+    DEFAULT_VALUES,
+    POSITION_OPTIONS,
+} from "../../utils/constants.ts";
 
 type AddPlayerDialogProps = {
     user: User | null;
@@ -24,58 +29,68 @@ type AddPlayerDialogProps = {
 
 export default function AddPlayerDialog({ user }: AddPlayerDialogProps) {
     const [isOpen, setIsOpen] = useState(false);
+    const [isAdding, setIsAdding] = useState(false);
 
     const {
         register,
         handleSubmit,
         reset,
         control,
+        setError,
         clearErrors,
         formState: { isSubmitting, isValidating, errors },
     } = useForm<z.infer<typeof PlayerSchema>>({
         resolver: zodResolver(PlayerSchema),
-        defaultValues: {
-            name: "",
-            number: 0,
-            position: "Goalkeeper",
-            availabilities: [
-                {
-                    day: "Monday",
-                    start: "9:30AM",
-                    end: "10:00AM",
-                },
-            ],
-        },
+        defaultValues: DEFAULT_VALUES,
     });
 
-    const { fields, append, remove } = useFieldArray<
-        z.infer<typeof PlayerSchema>
-    >({
+    const { fields, append, remove } = useFieldArray({
         control,
         name: "availabilities",
     });
 
-    const handleOpen = useCallback(() => {
-        reset();
-    }, [reset]);
+    const handleOpen = () => {
+        reset(DEFAULT_VALUES);
+        setIsOpen(true);
+    };
 
-    const handleClose = useCallback(() => {
+    const handleClose = () => {
         clearErrors();
         setIsOpen(false);
-    }, [clearErrors]);
+    };
 
-    const onSubmit = handleSubmit(async (data) => {
-        setIsOpen(false);
+    const addAvailability = () => {
+        append(DEFAULT_AVAILABILITY);
+    };
 
-        if (!user) {
-            throw new Error("User not authenticated");
-        }
+    const onSubmit = () =>
+        handleSubmit(async (data: z.infer<typeof PlayerSchema>) => {
+            if (!user?.uid) {
+                console.error("User not authenticated");
+                return;
+            }
 
-        await addDoc(
-            collection(clientFirestore, `users/${user.uid}/players/`),
-            data,
-        );
-    });
+            setIsAdding(true);
+
+            try {
+                await addDoc(
+                    collection(clientFirestore, `users/${user.uid}/players`),
+                    data,
+                );
+                setIsOpen(false);
+            } catch (error) {
+                console.error("Failed to add player:", error);
+
+                setError("name", {
+                    type: "manual",
+                    message: "An unexpected error occurred",
+                });
+            } finally {
+                setIsAdding(false);
+            }
+        });
+
+    const isFormDisabled = isSubmitting || isValidating || isAdding;
 
     return (
         <Dialog.Root open={isOpen} onOpenChange={setIsOpen}>
@@ -100,19 +115,13 @@ export default function AddPlayerDialog({ user }: AddPlayerDialogProps) {
                         <TextField.Root
                             id="name"
                             placeholder="Enter player name"
+                            disabled={isFormDisabled}
                             {...register("name")}
                         />
-                        {errors?.name && (
-                            <>
-                                <Text
-                                    size="2"
-                                    weight="regular"
-                                    as="p"
-                                    color="red"
-                                >
-                                    {errors.name.message}
-                                </Text>
-                            </>
+                        {errors.name && (
+                            <Text size="2" weight="regular" as="p" color="red">
+                                {errors.name.message}
+                            </Text>
                         )}
                     </Box>
                     <Box mb="3">
@@ -129,11 +138,12 @@ export default function AddPlayerDialog({ user }: AddPlayerDialogProps) {
                             max="99"
                             step="1"
                             inputMode="numeric"
+                            disabled={isFormDisabled}
                             {...register("number", {
                                 valueAsNumber: true,
                             })}
                         />
-                        {errors?.number && (
+                        {errors.number && (
                             <Text size="2" weight="regular" as="p" color="red">
                                 {errors.number.message}
                             </Text>
@@ -152,30 +162,28 @@ export default function AddPlayerDialog({ user }: AddPlayerDialogProps) {
                                 <Select.Root
                                     value={field.value}
                                     onValueChange={field.onChange}
-                                    name="position"
+                                    disabled={isFormDisabled}
                                 >
                                     <Select.Trigger
                                         style={{ width: "100%" }}
                                         id="position"
                                     />
                                     <Select.Content>
-                                        <Select.Item value="Goalkeeper">
-                                            Goalkeeper
-                                        </Select.Item>
-                                        <Select.Item value="Defender">
-                                            Defender
-                                        </Select.Item>
-                                        <Select.Item value="Midfielder">
-                                            Midfielder
-                                        </Select.Item>
-                                        <Select.Item value="Forward">
-                                            Forward
-                                        </Select.Item>
+                                        {POSITION_OPTIONS.map(
+                                            ({ value, label }) => (
+                                                <Select.Item
+                                                    key={value}
+                                                    value={value}
+                                                >
+                                                    {label}
+                                                </Select.Item>
+                                            ),
+                                        )}
                                     </Select.Content>
                                 </Select.Root>
                             )}
                         />
-                        {errors?.position && (
+                        {errors.position && (
                             <Text size="2" weight="regular" as="p" color="red">
                                 {errors.position.message}
                             </Text>
@@ -193,42 +201,32 @@ export default function AddPlayerDialog({ user }: AddPlayerDialogProps) {
                                     variant="soft"
                                     color="gray"
                                     type="button"
-                                    onClick={() =>
-                                        append({
-                                            day: "Monday",
-                                            start: "9:30AM",
-                                            end: "10:00AM",
-                                        })
-                                    }
+                                    onClick={addAvailability}
+                                    disabled={isFormDisabled}
                                 >
                                     Add Availability
                                 </Button>
                             </Flex>
-                            {fields.map((field, index) => {
-                                return (
-                                    <AvailabilityRow
-                                        key={field.id}
-                                        index={index}
-                                        register={register}
-                                        remove={remove}
-                                        errors={errors}
-                                        control={control}
-                                    />
-                                );
-                            })}
+                            {fields.map((field, index) => (
+                                <AvailabilityRow
+                                    key={field.id}
+                                    index={index}
+                                    register={register}
+                                    remove={remove}
+                                    errors={errors}
+                                    control={control}
+                                />
+                            ))}
                         </Flex>
                     </Box>
                     <Flex direction="row-reverse" gap="2">
-                        <Button
-                            type="submit"
-                            disabled={isSubmitting || isValidating}
-                        >
-                            Add Player
+                        <Button type="submit" disabled={isFormDisabled}>
+                            {isAdding ? "Adding..." : "Add Player"}
                         </Button>
                         <Button
                             variant="soft"
                             type="button"
-                            disabled={isSubmitting || isValidating}
+                            disabled={isFormDisabled}
                             onClick={handleClose}
                         >
                             Cancel

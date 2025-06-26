@@ -8,16 +8,7 @@ import {
 } from "react-hook-form";
 import type { PlayerSchema } from "../../utils/schemas.ts";
 import { z } from "zod";
-
-const DAYS = [
-    "Monday",
-    "Tuesday",
-    "Wednesday",
-    "Thursday",
-    "Friday",
-    "Saturday",
-    "Sunday",
-] as const;
+import { DAYS } from "../../utils/constants.ts";
 
 type AvailabilityRowProps = {
     index: number;

@@ -8,15 +8,14 @@ import {
     TextField,
 } from "@radix-ui/themes";
 import { Link } from "react-router";
-import { useUser } from "../../hooks/useUser.ts";
 import { ForgotPasswordFormSchema } from "../../utils/schemas.ts";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { sendPasswordResetEmail } from "firebase/auth";
+import { clientAuth } from "../../utils/firebase.ts";
 
 export default function ForgotPasswordCard() {
-    const { requestPasswordReset } = useUser();
-
     const {
         register,
         handleSubmit,
@@ -28,7 +27,7 @@ export default function ForgotPasswordCard() {
 
     const onSubmit = handleSubmit(async (data) => {
         try {
-            await requestPasswordReset(data.email);
+            await sendPasswordResetEmail(clientAuth, data.email);
         } catch (error) {
             console.error(error);
 

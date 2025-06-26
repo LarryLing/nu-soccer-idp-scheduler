@@ -8,7 +8,6 @@ import type {
     Control,
     FieldArrayWithId,
     FormState,
-    UseFieldArrayAppend,
     UseFieldArrayRemove,
     UseFormRegister,
 } from "react-hook-form";
@@ -32,11 +31,6 @@ export type TrainingBlock = z.infer<typeof TrainingBlockSchema> & {
 export type UserContextType = {
     user: User | null;
     isLoading: boolean;
-    signUp: (email?: string, password?: string) => Promise<void>;
-    signIn: (email?: string, password?: string) => Promise<void>;
-    signOut: () => Promise<void>;
-    requestPasswordReset: (email?: string) => Promise<void>;
-    resetPassword: (actionCode?: string, newPassword?: string) => Promise<void>;
 };
 
 export type EditPlayerDialogContextType = {
@@ -45,12 +39,13 @@ export type EditPlayerDialogContextType = {
     register: UseFormRegister<z.infer<typeof PlayerSchema>>;
     control: Control<z.infer<typeof PlayerSchema>>;
     isSubmitting: boolean;
+    isSaving: boolean;
     isValidating: boolean;
     errors: FormState<z.infer<typeof PlayerSchema>>["errors"];
     fields: FieldArrayWithId<z.infer<typeof PlayerSchema>>[];
-    append: UseFieldArrayAppend<z.infer<typeof PlayerSchema>>;
     remove: UseFieldArrayRemove;
     handleOpen: (player: Player) => void;
     handleClose: () => void;
+    addAvailability: () => void;
     onSubmit: (e?: BaseSyntheticEvent) => Promise<void>;
 };

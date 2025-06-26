@@ -11,7 +11,7 @@ import AddPlayerDialog from "./AddPlayerDialog.tsx";
 import { DownloadIcon, SearchIcon, TrashIcon, UploadIcon } from "lucide-react";
 import type { Player } from "../../utils/types.ts";
 import type { Table } from "@tanstack/react-table";
-import { type ChangeEvent, useRef } from "react";
+import { type ChangeEvent, useMemo, useRef, useState } from "react";
 import { doc, writeBatch } from "firebase/firestore";
 import { clientFirestore } from "../../utils/firebase.ts";
 import { useUser } from "../../hooks/useUser.ts";
@@ -27,163 +27,211 @@ export default function PlayerTableActionRow({
 }: PlayerTableActionRowProps) {
     const { user } = useUser();
 
-    const fileInputRef = useRef<HTMLInputElement | null>(null);
+    const fileInputRef = useRef<HTMLInputElement>(null);
+
+    const [isImporting, setIsImporting] = useState(false);
+    const [isDeleting, setIsDeleting] = useState(false);
+
+    const selectedPlayerIds = useMemo(
+        () =>
+            table
+                .getFilteredSelectedRowModel()
+                .rows.map((row) => row.original.id),
+        [table],
+    );
+
+    const searchValue = useMemo(
+        () => (table.getColumn("name")?.getFilterValue() as string) ?? "",
+        [table],
+    );
 
     const exportJSON = () => {
-        const jsonData = new Blob([JSON.stringify(players)], {
-            type: "application/json",
-        });
+        try {
+            const jsonData = new Blob([JSON.stringify(players, null, 2)], {
+                type: "application/json",
+            });
 
-        const jsonURL = URL.createObjectURL(jsonData);
+            const jsonURL = URL.createObjectURL(jsonData);
+            const link = document.createElement("a");
 
-        const link = document.createElement("a");
+            link.href = jsonURL;
+            link.download = `players_${new Date().toISOString().split("T")[0]}.json`;
+            link.click();
 
-        link.href = jsonURL;
-        link.download = "players.json";
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
+            setTimeout(() => URL.revokeObjectURL(jsonURL), 100);
+        } catch (error) {
+            console.error("Failed to export JSON:", error);
+        }
     };
-
-    const selectedPlayerIds = table
-        .getFilteredSelectedRowModel()
-        .rows.map((row) => (row.original as Player).id);
 
     const handleRemovePlayers = async () => {
-        if (!user) {
-            throw new Error("User not authenticated");
+        if (!user?.uid) {
+            console.error("User not authenticated");
+            return;
         }
 
-        const batch = writeBatch(clientFirestore);
-        selectedPlayerIds.forEach((selectedPlayerId) => {
-            batch.delete(
-                doc(
-                    clientFirestore,
-                    `users/${user.uid!}/players/${selectedPlayerId}`,
-                ),
-            );
-        });
+        if (selectedPlayerIds.length === 0) return;
 
-        await batch.commit();
-        table.resetRowSelection();
+        setIsDeleting(true);
+        try {
+            const batch = writeBatch(clientFirestore);
+
+            selectedPlayerIds.forEach((playerId) => {
+                batch.delete(
+                    doc(
+                        clientFirestore,
+                        `users/${user.uid}/players/${playerId}`,
+                    ),
+                );
+            });
+
+            await batch.commit();
+            table.resetRowSelection();
+        } catch (error) {
+            console.error("Failed to delete players:", error);
+        } finally {
+            setIsDeleting(false);
+        }
     };
 
-    const importJSON = (event: ChangeEvent<HTMLInputElement>) => {
-        if (!user) {
-            throw new Error("User not authenticated");
+    const validatePlayerData = (data: unknown): data is Player[] => {
+        if (!Array.isArray(data)) return false;
+
+        return data.every(
+            (item) =>
+                typeof item === "object" &&
+                item !== null &&
+                "id" in item &&
+                "name" in item &&
+                "number" in item &&
+                "position" in item &&
+                "availabilities" in item,
+        );
+    };
+
+    const importJSON = async (event: ChangeEvent<HTMLInputElement>) => {
+        if (!user?.uid) {
+            console.error("User not authenticated");
+            return;
         }
 
-        if (event.target.files) {
-            const fileReader = new FileReader();
+        const file = event.target.files?.[0];
+        if (!file) return;
 
-            fileReader.onload = async (event) => {
-                if (event.target) {
-                    const deletePlayerBatch = writeBatch(clientFirestore);
+        if (!file.type.includes("json")) {
+            console.error("Invalid file type. Please select a JSON file.");
+            return;
+        }
 
-                    players.forEach((player) => {
-                        deletePlayerBatch.delete(
-                            doc(
-                                clientFirestore,
-                                `users/${user.uid!}/players/${player.id!}`,
-                            ),
-                        );
-                    });
+        if (file.size > 10 * 1024 * 1024) {
+            console.error("File too large. Maximum size is 10MB.");
+            return;
+        }
 
-                    const addPlayerBatch = writeBatch(clientFirestore);
+        setIsImporting(true);
 
-                    const parsedPlayers: Player[] = JSON.parse(
-                        event.target.result as string,
+        try {
+            const text = await file.text();
+            const parsedPlayers = JSON.parse(text);
+
+            if (!validatePlayerData(parsedPlayers)) {
+                throw new Error("Invalid player data format");
+            }
+
+            const batch = writeBatch(clientFirestore);
+
+            // Delete existing players
+            players.forEach((player) => {
+                if (player.id) {
+                    batch.delete(
+                        doc(
+                            clientFirestore,
+                            `users/${user.uid}/players/${player.id}`,
+                        ),
                     );
-
-                    parsedPlayers.forEach((player) => {
-                        addPlayerBatch.set(
-                            doc(
-                                clientFirestore,
-                                `users/${user.uid!}/players`,
-                                player.id,
-                            ),
-                            {
-                                name: player.name,
-                                number: player.number,
-                                position: player.position,
-                                availabilities: player.availabilities,
-                            },
-                        );
-                    });
-
-                    await deletePlayerBatch.commit();
-
-                    await addPlayerBatch.commit();
                 }
-            };
+            });
 
-            fileReader.readAsText(event.target.files[0]);
+            // Add new players
+            parsedPlayers.forEach((player) => {
+                if (player.id) {
+                    batch.set(
+                        doc(
+                            clientFirestore,
+                            `users/${user.uid}/players/${player.id}`,
+                        ),
+                        {
+                            name: player.name,
+                            number: player.number,
+                            position: player.position,
+                            availabilities: player.availabilities,
+                        },
+                    );
+                }
+            });
+
+            await batch.commit();
+        } catch (error) {
+            console.error("Failed to import JSON:", error);
+        } finally {
+            setIsImporting(false);
+            if (fileInputRef.current) {
+                fileInputRef.current.value = "";
+            }
         }
+    };
+
+    // Only use useCallback when the function is used as a dependency
+    // or passed to memoized components that would benefit from it
+    const handleSearchChange = (event: ChangeEvent<HTMLInputElement>) => {
+        table.getColumn("name")?.setFilterValue(event.target.value);
+    };
+
+    const handleImportClick = () => {
+        fileInputRef.current?.click();
     };
 
     return (
         <>
             <Flex
-                direction={{
-                    initial: "column",
-                    sm: "row",
-                }}
+                direction={{ initial: "column", sm: "row" }}
                 justify="between"
-                align={{
-                    initial: "start",
-                    sm: "center",
-                }}
-                gap={{
-                    initial: "4",
-                    sm: "0",
-                }}
+                align={{ initial: "start", sm: "center" }}
+                gap={{ initial: "4", sm: "0" }}
                 mb="4"
             >
                 <Flex align="center" gap="2" wrap="wrap">
                     <AddPlayerDialog user={user} />
+
                     <Button variant="outline" onClick={exportJSON}>
                         <DownloadIcon size={15} />
                         Export JSON
                     </Button>
+
                     <input
-                        id="import-json"
                         ref={fileInputRef}
-                        name="import-json"
                         type="file"
-                        accept=".json, application/json"
+                        accept=".json,application/json"
                         onChange={importJSON}
                         style={{ display: "none" }}
+                        aria-label="Import JSON file"
                     />
-                    <label htmlFor="import-json">
-                        <Button
-                            variant="outline"
-                            onClick={() => fileInputRef.current?.click()}
-                        >
-                            <UploadIcon size={15} />
-                            Import JSON
-                        </Button>
-                    </label>
+
+                    <Button
+                        variant="outline"
+                        onClick={handleImportClick}
+                        disabled={isImporting}
+                    >
+                        <UploadIcon size={15} />
+                        {isImporting ? "Importing..." : "Import JSON"}
+                    </Button>
                 </Flex>
-                <Box
-                    width={{
-                        initial: "100%",
-                        sm: "250px",
-                    }}
-                >
+
+                <Box width={{ initial: "100%", sm: "250px" }}>
                     <TextField.Root
-                        id="search"
-                        name="search"
                         placeholder="Search players by name"
-                        value={
-                            (table
-                                .getColumn("name")
-                                ?.getFilterValue() as string) ?? ""
-                        }
-                        onChange={(event) =>
-                            table
-                                .getColumn("name")
-                                ?.setFilterValue(event.target.value)
-                        }
+                        value={searchValue}
+                        onChange={handleSearchChange}
                     >
                         <TextField.Slot>
                             <SearchIcon size={15} />
@@ -191,16 +239,27 @@ export default function PlayerTableActionRow({
                     </TextField.Root>
                 </Box>
             </Flex>
+
             {selectedPlayerIds.length > 0 && (
                 <Card mb="4">
                     <Flex justify="start" align="center" gap="2" wrap="wrap">
-                        <Text color="gray" weight="medium" size="2" wrap="nowrap">
-                            {selectedPlayerIds.length} players selected
+                        <Text
+                            color="gray"
+                            weight="medium"
+                            size="2"
+                            wrap="nowrap"
+                        >
+                            {selectedPlayerIds.length} player
+                            {selectedPlayerIds.length !== 1 ? "s" : ""} selected
                         </Text>
                         <Separator orientation="vertical" size="1" />
-                        <Button color="red" onClick={handleRemovePlayers}>
+                        <Button
+                            color="red"
+                            onClick={handleRemovePlayers}
+                            disabled={isDeleting}
+                        >
                             <TrashIcon size={15} />
-                            Delete Selected
+                            {isDeleting ? "Deleting..." : "Delete Selected"}
                         </Button>
                     </Flex>
                 </Card>

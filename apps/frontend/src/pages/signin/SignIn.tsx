@@ -9,16 +9,15 @@ import {
     TextField,
 } from "@radix-ui/themes";
 import { Link as ReactRouterLink, useNavigate } from "react-router";
-import { useUser } from "../../hooks/useUser.ts";
 import { SignInFormSchema } from "../../utils/schemas.ts";
 import { FirebaseError } from "firebase/app";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { clientAuth } from "../../utils/firebase.ts";
 
 export default function SignIn() {
-    const { signIn } = useUser();
-
     const navigate = useNavigate();
 
     const {
@@ -32,7 +31,11 @@ export default function SignIn() {
 
     const onSubmit = handleSubmit(async (data) => {
         try {
-            await signIn(data.email, data.password);
+            await signInWithEmailAndPassword(
+                clientAuth,
+                data.email,
+                data.password,
+            );
 
             navigate("/players");
         } catch (error: unknown) {

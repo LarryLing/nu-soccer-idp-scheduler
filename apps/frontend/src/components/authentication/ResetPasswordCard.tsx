@@ -7,11 +7,10 @@ import {
     Text,
     TextField,
 } from "@radix-ui/themes";
-import { useUser } from "../../hooks/useUser.ts";
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router";
 import { ResetPasswordFormSchema } from "../../utils/schemas.ts";
-import { verifyPasswordResetCode } from "firebase/auth";
+import { confirmPasswordReset, verifyPasswordResetCode } from "firebase/auth";
 import { clientAuth } from "../../utils/firebase.ts";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -24,8 +23,6 @@ type ResetPasswordCardProps = {
 export default function ResetPasswordCard({
     actionCode,
 }: ResetPasswordCardProps) {
-    const { resetPassword } = useUser();
-
     const navigate = useNavigate();
 
     const [isActionCodeVerified, setIsActionCodeVerified] = useState(true);
@@ -41,7 +38,7 @@ export default function ResetPasswordCard({
 
     const onSubmit = handleSubmit(async (data) => {
         try {
-            await resetPassword(actionCode, data.password);
+            await confirmPasswordReset(clientAuth, actionCode, data.password);
 
             navigate("/players");
         } catch (error) {

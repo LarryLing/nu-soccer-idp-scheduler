@@ -8,16 +8,15 @@ import {
     TextField,
 } from "@radix-ui/themes";
 import { Link, useNavigate } from "react-router";
-import { useUser } from "../../hooks/useUser.ts";
 import { CreateAnAccountSchema } from "../../utils/schemas.ts";
 import { FirebaseError } from "firebase/app";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { clientAuth } from "../../utils/firebase.ts";
 
 export default function CreateAnAccountCard() {
-    const { signUp } = useUser();
-
     const navigate = useNavigate();
 
     const {
@@ -31,7 +30,11 @@ export default function CreateAnAccountCard() {
 
     const onSubmit = handleSubmit(async (data) => {
         try {
-            await signUp(data.email, data.password);
+            await createUserWithEmailAndPassword(
+                clientAuth,
+                data.email,
+                data.password,
+            );
 
             navigate("/players");
         } catch (error: unknown) {
