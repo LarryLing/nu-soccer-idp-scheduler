@@ -28,11 +28,10 @@ export default function ProtectedLayout() {
                 <Navbar />
                 <Flex
                     direction="column"
-                    gap="5"
+                    gap="4"
                     px={{
-                        initial: "20px",
-                        xs: "36px",
-                        sm: "72px",
+                        initial: "32px",
+                        md: "72px",
                     }}
                     py="6"
                     width="100%"

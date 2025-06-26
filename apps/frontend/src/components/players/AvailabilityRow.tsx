@@ -1,5 +1,4 @@
-import { Flex, IconButton, Select, Text, TextField } from "@radix-ui/themes";
-import { XIcon } from "lucide-react";
+import { Button, Flex, Select, Text, TextField } from "@radix-ui/themes";
 import {
     type Control,
     Controller,
@@ -37,52 +36,54 @@ export default function AvailabilityRow({
 }: AvailabilityRowProps) {
     return (
         <>
-            <Flex justify="between">
-                <Flex align="center" gap="3">
-                    <Controller
-                        name={`availabilities.${index}.day`}
-                        control={control}
-                        render={({ field }) => (
-                            <Select.Root
-                                value={field.value}
-                                onValueChange={field.onChange}
-                            >
-                                <Select.Trigger style={{ width: "120px" }} />
-                                <Select.Content>
-                                    {DAYS.map((dayOption) => (
-                                        <Select.Item
-                                            key={dayOption}
-                                            value={dayOption}
-                                        >
-                                            {dayOption}
-                                        </Select.Item>
-                                    ))}
-                                </Select.Content>
-                            </Select.Root>
-                        )}
-                    />
-                    <TextField.Root
-                        style={{ width: "80px" }}
-                        placeholder="9:30AM"
-                        {...register(`availabilities.${index}.start`)}
-                    />
-                    <Text size="2" weight="medium">
-                        -
-                    </Text>
-                    <TextField.Root
-                        style={{ width: "80px" }}
-                        placeholder="10:00AM"
-                        {...register(`availabilities.${index}.end`)}
-                    />
-                </Flex>
-                <IconButton
+            <Flex justify="between" align="center" width="100%">
+                <Controller
+                    name={`availabilities.${index}.day`}
+                    control={control}
+                    render={({ field }) => (
+                        <Select.Root
+                            value={field.value}
+                            onValueChange={field.onChange}
+                            name={`availabilities.${index}.day`}
+                        >
+                            <Select.Trigger
+                                style={{ width: "120px" }}
+                                id={`availabilities.${index}.day`}
+                            />
+                            <Select.Content>
+                                {DAYS.map((dayOption) => (
+                                    <Select.Item
+                                        key={dayOption}
+                                        value={dayOption}
+                                    >
+                                        {dayOption}
+                                    </Select.Item>
+                                ))}
+                            </Select.Content>
+                        </Select.Root>
+                    )}
+                />
+                <TextField.Root
+                    style={{ width: "80px" }}
+                    placeholder="9:30AM"
+                    {...register(`availabilities.${index}.start`)}
+                />
+                <Text size="2" weight="medium">
+                    -
+                </Text>
+                <TextField.Root
+                    style={{ width: "80px" }}
+                    placeholder="10:00AM"
+                    {...register(`availabilities.${index}.end`)}
+                />
+                <Button
                     variant="soft"
                     color="red"
                     type="button"
                     onClick={() => remove(index)}
                 >
-                    <XIcon size={15} />
-                </IconButton>
+                    Remove
+                </Button>
             </Flex>
             <Flex direction="column">
                 {(["day", "start", "end"] as const).map(

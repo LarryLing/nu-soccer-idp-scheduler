@@ -1,9 +1,11 @@
 import { DropdownMenu, IconButton } from "@radix-ui/themes";
 import { EllipsisIcon } from "lucide-react";
-import { usePlayers } from "../../hooks/usePlayers.ts";
 import type { Table } from "@tanstack/react-table";
 import type { Player } from "../../utils/types.ts";
 import { useEditPlayerDialog } from "../../hooks/useEditPlayerDialog.ts";
+import { deleteDoc, doc } from "firebase/firestore";
+import { clientFirestore } from "../../utils/firebase.ts";
+import { useUser } from "../../hooks/useUser.ts";
 
 type PlayerActionsDropdownProps = {
     player: Player;
@@ -14,12 +16,19 @@ export default function PlayerActionsDropdown({
     player,
     table,
 }: PlayerActionsDropdownProps) {
-    const { removePlayer } = usePlayers();
+    const { user } = useUser();
 
     const { handleOpen } = useEditPlayerDialog();
 
     const handleRemovePlayer = async () => {
-        await removePlayer(player.id);
+        if (!user) {
+            throw new Error("User not authenticated");
+        }
+
+        await deleteDoc(
+            doc(clientFirestore, `users/${user.uid!}/players/${player.id}`),
+        );
+
         table.resetRowSelection();
     };
 

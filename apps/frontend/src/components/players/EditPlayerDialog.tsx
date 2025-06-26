@@ -8,32 +8,8 @@ import {
     TextField,
 } from "@radix-ui/themes";
 import AvailabilityRow from "./AvailabilityRow.tsx";
-import {
-    Controller,
-    type UseFormRegister,
-    type Control,
-    type FormState,
-    type FieldArrayWithId,
-    type UseFieldArrayAppend,
-    type UseFieldArrayRemove,
-} from "react-hook-form";
-import { PlayerSchema } from "../../utils/schemas.ts";
-import { z } from "zod";
-
-type EditPlayerDialogProps = {
-    isOpen: boolean;
-    setIsOpen: (isOpen: boolean) => void;
-    register: UseFormRegister<z.infer<typeof PlayerSchema>>;
-    control: Control<z.infer<typeof PlayerSchema>>;
-    isSubmitting: boolean;
-    isValidating: boolean;
-    errors: FormState<z.infer<typeof PlayerSchema>>["errors"];
-    fields: FieldArrayWithId<z.infer<typeof PlayerSchema>>[];
-    append: UseFieldArrayAppend<z.infer<typeof PlayerSchema>>;
-    remove: UseFieldArrayRemove;
-    handleClose: () => void;
-    onSubmit: (e?: React.BaseSyntheticEvent) => Promise<void>;
-};
+import { Controller } from "react-hook-form";
+import type { EditPlayerDialogContextType } from "../../utils/types.ts";
 
 export default function EditPlayerDialog({
     isOpen,
@@ -48,7 +24,7 @@ export default function EditPlayerDialog({
     remove,
     handleClose,
     onSubmit,
-}: EditPlayerDialogProps) {
+}: EditPlayerDialogContextType) {
     return (
         <Dialog.Root open={isOpen} onOpenChange={setIsOpen}>
             <Dialog.Content width="450px">
@@ -118,6 +94,7 @@ export default function EditPlayerDialog({
                                 <Select.Root
                                     value={field.value}
                                     onValueChange={field.onChange}
+                                    name="position"
                                 >
                                     <Select.Trigger
                                         style={{ width: "100%" }}
@@ -183,7 +160,7 @@ export default function EditPlayerDialog({
                             })}
                         </Flex>
                     </Box>
-                    <Flex direction="row-reverse" gap="4">
+                    <Flex direction="row-reverse" gap="2">
                         <Button
                             type="submit"
                             disabled={isSubmitting || isValidating}

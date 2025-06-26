@@ -11,20 +11,7 @@ type PlayerTableProps = {
 };
 
 export function PlayerTable({ table, numColumns }: PlayerTableProps) {
-    const {
-        isOpen,
-        setIsOpen,
-        register,
-        control,
-        isSubmitting,
-        isValidating,
-        errors,
-        fields,
-        append,
-        remove,
-        handleClose,
-        onSubmit,
-    } = useEditPlayerDialog();
+    const useEditPlayerDialogContext = useEditPlayerDialog();
 
     return (
         <>
@@ -77,20 +64,7 @@ export function PlayerTable({ table, numColumns }: PlayerTableProps) {
                     )}
                 </Table.Body>
             </Table.Root>
-            <EditPlayerDialog
-                isOpen={isOpen}
-                setIsOpen={setIsOpen}
-                register={register}
-                control={control}
-                isSubmitting={isSubmitting}
-                isValidating={isValidating}
-                errors={errors}
-                fields={fields}
-                append={append}
-                remove={remove}
-                handleClose={handleClose}
-                onSubmit={onSubmit}
-            />
+            <EditPlayerDialog {...useEditPlayerDialogContext} />
         </>
     );
 }

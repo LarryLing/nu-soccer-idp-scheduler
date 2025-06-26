@@ -4,14 +4,16 @@ import { useFieldArray, useForm } from "react-hook-form";
 import { z } from "zod";
 import { PlayerSchema } from "../utils/schemas.ts";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { usePlayers } from "../hooks/usePlayers.ts";
 import type { Player } from "../utils/types.ts";
+import { doc, updateDoc } from "firebase/firestore";
+import { clientFirestore } from "../utils/firebase.ts";
+import { useUser } from "../hooks/useUser.ts";
 
 export function EditPlayerDialogProvider({ children }: PropsWithChildren) {
     const [isOpen, setIsOpen] = useState(false);
     const [playerId, setPlayerId] = useState("");
 
-    const { editPlayer } = usePlayers();
+    const { user } = useUser();
 
     const {
         register,
@@ -62,7 +64,15 @@ export function EditPlayerDialogProvider({ children }: PropsWithChildren) {
 
     const onSubmit = handleSubmit(async (data) => {
         setIsOpen(false);
-        await editPlayer(playerId, data);
+
+        if (!data) {
+            throw new Error("Data is required");
+        }
+
+        await updateDoc(
+            doc(clientFirestore, `users/${user!.uid}/players/${playerId}`),
+            data,
+        );
     });
 
     const value = {

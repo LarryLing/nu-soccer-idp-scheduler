@@ -10,9 +10,8 @@ export default function Navbar() {
     return (
         <Flex
             px={{
-                initial: "20px",
-                xs: "36px",
-                sm: "72px",
+                initial: "32px",
+                md: "72px",
             }}
             py="20px"
             width="100%"
@@ -26,28 +25,28 @@ export default function Navbar() {
         >
             <Flex gap="4" align="center">
                 <NorthwesternLogo height={40} width={25.51} />
-                <Box display={{ initial: "none", xs: "block" }}>
+                <Box display={{ initial: "none", sm: "block" }}>
                     <Heading size="6" align="left">
                         IDP Scheduler
                     </Heading>
                 </Box>
             </Flex>
             <Flex gap="4" align="center">
-                <Link weight="medium" color="gray" asChild>
+                <Link weight="medium" color="gray" size="2" asChild>
                     <ReactRouterLink to="/players">Players</ReactRouterLink>
                 </Link>
-                <Link weight="medium" color="gray" asChild>
+                <Link weight="medium" color="gray" size="2" asChild>
                     <ReactRouterLink to="/training-blocks">
                         Training Blocks
                     </ReactRouterLink>
                 </Link>
-                <Box display={{ initial: "none", sm: "block" }}>
+                <Box display={{ initial: "none", xs: "block" }}>
                     <Button type="button" onClick={signOut}>
                         <LogOutIcon size={15} />
                         Sign Out
                     </Button>
                 </Box>
-                <Box display={{ initial: "block", sm: "none" }}>
+                <Box display={{ initial: "block", xs: "none" }}>
                     <IconButton type="button" onClick={signOut}>
                         <LogOutIcon size={15} />
                     </IconButton>

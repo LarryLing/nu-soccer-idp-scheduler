@@ -122,7 +122,7 @@ export default function ResetPasswordCard({
                             </Text>
                         )}
                     </Box>
-                    <Flex direction="row-reverse" gap="4">
+                    <Flex direction="row-reverse" gap="2">
                         <Button
                             type="submit"
                             disabled={

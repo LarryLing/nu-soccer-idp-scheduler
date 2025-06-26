@@ -6,8 +6,21 @@
   <component name="ChangeListManager">
     <list default="true" id="b05902af-5cdc-4fb0-944c-d2d26c9f2b39" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/components/authentication/ResetPasswordCard.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/components/authentication/ResetPasswordCard.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/apps/frontend/src/components/miscellaneous/Navbar.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/components/miscellaneous/Navbar.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/src/hooks/useTrainingBlocks.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/hooks/useTrainingBlocks.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/components/players/AddPlayerDialog.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/components/players/AddPlayerDialog.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/components/players/AvailabilityRow.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/components/players/AvailabilityRow.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/components/players/EditPlayerDialog.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/components/players/EditPlayerDialog.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/components/players/PlayerActionsDropdown.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/components/players/PlayerActionsDropdown.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/components/players/PlayerTable.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/components/players/PlayerTable.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/components/players/PlayerTableActionRow.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/components/players/PlayerTableActionRow.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/contexts/EditPlayerDialogProvider.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/contexts/EditPlayerDialogProvider.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/hooks/usePlayers.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/layouts/ProtectedLayout.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/layouts/ProtectedLayout.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/pages/create-an-account/CreateAnAccount.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/pages/create-an-account/CreateAnAccount.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/pages/forgot-password/ForgotPassword.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/pages/forgot-password/ForgotPassword.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/pages/players/Players.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/pages/players/Players.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/pages/signin/SignIn.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/pages/signin/SignIn.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -32,12 +45,12 @@
     &quot;assignee&quot;: &quot;LarryLing&quot;
   }
 }</component>
-  <component name="GithubPullRequestsUISettings"><![CDATA[{
-  "selectedUrlAndAccountId": {
-    "url": "git@github.com:LarryLing/nu-soccer-idp-scheduler.git",
-    "accountId": "e7172309-50cd-48e0-8108-749b6d263992"
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;git@github.com:LarryLing/nu-soccer-idp-scheduler.git&quot;,
+    &quot;accountId&quot;: &quot;e7172309-50cd-48e0-8108-749b6d263992&quot;
   }
-}]]></component>
+}</component>
   <component name="ProblemsViewState">
     <option name="selectedTabId" value="ProjectErrors" />
   </component>
@@ -49,27 +62,27 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;feature/players-page&quot;,
-    &quot;junie.onboarding.icon.badge.shown&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/Users/larryling/WebstormProjects/nu-soccer-idp-scheduler/apps/frontend/src/components/players&quot;,
-    &quot;list.type.of.created.stylesheet&quot;: &quot;CSS&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;npm.backend &gt; build.executor&quot;: &quot;Run&quot;,
-    &quot;prettierjs.PrettierConfiguration.Package&quot;: &quot;/Users/larryling/WebstormProjects/nu-soccer-idp-scheduler/node_modules/prettier&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;settings.json.schema&quot;,
-    &quot;ts.external.directory.path&quot;: &quot;/Users/larryling/WebstormProjects/nu-soccer-idp-scheduler/apps/backend/node_modules/typescript/lib&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "git-widget-placeholder": "feature/players-page-optimizations",
+    "junie.onboarding.icon.badge.shown": "true",
+    "last_opened_file_path": "/Users/larryling/WebstormProjects/nu-soccer-idp-scheduler/apps/frontend/src/components/players",
+    "list.type.of.created.stylesheet": "CSS",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "npm.backend > build.executor": "Run",
+    "prettierjs.PrettierConfiguration.Package": "/Users/larryling/WebstormProjects/nu-soccer-idp-scheduler/node_modules/prettier",
+    "settings.editor.selected.configurable": "settings.json.schema",
+    "ts.external.directory.path": "/Users/larryling/WebstormProjects/nu-soccer-idp-scheduler/apps/backend/node_modules/typescript/lib",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/apps/frontend/src/components/players" />

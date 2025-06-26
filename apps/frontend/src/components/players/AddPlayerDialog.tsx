@@ -14,12 +14,15 @@ import { z } from "zod";
 import { PlusIcon } from "lucide-react";
 import { useCallback, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { addDoc, collection } from "firebase/firestore";
+import { clientFirestore } from "../../utils/firebase.ts";
+import type { User } from "../../utils/types.ts";
 
 type AddPlayerDialogProps = {
-    addPlayer: (player?: z.infer<typeof PlayerSchema>) => Promise<void>;
+    user: User | null;
 };
 
-export default function AddPlayerDialog({ addPlayer }: AddPlayerDialogProps) {
+export default function AddPlayerDialog({ user }: AddPlayerDialogProps) {
     const [isOpen, setIsOpen] = useState(false);
 
     const {
@@ -63,7 +66,15 @@ export default function AddPlayerDialog({ addPlayer }: AddPlayerDialogProps) {
 
     const onSubmit = handleSubmit(async (data) => {
         setIsOpen(false);
-        await addPlayer(data);
+
+        if (!user) {
+            throw new Error("User not authenticated");
+        }
+
+        await addDoc(
+            collection(clientFirestore, `users/${user.uid}/players/`),
+            data,
+        );
     });
 
     return (
@@ -141,6 +152,7 @@ export default function AddPlayerDialog({ addPlayer }: AddPlayerDialogProps) {
                                 <Select.Root
                                     value={field.value}
                                     onValueChange={field.onChange}
+                                    name="position"
                                 >
                                     <Select.Trigger
                                         style={{ width: "100%" }}
@@ -206,7 +218,7 @@ export default function AddPlayerDialog({ addPlayer }: AddPlayerDialogProps) {
                             })}
                         </Flex>
                     </Box>
-                    <Flex direction="row-reverse" gap="4">
+                    <Flex direction="row-reverse" gap="2">
                         <Button
                             type="submit"
                             disabled={isSubmitting || isValidating}

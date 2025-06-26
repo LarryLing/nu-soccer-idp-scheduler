@@ -63,12 +63,12 @@ export default function ForgotPasswordCard() {
                             </Text>
                         )}
                     </Box>
-                    <Flex direction="row-reverse" gap="4">
+                    <Flex direction="row-reverse" gap="2">
                         <Button
                             type="submit"
                             disabled={isSubmitting || isValidating}
                         >
-                            Send Password Recovery
+                            Send Recovery Email
                         </Button>
                         <Link to="/signin">
                             <Button

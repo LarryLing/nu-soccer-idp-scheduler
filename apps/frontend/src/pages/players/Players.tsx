@@ -7,8 +7,7 @@ import {
     Text,
 } from "@radix-ui/themes";
 import { PlayerTable } from "../../components/players/PlayerTable.tsx";
-import { usePlayers } from "../../hooks/usePlayers.ts";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
     type ColumnDef,
     type ColumnFiltersState,
@@ -23,6 +22,9 @@ import PlayerTableActionRow from "../../components/players/PlayerTableActionRow.
 import { ArrowDownUpIcon } from "lucide-react";
 import PlayerActionsDropdown from "../../components/players/PlayerActionsDropdown.tsx";
 import { EditPlayerDialogProvider } from "../../contexts/EditPlayerDialogProvider.tsx";
+import { collection, onSnapshot, orderBy, query } from "firebase/firestore";
+import { clientFirestore } from "../../utils/firebase.ts";
+import { useUser } from "../../hooks/useUser.ts";
 
 const createPlayerColumns = (): ColumnDef<Player>[] => [
     {
@@ -155,12 +157,12 @@ const createPlayerColumns = (): ColumnDef<Player>[] => [
 ];
 
 export default function Players() {
+    const { user } = useUser();
+
+    const [players, setPlayers] = useState<Player[]>([]);
     const [sorting, setSorting] = useState<SortingState>([]);
     const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
     const [rowSelection, setRowSelection] = useState({});
-
-    const { players, addPlayer, removePlayers, exportJSON, importJSON } =
-        usePlayers();
 
     const columns = useMemo(() => createPlayerColumns(), []);
 
@@ -180,14 +182,27 @@ export default function Players() {
         },
     });
 
-    const selectedPlayerIds = table
-        .getFilteredSelectedRowModel()
-        .rows.map((row) => (row.original as Player).id);
+    useEffect(() => {
+        if (!user) {
+            return;
+        }
 
-    const handleRemovePlayers = async () => {
-        await removePlayers(selectedPlayerIds);
-        table.resetRowSelection();
-    };
+        const playersQuery = query(
+            collection(clientFirestore, `users/${user.uid}/players`),
+            orderBy("number", "asc"),
+        );
+
+        const unsubscribe = onSnapshot(playersQuery, (snapshot) => {
+            setPlayers(
+                snapshot.docs.map((doc) => ({
+                    id: doc.id,
+                    ...doc.data(),
+                })) as Player[],
+            );
+        });
+
+        return () => unsubscribe();
+    }, [user]);
 
     return (
         <>
@@ -200,14 +215,7 @@ export default function Players() {
                 </Text>
             </Section>
             <Section p="0">
-                <PlayerTableActionRow
-                    table={table}
-                    selectedPlayerIds={selectedPlayerIds}
-                    addPlayer={addPlayer}
-                    exportJSON={exportJSON}
-                    importJSON={importJSON}
-                    handleRemovePlayers={handleRemovePlayers}
-                />
+                <PlayerTableActionRow table={table} players={players} />
                 <EditPlayerDialogProvider>
                     <PlayerTable table={table} numColumns={columns.length} />
                 </EditPlayerDialogProvider>
