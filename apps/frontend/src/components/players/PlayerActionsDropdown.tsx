@@ -8,49 +8,49 @@ import { clientFirestore } from "../../utils/firebase.ts";
 import { useUser } from "../../hooks/useUser.ts";
 
 type PlayerActionsDropdownProps = {
-    player: Player;
-    table: Table<Player>;
+  player: Player;
+  table: Table<Player>;
 };
 
 export default function PlayerActionsDropdown({
-    player,
-    table,
+  player,
+  table,
 }: PlayerActionsDropdownProps) {
-    const { user } = useUser();
+  const { user } = useUser();
 
-    const { handleOpen } = useEditPlayerDialog();
+  const { handleOpen } = useEditPlayerDialog();
 
-    const handleRemovePlayer = async () => {
-        if (!user) {
-            throw new Error("User not authenticated");
-        }
+  const handleRemovePlayer = async () => {
+    if (!user) {
+      throw new Error("User not authenticated");
+    }
 
-        try {
-            await deleteDoc(
-                doc(clientFirestore, `users/${user.uid!}/players/${player.id}`),
-            );
+    try {
+      await deleteDoc(
+        doc(clientFirestore, `users/${user.uid!}/players/${player.id}`),
+      );
 
-            table.resetRowSelection();
-        } catch (error) {
-            console.error("Failed to delete player:", error);
-        }
-    };
+      table.resetRowSelection();
+    } catch (error) {
+      console.error("Failed to delete player:", error);
+    }
+  };
 
-    return (
-        <DropdownMenu.Root>
-            <DropdownMenu.Trigger>
-                <IconButton variant="ghost" color="gray">
-                    <EllipsisIcon size={15} />
-                </IconButton>
-            </DropdownMenu.Trigger>
-            <DropdownMenu.Content align="center">
-                <DropdownMenu.Item onClick={() => handleOpen(player)}>
-                    Edit
-                </DropdownMenu.Item>
-                <DropdownMenu.Item color="red" onClick={handleRemovePlayer}>
-                    Delete
-                </DropdownMenu.Item>
-            </DropdownMenu.Content>
-        </DropdownMenu.Root>
-    );
+  return (
+    <DropdownMenu.Root>
+      <DropdownMenu.Trigger>
+        <IconButton variant="ghost" color="gray">
+          <EllipsisIcon size={15} />
+        </IconButton>
+      </DropdownMenu.Trigger>
+      <DropdownMenu.Content align="center">
+        <DropdownMenu.Item onClick={() => handleOpen(player)}>
+          Edit
+        </DropdownMenu.Item>
+        <DropdownMenu.Item color="red" onClick={handleRemovePlayer}>
+          Delete
+        </DropdownMenu.Item>
+      </DropdownMenu.Content>
+    </DropdownMenu.Root>
+  );
 }

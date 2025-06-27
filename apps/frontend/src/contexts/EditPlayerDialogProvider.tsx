@@ -4,100 +4,106 @@ import { useFieldArray, useForm } from "react-hook-form";
 import { z } from "zod";
 import { PlayerSchema } from "../utils/schemas.ts";
 import { zodResolver } from "@hookform/resolvers/zod";
-import type { Player } from "../utils/types.ts";
+import type { Availability, Player } from "../utils/types.ts";
 import { DEFAULT_AVAILABILITY, DEFAULT_VALUES } from "../utils/constants.ts";
 
 export function EditPlayerDialogProvider({ children }: PropsWithChildren) {
-    const [isOpen, setIsOpen] = useState(false);
-    const [playerId, setPlayerId] = useState("");
-    const [isSaving, setIsSaving] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+  const [playerId, setPlayerId] = useState("");
+  const [isSaving, setIsSaving] = useState(false);
 
-    const {
-        register,
-        handleSubmit,
-        control,
-        setError,
-        clearErrors,
-        reset,
-        formState: { isSubmitting, isValidating, errors },
-    } = useForm<z.infer<typeof PlayerSchema>>({
-        resolver: zodResolver(PlayerSchema),
-        defaultValues: DEFAULT_VALUES,
-    });
+  const {
+    register,
+    handleSubmit,
+    control,
+    setError,
+    clearErrors,
+    reset,
+    formState: { isSubmitting, isValidating, errors },
+  } = useForm<z.infer<typeof PlayerSchema>>({
+    resolver: zodResolver(PlayerSchema),
+    defaultValues: DEFAULT_VALUES,
+  });
 
-    const { fields, append, remove } = useFieldArray<
-        z.infer<typeof PlayerSchema>
-    >({
-        control,
-        name: "availabilities",
-    });
+  const { fields, append, remove } = useFieldArray<
+    z.infer<typeof PlayerSchema>
+  >({
+    control,
+    name: "availabilities",
+  });
 
-    const handleOpen = useCallback(
-        (player: Player) => {
-            reset({
-                name: player.name,
-                number: player.number,
-                position: player.position,
-                availabilities: player.availabilities,
-            });
-            setPlayerId(player.id);
-            setIsOpen(true);
-        },
-        [reset],
-    );
+  const handleOpen = useCallback(
+    (player: Player) => {
+      reset({
+        name: player.name,
+        number: player.number,
+        position: player.position,
+        availabilities: player.availabilities,
+      });
+      setPlayerId(player.id);
+      setIsOpen(true);
+    },
+    [reset],
+  );
 
-    const handleClose = useCallback(() => {
-        clearErrors();
-        setIsOpen(false);
-    }, [clearErrors]);
+  const handleClose = useCallback(() => {
+    clearErrors();
+    setIsOpen(false);
+  }, [clearErrors]);
 
-    const addAvailability = useCallback(() => {
-        append(DEFAULT_AVAILABILITY);
-    }, [append]);
+  const addAvailability = useCallback(
+    (day: Availability["day"]) => {
+      append({
+        ...DEFAULT_AVAILABILITY,
+        day,
+      });
+    },
+    [append],
+  );
 
-    const value = useMemo(
-        () => ({
-            playerId,
-            isOpen,
-            setIsOpen,
-            register,
-            control,
-            isSubmitting,
-            isSaving,
-            setIsSaving,
-            isValidating,
-            setError,
-            errors,
-            fields,
-            remove,
-            handleOpen,
-            handleClose,
-            addAvailability,
-            handleSubmit,
-        }),
-        [
-            playerId,
-            isOpen,
-            register,
-            control,
-            isSubmitting,
-            isSaving,
-            setIsSaving,
-            isValidating,
-            setError,
-            errors,
-            fields,
-            remove,
-            handleOpen,
-            handleClose,
-            addAvailability,
-            handleSubmit,
-        ],
-    );
+  const value = useMemo(
+    () => ({
+      playerId,
+      isOpen,
+      setIsOpen,
+      register,
+      control,
+      isSubmitting,
+      isSaving,
+      setIsSaving,
+      isValidating,
+      setError,
+      errors,
+      fields,
+      remove,
+      handleOpen,
+      handleClose,
+      addAvailability,
+      handleSubmit,
+    }),
+    [
+      playerId,
+      isOpen,
+      register,
+      control,
+      isSubmitting,
+      isSaving,
+      setIsSaving,
+      isValidating,
+      setError,
+      errors,
+      fields,
+      remove,
+      handleOpen,
+      handleClose,
+      addAvailability,
+      handleSubmit,
+    ],
+  );
 
-    return (
-        <EditPlayerDialogContext.Provider value={value}>
-            {children}
-        </EditPlayerDialogContext.Provider>
-    );
+  return (
+    <EditPlayerDialogContext.Provider value={value}>
+      {children}
+    </EditPlayerDialogContext.Provider>
+  );
 }
