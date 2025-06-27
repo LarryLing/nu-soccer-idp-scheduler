@@ -9,9 +9,10 @@ import type {
     FieldArrayWithId,
     FormState,
     UseFieldArrayRemove,
+    UseFormHandleSubmit,
     UseFormRegister,
+    UseFormSetError,
 } from "react-hook-form";
-import type { BaseSyntheticEvent } from "react";
 export type User = {
     uid: string;
     email: string;
@@ -34,18 +35,21 @@ export type UserContextType = {
 };
 
 export type EditPlayerDialogContextType = {
+    playerId: Player["id"];
     isOpen: boolean;
     setIsOpen: (isOpen: boolean) => void;
     register: UseFormRegister<z.infer<typeof PlayerSchema>>;
     control: Control<z.infer<typeof PlayerSchema>>;
     isSubmitting: boolean;
     isSaving: boolean;
+    setIsSaving: (isSaving: boolean) => void;
     isValidating: boolean;
     errors: FormState<z.infer<typeof PlayerSchema>>["errors"];
+    setError: UseFormSetError<z.infer<typeof PlayerSchema>>;
     fields: FieldArrayWithId<z.infer<typeof PlayerSchema>>[];
     remove: UseFieldArrayRemove;
     handleOpen: (player: Player) => void;
     handleClose: () => void;
     addAvailability: () => void;
-    onSubmit: (e?: BaseSyntheticEvent) => Promise<void>;
+    handleSubmit: UseFormHandleSubmit<z.infer<typeof PlayerSchema>>;
 };

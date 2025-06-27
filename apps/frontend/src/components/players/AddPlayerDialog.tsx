@@ -8,7 +8,12 @@ import {
     TextField,
 } from "@radix-ui/themes";
 import AvailabilityRow from "./AvailabilityRow.tsx";
-import { useForm, useFieldArray, Controller } from "react-hook-form";
+import {
+    useForm,
+    useFieldArray,
+    Controller,
+    type SubmitHandler,
+} from "react-hook-form";
 import { PlayerSchema } from "../../utils/schemas.ts";
 import { z } from "zod";
 import { PlusIcon } from "lucide-react";
@@ -16,7 +21,7 @@ import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { addDoc, collection } from "firebase/firestore";
 import { clientFirestore } from "../../utils/firebase.ts";
-import type { User } from "../../utils/types.ts";
+import type { Player, User } from "../../utils/types.ts";
 import {
     DEFAULT_AVAILABILITY,
     DEFAULT_VALUES,
@@ -25,9 +30,13 @@ import {
 
 type AddPlayerDialogProps = {
     user: User | null;
+    players: Player[];
 };
 
-export default function AddPlayerDialog({ user }: AddPlayerDialogProps) {
+export default function AddPlayerDialog({
+    user,
+    players,
+}: AddPlayerDialogProps) {
     const [isOpen, setIsOpen] = useState(false);
     const [isAdding, setIsAdding] = useState(false);
 
@@ -63,32 +72,51 @@ export default function AddPlayerDialog({ user }: AddPlayerDialogProps) {
         append(DEFAULT_AVAILABILITY);
     };
 
-    const onSubmit = () =>
-        handleSubmit(async (data: z.infer<typeof PlayerSchema>) => {
-            if (!user?.uid) {
-                console.error("User not authenticated");
-                return;
-            }
+    const onSubmit: SubmitHandler<z.infer<typeof PlayerSchema>> = async (
+        data,
+    ) => {
+        if (!user?.uid) {
+            console.error("User not authenticated");
+            return;
+        }
 
-            setIsAdding(true);
+        if (players.some((player) => player.name === data.name)) {
+            console.error("Player name already in use");
+            setError("name", {
+                type: "manual",
+                message: "Player name already in use",
+            });
+            return;
+        }
 
-            try {
-                await addDoc(
-                    collection(clientFirestore, `users/${user.uid}/players`),
-                    data,
-                );
-                setIsOpen(false);
-            } catch (error) {
-                console.error("Failed to add player:", error);
+        if (players.some((player) => player.number === data.number)) {
+            console.error("Player number already in use");
+            setError("number", {
+                type: "manual",
+                message: "Player number already in use",
+            });
+            return;
+        }
 
-                setError("name", {
-                    type: "manual",
-                    message: "An unexpected error occurred",
-                });
-            } finally {
-                setIsAdding(false);
-            }
-        });
+        setIsAdding(true);
+
+        try {
+            await addDoc(
+                collection(clientFirestore, `users/${user.uid}/players`),
+                data,
+            );
+            setIsOpen(false);
+        } catch (error) {
+            console.error("Failed to add player:", error);
+
+            setError("name", {
+                type: "manual",
+                message: "An unexpected error occurred",
+            });
+        } finally {
+            setIsAdding(false);
+        }
+    };
 
     const isFormDisabled = isSubmitting || isValidating || isAdding;
 
@@ -105,7 +133,7 @@ export default function AddPlayerDialog({ user }: AddPlayerDialogProps) {
                 <Dialog.Description mb="3">
                     Insert player information
                 </Dialog.Description>
-                <form onSubmit={onSubmit}>
+                <form onSubmit={handleSubmit(onSubmit)}>
                     <Box mb="3">
                         <label htmlFor="name">
                             <Text size="2" weight="medium" mb="1" as="p">

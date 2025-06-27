@@ -12,7 +12,7 @@ import { Link as ReactRouterLink, useNavigate } from "react-router";
 import { SignInFormSchema } from "../../utils/schemas.ts";
 import { FirebaseError } from "firebase/app";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
+import { type SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { clientAuth } from "../../utils/firebase.ts";
@@ -29,7 +29,9 @@ export default function SignIn() {
         resolver: zodResolver(SignInFormSchema),
     });
 
-    const onSubmit = handleSubmit(async (data) => {
+    const onSubmit: SubmitHandler<z.infer<typeof SignInFormSchema>> = async (
+        data,
+    ) => {
         try {
             await signInWithEmailAndPassword(
                 clientAuth,
@@ -40,7 +42,7 @@ export default function SignIn() {
             navigate("/players");
         } catch (error: unknown) {
             if (error instanceof FirebaseError) {
-                console.error(error);
+                console.error("Failed to sign in:", error);
 
                 if (error.code === "auth/invalid-credential") {
                     setError("email", {
@@ -55,12 +57,12 @@ export default function SignIn() {
                 }
             }
         }
-    });
+    };
 
     return (
         <Box width="400px">
             <Card size="4">
-                <form onSubmit={onSubmit}>
+                <form onSubmit={handleSubmit(onSubmit)}>
                     <Heading size="6" mb="5">
                         Sign In
                     </Heading>

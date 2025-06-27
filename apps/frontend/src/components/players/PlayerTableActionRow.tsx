@@ -11,7 +11,7 @@ import AddPlayerDialog from "./AddPlayerDialog.tsx";
 import { DownloadIcon, SearchIcon, TrashIcon, UploadIcon } from "lucide-react";
 import type { Player } from "../../utils/types.ts";
 import type { Table } from "@tanstack/react-table";
-import { type ChangeEvent, useMemo, useRef, useState } from "react";
+import { type ChangeEvent, useRef, useState } from "react";
 import { doc, writeBatch } from "firebase/firestore";
 import { clientFirestore } from "../../utils/firebase.ts";
 import { useUser } from "../../hooks/useUser.ts";
@@ -32,18 +32,12 @@ export default function PlayerTableActionRow({
     const [isImporting, setIsImporting] = useState(false);
     const [isDeleting, setIsDeleting] = useState(false);
 
-    const selectedPlayerIds = useMemo(
-        () =>
-            table
-                .getFilteredSelectedRowModel()
-                .rows.map((row) => row.original.id),
-        [table],
-    );
+    const selectedPlayerIds = table
+        .getFilteredSelectedRowModel()
+        .rows.map((row) => row.original.id);
 
-    const searchValue = useMemo(
-        () => (table.getColumn("name")?.getFilterValue() as string) ?? "",
-        [table],
-    );
+    const searchValue =
+        (table.getColumn("name")?.getFilterValue() as string) ?? "";
 
     const exportJSON = () => {
         try {
@@ -140,7 +134,6 @@ export default function PlayerTableActionRow({
 
             const batch = writeBatch(clientFirestore);
 
-            // Delete existing players
             players.forEach((player) => {
                 if (player.id) {
                     batch.delete(
@@ -152,7 +145,6 @@ export default function PlayerTableActionRow({
                 }
             });
 
-            // Add new players
             parsedPlayers.forEach((player) => {
                 if (player.id) {
                     batch.set(
@@ -181,8 +173,6 @@ export default function PlayerTableActionRow({
         }
     };
 
-    // Only use useCallback when the function is used as a dependency
-    // or passed to memoized components that would benefit from it
     const handleSearchChange = (event: ChangeEvent<HTMLInputElement>) => {
         table.getColumn("name")?.setFilterValue(event.target.value);
     };
@@ -201,13 +191,11 @@ export default function PlayerTableActionRow({
                 mb="4"
             >
                 <Flex align="center" gap="2" wrap="wrap">
-                    <AddPlayerDialog user={user} />
-
+                    <AddPlayerDialog user={user} players={players} />
                     <Button variant="outline" onClick={exportJSON}>
                         <DownloadIcon size={15} />
                         Export JSON
                     </Button>
-
                     <input
                         ref={fileInputRef}
                         type="file"
@@ -216,7 +204,6 @@ export default function PlayerTableActionRow({
                         style={{ display: "none" }}
                         aria-label="Import JSON file"
                     />
-
                     <Button
                         variant="outline"
                         onClick={handleImportClick}
@@ -226,8 +213,7 @@ export default function PlayerTableActionRow({
                         {isImporting ? "Importing..." : "Import JSON"}
                     </Button>
                 </Flex>
-
-                <Box width={{ initial: "100%", sm: "250px" }}>
+                <Box width={{ initial: "100%", sm: "210px" }}>
                     <TextField.Root
                         placeholder="Search players by name"
                         value={searchValue}
@@ -239,7 +225,6 @@ export default function PlayerTableActionRow({
                     </TextField.Root>
                 </Box>
             </Flex>
-
             {selectedPlayerIds.length > 0 && (
                 <Card mb="4">
                     <Flex justify="start" align="center" gap="2" wrap="wrap">

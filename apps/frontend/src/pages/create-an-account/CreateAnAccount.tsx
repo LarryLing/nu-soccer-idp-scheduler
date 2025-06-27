@@ -10,7 +10,7 @@ import {
 import { Link, useNavigate } from "react-router";
 import { CreateAnAccountSchema } from "../../utils/schemas.ts";
 import { FirebaseError } from "firebase/app";
-import { useForm } from "react-hook-form";
+import { type SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { createUserWithEmailAndPassword } from "firebase/auth";
@@ -28,7 +28,9 @@ export default function CreateAnAccountCard() {
         resolver: zodResolver(CreateAnAccountSchema),
     });
 
-    const onSubmit = handleSubmit(async (data) => {
+    const onSubmit: SubmitHandler<
+        z.infer<typeof CreateAnAccountSchema>
+    > = async (data) => {
         try {
             await createUserWithEmailAndPassword(
                 clientAuth,
@@ -39,7 +41,7 @@ export default function CreateAnAccountCard() {
             navigate("/players");
         } catch (error: unknown) {
             if (error instanceof FirebaseError) {
-                console.error(error);
+                console.error("Failed to create account:", error);
 
                 if (error.code === "auth/email-already-in-use") {
                     setError("email", {
@@ -54,12 +56,12 @@ export default function CreateAnAccountCard() {
                 }
             }
         }
-    });
+    };
 
     return (
         <Box width="400px">
             <Card size="4">
-                <form onSubmit={onSubmit}>
+                <form onSubmit={handleSubmit(onSubmit)}>
                     <Heading size="6" mb="5">
                         Create An Account
                     </Heading>

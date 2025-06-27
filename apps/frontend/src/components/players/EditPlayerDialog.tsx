@@ -8,26 +8,96 @@ import {
     TextField,
 } from "@radix-ui/themes";
 import AvailabilityRow from "./AvailabilityRow.tsx";
-import { Controller } from "react-hook-form";
-import type { EditPlayerDialogContextType } from "../../utils/types.ts";
+import { Controller, type SubmitHandler } from "react-hook-form";
+import type { EditPlayerDialogContextType, Player } from "../../utils/types.ts";
 import { POSITION_OPTIONS } from "../../utils/constants.ts";
+import { z } from "zod";
+import { PlayerSchema } from "../../utils/schemas.ts";
+import { doc, updateDoc } from "firebase/firestore";
+import { clientFirestore } from "../../utils/firebase.ts";
+import { useUser } from "../../hooks/useUser.ts";
+
+type EditPlayerDialogProps = {
+    players: Player[];
+} & EditPlayerDialogContextType;
 
 export default function EditPlayerDialog({
+    playerId,
     isOpen,
     setIsOpen,
     register,
     control,
     isSubmitting,
     isSaving,
+    setIsSaving,
     isValidating,
+    setError,
     errors,
     fields,
     remove,
     handleClose,
     addAvailability,
-    onSubmit,
-}: EditPlayerDialogContextType) {
+    handleSubmit,
+    players,
+}: EditPlayerDialogProps) {
+    const { user } = useUser();
+
     const isFormDisabled = isSubmitting || isValidating || isSaving;
+
+    const onSubmit: SubmitHandler<z.infer<typeof PlayerSchema>> = async (
+        data,
+    ) => {
+        if (!user?.uid) {
+            console.error("User not authenticated");
+            return;
+        }
+
+        if (
+            players.some(
+                (player) => player.name === data.name && player.id !== playerId,
+            )
+        ) {
+            console.error("Player name already in use");
+            setError("name", {
+                type: "manual",
+                message: "Player name already in use",
+            });
+            return;
+        }
+
+        if (
+            players.some(
+                (player) =>
+                    player.number === data.number && player.id !== playerId,
+            )
+        ) {
+            console.error("Player number already in use");
+            setError("number", {
+                type: "manual",
+                message: "Player number already in use",
+            });
+            return;
+        }
+
+        setIsSaving(true);
+
+        try {
+            await updateDoc(
+                doc(clientFirestore, `users/${user.uid}/players/${playerId}`),
+                data,
+            );
+            setIsOpen(false);
+        } catch (error) {
+            console.error("Failed to update player:", error);
+
+            setError("name", {
+                type: "manual",
+                message: "An unexpected error occurred",
+            });
+        } finally {
+            setIsSaving(false);
+        }
+    };
 
     return (
         <Dialog.Root open={isOpen} onOpenChange={setIsOpen}>
@@ -36,7 +106,7 @@ export default function EditPlayerDialog({
                 <Dialog.Description mb="3">
                     Update player information
                 </Dialog.Description>
-                <form onSubmit={onSubmit}>
+                <form onSubmit={handleSubmit(onSubmit)}>
                     <Box mb="3">
                         <label htmlFor="name">
                             <Text size="2" weight="medium" mb="1" as="p">

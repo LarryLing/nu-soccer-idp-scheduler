@@ -9,7 +9,7 @@ import {
 } from "@radix-ui/themes";
 import { Link } from "react-router";
 import { ForgotPasswordFormSchema } from "../../utils/schemas.ts";
-import { useForm } from "react-hook-form";
+import { type SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { sendPasswordResetEmail } from "firebase/auth";
@@ -25,23 +25,25 @@ export default function ForgotPasswordCard() {
         resolver: zodResolver(ForgotPasswordFormSchema),
     });
 
-    const onSubmit = handleSubmit(async (data) => {
+    const onSubmit: SubmitHandler<
+        z.infer<typeof ForgotPasswordFormSchema>
+    > = async (data) => {
         try {
             await sendPasswordResetEmail(clientAuth, data.email);
         } catch (error) {
-            console.error(error);
+            console.error("Failed to send password reset email:", error);
 
             setError("email", {
                 type: "manual",
                 message: "An unexpected error occurred",
             });
         }
-    });
+    };
 
     return (
         <Box width="400px">
             <Card size="4">
-                <form onSubmit={onSubmit}>
+                <form onSubmit={handleSubmit(onSubmit)}>
                     <Heading size="6" mb="5">
                         Forgot Password
                     </Heading>

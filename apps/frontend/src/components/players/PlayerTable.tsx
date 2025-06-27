@@ -8,9 +8,10 @@ import EditPlayerDialog from "./EditPlayerDialog.tsx";
 type PlayerTableProps = {
     table: TanstackTable<Player>;
     numColumns: number;
+    players: Player[];
 };
 
-export function PlayerTable({ table, numColumns }: PlayerTableProps) {
+export function PlayerTable({ table, numColumns, players }: PlayerTableProps) {
     const useEditPlayerDialogContext = useEditPlayerDialog();
 
     return (
@@ -64,7 +65,10 @@ export function PlayerTable({ table, numColumns }: PlayerTableProps) {
                     )}
                 </Table.Body>
             </Table.Root>
-            <EditPlayerDialog {...useEditPlayerDialogContext} />
+            <EditPlayerDialog
+                {...useEditPlayerDialogContext}
+                players={players}
+            />
         </>
     );
 }

@@ -12,7 +12,7 @@ import { Link, useNavigate } from "react-router";
 import { ResetPasswordFormSchema } from "../../utils/schemas.ts";
 import { confirmPasswordReset, verifyPasswordResetCode } from "firebase/auth";
 import { clientAuth } from "../../utils/firebase.ts";
-import { useForm } from "react-hook-form";
+import { type SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 
@@ -36,20 +36,22 @@ export default function ResetPasswordCard({
         resolver: zodResolver(ResetPasswordFormSchema),
     });
 
-    const onSubmit = handleSubmit(async (data) => {
+    const onSubmit: SubmitHandler<
+        z.infer<typeof ResetPasswordFormSchema>
+    > = async (data) => {
         try {
             await confirmPasswordReset(clientAuth, actionCode, data.password);
 
             navigate("/players");
         } catch (error) {
-            console.error(error);
+            console.error("Failed to reset password:", error);
 
             setError("password", {
                 type: "manual",
                 message: "An unexpected error occurred",
             });
         }
-    });
+    };
 
     useEffect(() => {
         async function verifyActionCode() {
@@ -70,7 +72,7 @@ export default function ResetPasswordCard({
     return (
         <Box width="400px">
             <Card size="4">
-                <form onSubmit={onSubmit}>
+                <form onSubmit={handleSubmit(onSubmit)}>
                     <Heading size="6" mb="5">
                         Reset Password
                     </Heading>

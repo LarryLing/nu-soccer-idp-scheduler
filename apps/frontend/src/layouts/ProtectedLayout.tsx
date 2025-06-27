@@ -31,7 +31,7 @@ export default function ProtectedLayout() {
                     gap="4"
                     px={{
                         initial: "32px",
-                        md: "72px",
+                        sm: "72px",
                     }}
                     py="6"
                     width="100%"

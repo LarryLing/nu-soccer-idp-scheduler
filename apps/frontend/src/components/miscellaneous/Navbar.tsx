@@ -14,7 +14,7 @@ export default function Navbar() {
         <Flex
             px={{
                 initial: "32px",
-                md: "72px",
+                sm: "72px",
             }}
             py="20px"
             width="100%"
@@ -43,13 +43,13 @@ export default function Navbar() {
                         Training Blocks
                     </ReactRouterLink>
                 </Link>
-                <Box display={{ initial: "none", xs: "block" }}>
+                <Box display={{ initial: "none", sm: "block" }}>
                     <Button type="button" onClick={handleSignout}>
                         <LogOutIcon size={15} />
                         Sign Out
                     </Button>
                 </Box>
-                <Box display={{ initial: "block", xs: "none" }}>
+                <Box display={{ initial: "block", sm: "none" }}>
                     <IconButton type="button" onClick={handleSignout}>
                         <LogOutIcon size={15} />
                     </IconButton>

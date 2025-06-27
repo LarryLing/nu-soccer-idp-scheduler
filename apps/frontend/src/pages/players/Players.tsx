@@ -217,7 +217,11 @@ export default function Players() {
             <Section p="0">
                 <PlayerTableActionRow table={table} players={players} />
                 <EditPlayerDialogProvider>
-                    <PlayerTable table={table} numColumns={columns.length} />
+                    <PlayerTable
+                        table={table}
+                        numColumns={columns.length}
+                        players={players}
+                    />
                 </EditPlayerDialogProvider>
             </Section>
         </>
