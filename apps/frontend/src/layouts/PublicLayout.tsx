@@ -5,29 +5,29 @@ import { Flex } from "@radix-ui/themes";
 import trianglify from "../images/trianglify.png";
 
 export default function PublicLayout() {
-    const { user } = useUser();
+  const { user } = useUser();
 
-    const navigate = useNavigate();
+  const navigate = useNavigate();
 
-    useEffect(() => {
-        if (user !== null) {
-            navigate("/players", { replace: true });
-        }
-    }, [navigate, user]);
+  useEffect(() => {
+    if (user !== null) {
+      navigate("/players", { replace: true });
+    }
+  }, [navigate, user]);
 
-    return (
-        <Flex
-            height="100vh"
-            justify="center"
-            align="center"
-            style={{
-                backgroundImage: `url(${trianglify})`,
-                backgroundSize: "cover",
-                backgroundPosition: "center",
-                backgroundAttachment: "fixed",
-            }}
-        >
-            <Outlet />
-        </Flex>
-    );
+  return (
+    <Flex
+      height="100vh"
+      justify="center"
+      align="center"
+      style={{
+        backgroundImage: `url(${trianglify})`,
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundAttachment: "fixed",
+      }}
+    >
+      <Outlet />
+    </Flex>
+  );
 }

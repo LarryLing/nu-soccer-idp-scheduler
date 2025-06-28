@@ -1,206 +1,240 @@
 import {
-    Box,
-    Button,
-    Dialog,
-    Flex,
-    Select,
-    Text,
-    TextField,
+  Box,
+  Button,
+  Dialog,
+  Flex,
+  Select,
+  Text,
+  TextField,
 } from "@radix-ui/themes";
-import AvailabilityRow from "./AvailabilityRow.tsx";
-import {
-    Controller,
-    type UseFormRegister,
-    type Control,
-    type FormState,
-    type FieldArrayWithId,
-    type UseFieldArrayAppend,
-    type UseFieldArrayRemove,
-} from "react-hook-form";
-import { PlayerSchema } from "../../utils/schemas.ts";
+import { Controller, type SubmitHandler } from "react-hook-form";
+import type { EditPlayerDialogContextType, Player } from "../../utils/types.ts";
+import { DAYS, POSITION_OPTIONS } from "../../utils/constants.ts";
 import { z } from "zod";
+import { PlayerSchema } from "../../utils/schemas.ts";
+import { doc, updateDoc } from "firebase/firestore";
+import { clientFirestore } from "../../utils/firebase.ts";
+import { useUser } from "../../hooks/useUser.ts";
+import { AvailabilityInputBox } from "./AvailabilityInputBox.tsx";
+import { parseTime } from "../../utils/helpers.ts";
 
 type EditPlayerDialogProps = {
-    isOpen: boolean;
-    setIsOpen: (isOpen: boolean) => void;
-    register: UseFormRegister<z.infer<typeof PlayerSchema>>;
-    control: Control<z.infer<typeof PlayerSchema>>;
-    isSubmitting: boolean;
-    isValidating: boolean;
-    errors: FormState<z.infer<typeof PlayerSchema>>["errors"];
-    fields: FieldArrayWithId<z.infer<typeof PlayerSchema>>[];
-    append: UseFieldArrayAppend<z.infer<typeof PlayerSchema>>;
-    remove: UseFieldArrayRemove;
-    handleClose: () => void;
-    onSubmit: (e?: React.BaseSyntheticEvent) => Promise<void>;
-};
+  players: Player[];
+} & EditPlayerDialogContextType;
 
 export default function EditPlayerDialog({
-    isOpen,
-    setIsOpen,
-    register,
-    control,
-    isSubmitting,
-    isValidating,
-    errors,
-    fields,
-    append,
-    remove,
-    handleClose,
-    onSubmit,
+  playerId,
+  isOpen,
+  setIsOpen,
+  register,
+  control,
+  isSubmitting,
+  isSaving,
+  setIsSaving,
+  isValidating,
+  setError,
+  errors,
+  fields,
+  remove,
+  handleClose,
+  addAvailability,
+  handleSubmit,
+  players,
 }: EditPlayerDialogProps) {
-    return (
-        <Dialog.Root open={isOpen} onOpenChange={setIsOpen}>
-            <Dialog.Content width="450px">
-                <Dialog.Title>Edit Player</Dialog.Title>
-                <Dialog.Description mb="3">
-                    Update player information
-                </Dialog.Description>
-                <form onSubmit={onSubmit}>
-                    <Box mb="3">
-                        <label htmlFor="name">
-                            <Text size="2" weight="medium" mb="1" as="p">
-                                Name
-                            </Text>
-                        </label>
-                        <TextField.Root
-                            id="name"
-                            placeholder="Enter player name"
-                            {...register("name")}
-                        />
-                        {errors?.name && (
-                            <>
-                                <Text
-                                    size="2"
-                                    weight="regular"
-                                    as="p"
-                                    color="red"
-                                >
-                                    {errors.name.message}
-                                </Text>
-                            </>
-                        )}
-                    </Box>
-                    <Box mb="3">
-                        <label htmlFor="number">
-                            <Text size="2" weight="medium" mb="1" as="p">
-                                Number
-                            </Text>
-                        </label>
-                        <TextField.Root
-                            id="number"
-                            type="number"
-                            placeholder="Enter player number"
-                            min="0"
-                            max="99"
-                            step="1"
-                            inputMode="numeric"
-                            {...register("number", {
-                                valueAsNumber: true,
-                            })}
-                        />
-                        {errors?.number && (
-                            <Text size="2" weight="regular" as="p" color="red">
-                                {errors.number.message}
-                            </Text>
-                        )}
-                    </Box>
-                    <Box mb="3">
-                        <label htmlFor="position">
-                            <Text size="2" weight="medium" mb="1" as="p">
-                                Position
-                            </Text>
-                        </label>
-                        <Controller
-                            name="position"
-                            control={control}
-                            render={({ field }) => (
-                                <Select.Root
-                                    value={field.value}
-                                    onValueChange={field.onChange}
-                                >
-                                    <Select.Trigger
-                                        style={{ width: "100%" }}
-                                        id="position"
-                                    />
-                                    <Select.Content>
-                                        <Select.Item value="Goalkeeper">
-                                            Goalkeeper
-                                        </Select.Item>
-                                        <Select.Item value="Defender">
-                                            Defender
-                                        </Select.Item>
-                                        <Select.Item value="Midfielder">
-                                            Midfielder
-                                        </Select.Item>
-                                        <Select.Item value="Forward">
-                                            Forward
-                                        </Select.Item>
-                                    </Select.Content>
-                                </Select.Root>
-                            )}
-                        />
-                        {errors?.position && (
-                            <Text size="2" weight="regular" as="p" color="red">
-                                {errors.position.message}
-                            </Text>
-                        )}
-                    </Box>
-                    <Box mb="3">
-                        <Flex direction="column" gap="2">
-                            <Flex justify="between" align="center">
-                                <label>
-                                    <Text size="2" weight="medium" as="p">
-                                        Availabilities
-                                    </Text>
-                                </label>
-                                <Button
-                                    variant="soft"
-                                    color="gray"
-                                    type="button"
-                                    onClick={() =>
-                                        append({
-                                            day: "Monday",
-                                            start: "9:30AM",
-                                            end: "10:00AM",
-                                        })
-                                    }
-                                >
-                                    Add Availability
-                                </Button>
-                            </Flex>
-                            {fields.map((field, index) => {
-                                return (
-                                    <AvailabilityRow
-                                        key={field.id}
-                                        index={index}
-                                        register={register}
-                                        remove={remove}
-                                        errors={errors}
-                                        control={control}
-                                    />
-                                );
-                            })}
-                        </Flex>
-                    </Box>
-                    <Flex direction="row-reverse" gap="4">
-                        <Button
-                            type="submit"
-                            disabled={isSubmitting || isValidating}
-                        >
-                            Save Changes
-                        </Button>
-                        <Button
-                            variant="soft"
-                            type="button"
-                            disabled={isSubmitting || isValidating}
-                            onClick={handleClose}
-                        >
-                            Cancel
-                        </Button>
-                    </Flex>
-                </form>
-            </Dialog.Content>
-        </Dialog.Root>
-    );
+  const { user } = useUser();
+
+  const isFormDisabled = isSubmitting || isValidating || isSaving;
+
+  const onSubmit: SubmitHandler<z.infer<typeof PlayerSchema>> = async (
+    data,
+  ) => {
+    if (!user?.uid) {
+      console.error("User not authenticated");
+      return;
+    }
+
+    if (
+      players.some(
+        (player) => player.name === data.name && player.id !== playerId,
+      )
+    ) {
+      console.error("Player name already in use");
+      setError("name", {
+        type: "manual",
+        message: "Player name already in use.",
+      });
+      return;
+    }
+
+    if (
+      players.some(
+        (player) => player.number === data.number && player.id !== playerId,
+      )
+    ) {
+      console.error("Player number already in use");
+      setError("number", {
+        type: "manual",
+        message: "Player number already in use.",
+      });
+      return;
+    }
+
+    for (const day of DAYS) {
+      const filteredData = data.availabilities
+        .filter((availability) => {
+          return availability.day === day;
+        })
+        .sort((a, b) => {
+          return parseTime(a.start) - parseTime(b.start);
+        });
+
+      if (filteredData.length === 0) {
+        continue;
+      }
+
+      const hasOverlaps = filteredData.some((current, index) => {
+        if (index === 0) return false;
+        const previous = filteredData[index - 1];
+        return parseTime(current.start) <= parseTime(previous.end);
+      });
+
+      if (hasOverlaps) {
+        console.error("Overlapping or redundant availabilities were found");
+        setError("root.availabilities", {
+          type: "manual",
+          message: "Please fix the overlapping or redundant availabilities.",
+        });
+        return;
+      }
+    }
+
+    setIsSaving(true);
+
+    try {
+      await updateDoc(
+        doc(clientFirestore, `users/${user.uid}/players/${playerId}`),
+        data,
+      );
+      setIsOpen(false);
+    } catch (error) {
+      console.error("Failed to update player:", error);
+      setError("name", {
+        type: "manual",
+        message: "An unexpected error occurred.",
+      });
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  return (
+    <Dialog.Root open={isOpen} onOpenChange={setIsOpen}>
+      <Dialog.Content width="450px">
+        <Dialog.Title>Edit Player</Dialog.Title>
+        <Dialog.Description mb="3">
+          Update player information
+        </Dialog.Description>
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <Box mb="3">
+            <label htmlFor="name">
+              <Text size="2" weight="medium" mb="1" as="p">
+                Name
+              </Text>
+            </label>
+            <TextField.Root
+              id="name"
+              placeholder="Enter player name"
+              disabled={isFormDisabled}
+              {...register("name")}
+            />
+            {errors?.name && (
+              <>
+                <Text size="2" weight="regular" as="p" color="red">
+                  {errors.name.message}
+                </Text>
+              </>
+            )}
+          </Box>
+          <Box mb="3">
+            <label htmlFor="number">
+              <Text size="2" weight="medium" mb="1" as="p">
+                Number
+              </Text>
+            </label>
+            <TextField.Root
+              id="number"
+              type="number"
+              placeholder="Enter player number"
+              min="0"
+              max="99"
+              step="1"
+              inputMode="numeric"
+              disabled={isFormDisabled}
+              {...register("number", {
+                valueAsNumber: true,
+              })}
+            />
+            {errors?.number && (
+              <Text size="2" weight="regular" as="p" color="red">
+                {errors.number.message}
+              </Text>
+            )}
+          </Box>
+          <Box mb="3">
+            <label htmlFor="position">
+              <Text size="2" weight="medium" mb="1" as="p">
+                Position
+              </Text>
+            </label>
+            <Controller
+              name="position"
+              control={control}
+              render={({ field }) => (
+                <Select.Root
+                  value={field.value}
+                  onValueChange={field.onChange}
+                  disabled={isFormDisabled}
+                >
+                  <Select.Trigger style={{ width: "100%" }} id="position" />
+                  <Select.Content>
+                    {POSITION_OPTIONS.map((position) => (
+                      <Select.Item key={position} value={position}>
+                        {position}
+                      </Select.Item>
+                    ))}
+                  </Select.Content>
+                </Select.Root>
+              )}
+            />
+            {errors?.position && (
+              <Text size="2" weight="regular" as="p" color="red">
+                {errors.position.message}
+              </Text>
+            )}
+          </Box>
+          <AvailabilityInputBox
+            addAvailability={addAvailability}
+            fields={fields}
+            remove={remove}
+            errors={errors}
+            isFormDisabled={isFormDisabled}
+            register={register}
+          />
+          <Flex direction="row-reverse" gap="2">
+            <Button type="submit" disabled={isFormDisabled}>
+              {isSaving ? "Saving..." : "Save Changes"}
+            </Button>
+            <Button
+              variant="soft"
+              type="button"
+              disabled={isFormDisabled}
+              onClick={handleClose}
+            >
+              Cancel
+            </Button>
+          </Flex>
+        </form>
+      </Dialog.Content>
+    </Dialog.Root>
+  );
 }

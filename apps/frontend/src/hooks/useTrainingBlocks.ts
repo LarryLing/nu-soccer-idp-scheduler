@@ -7,101 +7,96 @@ import { clientFirestore } from "../utils/firebase.ts";
 import { FirebaseError } from "firebase/app";
 
 export const useTrainingBlocks = (userId: string) => {
-    const [trainingBlocks, setTrainingBlocks] = useState<TrainingBlock[]>([]);
-    const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [trainingBlocks, setTrainingBlocks] = useState<TrainingBlock[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
-    const addTrainingBlock = useCallback(
-        async (trainingBlock?: z.infer<typeof TrainingBlockSchema>) => {
-            if (!trainingBlock) {
-                throw new Error("Training block is required");
-            }
+  const addTrainingBlock = useCallback(
+    async (trainingBlock?: z.infer<typeof TrainingBlockSchema>) => {
+      if (!trainingBlock) {
+        throw new Error("Training block is required");
+      }
 
-            setTrainingBlocks((prev) => [
-                ...prev,
-                {
-                    ...trainingBlock,
-                    id: "",
-                    assignedPlayers: [],
-                } as TrainingBlock,
-            ]);
-        },
-        [],
+      setTrainingBlocks((prev) => [
+        ...prev,
+        {
+          ...trainingBlock,
+          id: "",
+          assignedPlayers: [],
+        } as TrainingBlock,
+      ]);
+    },
+    [],
+  );
+
+  const removeTrainingBlock = useCallback(async (trainingBlockId?: string) => {
+    if (!trainingBlockId) {
+      throw new Error("Training block ID is required");
+    }
+
+    setTrainingBlocks((prev) =>
+      prev.filter((trainingBlock) => trainingBlock.id !== trainingBlockId),
     );
+  }, []);
 
-    const removeTrainingBlock = useCallback(
-        async (trainingBlockId?: string) => {
-            if (!trainingBlockId) {
-                throw new Error("Training block ID is required");
-            }
+  const assignPlayerToTrainingBlock = useCallback(
+    async (trainingBlockId?: string, playerId?: string) => {
+      if (!playerId || !trainingBlockId) {
+        throw new Error("Player ID and training block ID are required");
+      }
 
-            setTrainingBlocks((prev) =>
-                prev.filter(
-                    (trainingBlock) => trainingBlock.id !== trainingBlockId,
-                ),
-            );
-        },
-        [],
-    );
+      return;
+    },
+    [],
+  );
 
-    const assignPlayerToTrainingBlock = useCallback(
-        async (trainingBlockId?: string, playerId?: string) => {
-            if (!playerId || !trainingBlockId) {
-                throw new Error("Player ID and training block ID are required");
-            }
+  const unassignPlayerFromTrainingBlock = useCallback(
+    async (trainingBlockId?: string, playerId?: string) => {
+      if (!playerId || !trainingBlockId) {
+        throw new Error("Player ID and training block ID are required");
+      }
 
-            return;
-        },
-        [],
-    );
+      return;
+    },
+    [],
+  );
 
-    const unassignPlayerFromTrainingBlock = useCallback(
-        async (trainingBlockId?: string, playerId?: string) => {
-            if (!playerId || !trainingBlockId) {
-                throw new Error("Player ID and training block ID are required");
-            }
+  useEffect(() => {
+    async function fetchData() {
+      const trainingBlocksQuery = query(
+        collection(clientFirestore, `users/${userId!}/trainingBlocks`),
+      );
 
-            return;
-        },
-        [],
-    );
+      const fetchedTrainingBlockDocs = await getDocs(trainingBlocksQuery);
 
-    useEffect(() => {
-        async function fetchData() {
-            const trainingBlocksQuery = query(
-                collection(clientFirestore, `users/${userId!}/trainingBlocks`),
-            );
+      setTrainingBlocks(
+        fetchedTrainingBlockDocs.docs.map(
+          (doc) =>
+            ({
+              id: doc.id,
+              ...doc.data(),
+            }) as TrainingBlock,
+        ),
+      );
+    }
 
-            const fetchedTrainingBlockDocs = await getDocs(trainingBlocksQuery);
+    try {
+      fetchData();
+    } catch (error) {
+      if (error instanceof FirebaseError) {
+        console.error(error.message);
+      }
+      console.error(error);
+    } finally {
+      setIsLoading(false);
+    }
+  }, [userId]);
 
-            setTrainingBlocks(
-                fetchedTrainingBlockDocs.docs.map(
-                    (doc) =>
-                        ({
-                            id: doc.id,
-                            ...doc.data(),
-                        }) as TrainingBlock,
-                ),
-            );
-        }
-
-        try {
-            fetchData();
-        } catch (error) {
-            if (error instanceof FirebaseError) {
-                console.error(error.message);
-            }
-            console.error(error);
-        } finally {
-            setIsLoading(false);
-        }
-    }, [userId]);
-
-    return {
-        trainingBlocks: trainingBlocks,
-        isLoading: isLoading,
-        addTrainingBlock: addTrainingBlock,
-        removeTrainingBlock: removeTrainingBlock,
-        assignPlayerToTrainingBlock: assignPlayerToTrainingBlock,
-        unassignPlayerFromTrainingBlock: unassignPlayerFromTrainingBlock,
-    };
+  return {
+    trainingBlocks: trainingBlocks,
+    isLoading: isLoading,
+    addTrainingBlock: addTrainingBlock,
+    removeTrainingBlock: removeTrainingBlock,
+    assignPlayerToTrainingBlock: assignPlayerToTrainingBlock,
+    unassignPlayerFromTrainingBlock: unassignPlayerFromTrainingBlock,
+  };
 };

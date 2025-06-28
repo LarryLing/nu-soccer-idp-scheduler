@@ -6,40 +6,39 @@ import { useUser } from "../hooks/useUser.ts";
 import trianglify from "../images/trianglify.png";
 
 export default function ProtectedLayout() {
-    const { user } = useUser();
+  const { user } = useUser();
 
-    const navigate = useNavigate();
+  const navigate = useNavigate();
 
-    useEffect(() => {
-        if (user === null) {
-            navigate("/signin", { replace: true });
-        }
-    }, [navigate, user]);
+  useEffect(() => {
+    if (user === null) {
+      navigate("/signin", { replace: true });
+    }
+  }, [navigate, user]);
 
-    return (
-        user && (
-            <Flex
-                direction="column"
-                minHeight="100vh"
-                style={{
-                    background: `url(${trianglify}) no-repeat center center fixed`,
-                }}
-            >
-                <Navbar />
-                <Flex
-                    direction="column"
-                    gap="5"
-                    px={{
-                        initial: "20px",
-                        xs: "36px",
-                        sm: "72px",
-                    }}
-                    py="6"
-                    width="100%"
-                >
-                    <Outlet />
-                </Flex>
-            </Flex>
-        )
-    );
+  return (
+    user && (
+      <Flex
+        direction="column"
+        minHeight="100vh"
+        style={{
+          background: `url(${trianglify}) no-repeat center center fixed`,
+        }}
+      >
+        <Navbar />
+        <Flex
+          direction="column"
+          gap="4"
+          px={{
+            initial: "32px",
+            sm: "72px",
+          }}
+          py="6"
+          width="100%"
+        >
+          <Outlet />
+        </Flex>
+      </Flex>
+    )
+  );
 }
