@@ -5,7 +5,8 @@ import { z } from "zod";
 import { PlayerSchema } from "../utils/schemas.ts";
 import { zodResolver } from "@hookform/resolvers/zod";
 import type { Availability, Player } from "../utils/types.ts";
-import { DEFAULT_AVAILABILITY, DEFAULT_VALUES } from "../utils/constants.ts";
+import { DEFAULT_VALUES } from "../utils/constants.ts";
+import { generateNextTimes, parseTime } from "../utils/helpers.ts";
 
 export function EditPlayerDialogProvider({ children }: PropsWithChildren) {
   const [isOpen, setIsOpen] = useState(false);
@@ -53,12 +54,37 @@ export function EditPlayerDialogProvider({ children }: PropsWithChildren) {
 
   const addAvailability = useCallback(
     (day: Availability["day"]) => {
+      const availabilitiesForDay = fields
+        .filter((field) => {
+          return field.day === day;
+        })
+        .sort((a, b) => {
+          return parseTime(a.start) - parseTime(b.start);
+        });
+
+      if (availabilitiesForDay.length === 0) {
+        append({
+          day: day,
+          start: "8:00AM",
+          end: "9:00AM",
+        });
+        return;
+      }
+
+      const lastEndTime =
+        availabilitiesForDay[availabilitiesForDay.length - 1].end;
+
+      const [nextStartTime, nextEndTime] = generateNextTimes(lastEndTime);
+
+      console.log(nextStartTime, nextEndTime);
+
       append({
-        ...DEFAULT_AVAILABILITY,
-        day,
+        day: day,
+        start: nextStartTime,
+        end: nextEndTime,
       });
     },
-    [append],
+    [append, fields],
   );
 
   const value = useMemo(

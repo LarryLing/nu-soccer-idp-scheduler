@@ -5,43 +5,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b05902af-5cdc-4fb0-944c-d2d26c9f2b39" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/apps/frontend/src/components/players/AvailabilityInputBox.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/apps/frontend/src/utils/helpers.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/codeStyles/Project.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/codeStyles/Project.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.prettierrc" beforeDir="false" afterPath="$PROJECT_DIR$/.prettierrc" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/src/App.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/App.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/src/components/authentication/ResetPasswordCard.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/components/authentication/ResetPasswordCard.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/src/components/miscellaneous/Navbar.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/components/miscellaneous/Navbar.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/src/components/miscellaneous/NorthwesternLogo.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/components/miscellaneous/NorthwesternLogo.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/apps/frontend/src/components/players/AddPlayerDialog.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/components/players/AddPlayerDialog.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/src/components/players/AvailabilityRow.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/components/players/AvailabilityInputBox.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/components/players/AvailabilityInputBox.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/apps/frontend/src/components/players/EditPlayerDialog.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/components/players/EditPlayerDialog.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/src/components/players/PlayerActionsDropdown.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/components/players/PlayerActionsDropdown.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/src/components/players/PlayerTable.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/components/players/PlayerTable.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/src/components/players/PlayerTableActionRow.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/components/players/PlayerTableActionRow.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/src/contexts/EditPlayerDialogContext.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/contexts/EditPlayerDialogContext.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/apps/frontend/src/contexts/EditPlayerDialogProvider.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/contexts/EditPlayerDialogProvider.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/src/contexts/UserContext.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/contexts/UserContext.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/src/contexts/UserProvider.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/contexts/UserProvider.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/src/hooks/useEditPlayerDialog.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/hooks/useEditPlayerDialog.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/src/hooks/useTrainingBlocks.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/hooks/useTrainingBlocks.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/src/hooks/useUser.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/hooks/useUser.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/src/layouts/ProtectedLayout.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/layouts/ProtectedLayout.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/src/layouts/PublicLayout.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/layouts/PublicLayout.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/src/main.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/main.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/src/pages/create-an-account/CreateAnAccount.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/pages/create-an-account/CreateAnAccount.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/src/pages/email-actions/EmailActions.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/pages/email-actions/EmailActions.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/src/pages/forgot-password/ForgotPassword.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/pages/forgot-password/ForgotPassword.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/src/pages/players/Players.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/pages/players/Players.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/src/pages/signin/SignIn.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/pages/signin/SignIn.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/src/pages/training-blocks/TrainingBlocks.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/pages/training-blocks/TrainingBlocks.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/apps/frontend/src/utils/constants.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/utils/constants.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/src/utils/firebase.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/utils/firebase.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/src/utils/schemas.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/utils/schemas.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/src/utils/types.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/utils/types.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/vite.config.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/vite.config.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/utils/helpers.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/utils/helpers.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -157,7 +127,7 @@
       <workItem from="1750368658431" duration="36650000" />
       <workItem from="1750452312080" duration="26836000" />
       <workItem from="1750814721487" duration="8388000" />
-      <workItem from="1751065335496" duration="248000" />
+      <workItem from="1751065335496" duration="11196000" />
     </task>
     <servers />
   </component>

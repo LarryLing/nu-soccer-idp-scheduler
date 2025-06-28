@@ -22,11 +22,12 @@ import { addDoc, collection } from "firebase/firestore";
 import { clientFirestore } from "../../utils/firebase.ts";
 import type { Availability, Player, User } from "../../utils/types.ts";
 import {
-  DEFAULT_AVAILABILITY,
+  DAYS,
   DEFAULT_VALUES,
   POSITION_OPTIONS,
 } from "../../utils/constants.ts";
 import { AvailabilityInputBox } from "./AvailabilityInputBox.tsx";
+import { generateNextTimes, parseTime } from "../../utils/helpers.ts";
 
 type AddPlayerDialogProps = {
   user: User | null;
@@ -69,9 +70,33 @@ export default function AddPlayerDialog({
   };
 
   const addAvailability = (day: Availability["day"]) => {
+    const availabilitiesForDay = fields
+      .filter((field) => {
+        return field.day === day;
+      })
+      .sort((a, b) => {
+        return parseTime(a.start) - parseTime(b.start);
+      });
+
+    if (availabilitiesForDay.length === 0) {
+      append({
+        day: day,
+        start: "8:00AM",
+        end: "9:00AM",
+      });
+      return;
+    }
+
+    const lastEndTime =
+      availabilitiesForDay[availabilitiesForDay.length - 1].end;
+
+    const [nextStartTime, nextEndTime] = generateNextTimes(lastEndTime);
+    console.log(nextStartTime, nextEndTime);
+
     append({
-      ...DEFAULT_AVAILABILITY,
-      day,
+      day: day,
+      start: nextStartTime,
+      end: nextEndTime,
     });
   };
 
@@ -87,7 +112,7 @@ export default function AddPlayerDialog({
       console.error("Player name already in use");
       setError("name", {
         type: "manual",
-        message: "Player name already in use",
+        message: "Player name already in use.",
       });
       return;
     }
@@ -96,9 +121,38 @@ export default function AddPlayerDialog({
       console.error("Player number already in use");
       setError("number", {
         type: "manual",
-        message: "Player number already in use",
+        message: "Player number already in use.",
       });
       return;
+    }
+
+    for (const day of DAYS) {
+      const filteredData = data.availabilities
+        .filter((availability) => {
+          return availability.day === day;
+        })
+        .sort((a, b) => {
+          return parseTime(a.start) - parseTime(b.start);
+        });
+
+      if (filteredData.length === 0) {
+        continue;
+      }
+
+      const hasOverlaps = filteredData.some((current, index) => {
+        if (index === 0) return false;
+        const previous = filteredData[index - 1];
+        return parseTime(current.start) < parseTime(previous.end);
+      });
+
+      if (hasOverlaps) {
+        console.error("Time overlaps were found");
+        setError("root.availabilities", {
+          type: "manual",
+          message: "Please fix the time overlaps.",
+        });
+        return;
+      }
     }
 
     setIsAdding(true);
@@ -111,7 +165,6 @@ export default function AddPlayerDialog({
       setIsOpen(false);
     } catch (error) {
       console.error("Failed to add player:", error);
-
       setError("name", {
         type: "manual",
         message: "An unexpected error occurred",
@@ -136,7 +189,12 @@ export default function AddPlayerDialog({
         <Dialog.Description mb="3">
           Insert player information
         </Dialog.Description>
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <form
+          onSubmit={(e) => {
+            console.log("Form submit event triggered");
+            handleSubmit(onSubmit)(e);
+          }}
+        >
           <Box mb="3">
             <label htmlFor="name">
               <Text size="2" weight="medium" mb="1" as="p">

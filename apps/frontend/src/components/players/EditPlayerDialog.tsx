@@ -9,13 +9,14 @@ import {
 } from "@radix-ui/themes";
 import { Controller, type SubmitHandler } from "react-hook-form";
 import type { EditPlayerDialogContextType, Player } from "../../utils/types.ts";
-import { POSITION_OPTIONS } from "../../utils/constants.ts";
+import { DAYS, POSITION_OPTIONS } from "../../utils/constants.ts";
 import { z } from "zod";
 import { PlayerSchema } from "../../utils/schemas.ts";
 import { doc, updateDoc } from "firebase/firestore";
 import { clientFirestore } from "../../utils/firebase.ts";
 import { useUser } from "../../hooks/useUser.ts";
 import { AvailabilityInputBox } from "./AvailabilityInputBox.tsx";
+import { parseTime } from "../../utils/helpers.ts";
 
 type EditPlayerDialogProps = {
   players: Player[];
@@ -60,7 +61,7 @@ export default function EditPlayerDialog({
       console.error("Player name already in use");
       setError("name", {
         type: "manual",
-        message: "Player name already in use",
+        message: "Player name already in use.",
       });
       return;
     }
@@ -73,9 +74,38 @@ export default function EditPlayerDialog({
       console.error("Player number already in use");
       setError("number", {
         type: "manual",
-        message: "Player number already in use",
+        message: "Player number already in use.",
       });
       return;
+    }
+
+    for (const day of DAYS) {
+      const filteredData = data.availabilities
+        .filter((availability) => {
+          return availability.day === day;
+        })
+        .sort((a, b) => {
+          return parseTime(a.start) - parseTime(b.start);
+        });
+
+      if (filteredData.length === 0) {
+        continue;
+      }
+
+      const hasOverlaps = filteredData.some((current, index) => {
+        if (index === 0) return false;
+        const previous = filteredData[index - 1];
+        return parseTime(current.start) < parseTime(previous.end);
+      });
+
+      if (hasOverlaps) {
+        console.error("Time overlaps were found");
+        setError("root.availabilities", {
+          type: "manual",
+          message: "Please fix the time overlaps.",
+        });
+        return;
+      }
     }
 
     setIsSaving(true);
@@ -88,10 +118,9 @@ export default function EditPlayerDialog({
       setIsOpen(false);
     } catch (error) {
       console.error("Failed to update player:", error);
-
       setError("name", {
         type: "manual",
-        message: "An unexpected error occurred",
+        message: "An unexpected error occurred.",
       });
     } finally {
       setIsSaving(false);
