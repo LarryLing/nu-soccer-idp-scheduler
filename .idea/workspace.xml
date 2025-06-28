@@ -6,14 +6,6 @@
   <component name="ChangeListManager">
     <list default="true" id="b05902af-5cdc-4fb0-944c-d2d26c9f2b39" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/src/components/authentication/ResetPasswordCard.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/components/authentication/ResetPasswordCard.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/src/components/players/AddPlayerDialog.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/components/players/AddPlayerDialog.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/src/components/players/AvailabilityInputBox.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/components/players/AvailabilityInputBox.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/src/components/players/EditPlayerDialog.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/components/players/EditPlayerDialog.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/src/contexts/EditPlayerDialogProvider.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/contexts/EditPlayerDialogProvider.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/src/pages/create-an-account/CreateAnAccount.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/pages/create-an-account/CreateAnAccount.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/src/pages/forgot-password/ForgotPassword.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/pages/forgot-password/ForgotPassword.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/src/pages/signin/SignIn.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/pages/signin/SignIn.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -129,7 +121,7 @@
       <workItem from="1750368658431" duration="36650000" />
       <workItem from="1750452312080" duration="26836000" />
       <workItem from="1750814721487" duration="8388000" />
-      <workItem from="1751065335496" duration="11963000" />
+      <workItem from="1751065335496" duration="13802000" />
     </task>
     <servers />
   </component>
