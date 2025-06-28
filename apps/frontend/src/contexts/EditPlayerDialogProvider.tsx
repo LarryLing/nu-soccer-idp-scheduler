@@ -24,6 +24,8 @@ export function EditPlayerDialogProvider({ children }: PropsWithChildren) {
   } = useForm<z.infer<typeof PlayerSchema>>({
     resolver: zodResolver(PlayerSchema),
     defaultValues: DEFAULT_VALUES,
+    mode: 'onSubmit',
+    reValidateMode: "onSubmit",
   });
 
   const { fields, append, remove } = useFieldArray<
@@ -75,8 +77,6 @@ export function EditPlayerDialogProvider({ children }: PropsWithChildren) {
         availabilitiesForDay[availabilitiesForDay.length - 1].end;
 
       const [nextStartTime, nextEndTime] = generateNextTimes(lastEndTime);
-
-      console.log(nextStartTime, nextEndTime);
 
       append({
         day: day,

@@ -23,6 +23,8 @@ export default function ForgotPasswordCard() {
     formState: { isSubmitting, isValidating, errors },
   } = useForm<z.infer<typeof ForgotPasswordFormSchema>>({
     resolver: zodResolver(ForgotPasswordFormSchema),
+    mode: 'onSubmit',
+    reValidateMode: "onSubmit",
   });
 
   const onSubmit: SubmitHandler<

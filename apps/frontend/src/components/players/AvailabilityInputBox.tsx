@@ -1,5 +1,4 @@
 import {
-  Badge,
   Box,
   Button,
   Card,
@@ -72,20 +71,11 @@ export function AvailabilityInputBox({
             return null;
           }
 
-          const hasOverlaps = dayFieldsWithIndex.some((current, index) => {
-            if (index === 0) return false;
-            const previous = dayFieldsWithIndex[index - 1];
-            return parseTime(current.start) < parseTime(previous.end);
-          });
-
           return (
             <Card key={day}>
-              <Flex justify="between" align="center" mb="2" width="100%">
-                <Text size="2" weight="medium">
-                  {day}
-                </Text>
-                {hasOverlaps && <Badge color="yellow">Time Overlap!</Badge>}
-              </Flex>
+              <Text size="2" weight="medium" mb="2" as="p">
+                {day}
+              </Text>
               <Flex direction="column" gap="1">
                 {dayFieldsWithIndex.map((field, index) => (
                   <>

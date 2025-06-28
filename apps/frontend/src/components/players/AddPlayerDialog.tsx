@@ -52,6 +52,8 @@ export default function AddPlayerDialog({
   } = useForm<z.infer<typeof PlayerSchema>>({
     resolver: zodResolver(PlayerSchema),
     defaultValues: DEFAULT_VALUES,
+    mode: 'onSubmit',
+    reValidateMode: "onSubmit",
   });
 
   const { fields, append, remove } = useFieldArray({
@@ -142,14 +144,14 @@ export default function AddPlayerDialog({
       const hasOverlaps = filteredData.some((current, index) => {
         if (index === 0) return false;
         const previous = filteredData[index - 1];
-        return parseTime(current.start) < parseTime(previous.end);
+        return parseTime(current.start) <= parseTime(previous.end);
       });
 
       if (hasOverlaps) {
-        console.error("Time overlaps were found");
+        console.error("Overlapping or redundant availabilities were found");
         setError("root.availabilities", {
           type: "manual",
-          message: "Please fix the time overlaps.",
+          message: "Please fix the overlapping or redundant availabilities.",
         });
         return;
       }
