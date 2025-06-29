@@ -5,7 +5,7 @@ import { z } from "zod";
 import { PlayerSchema } from "../utils/schemas.ts";
 import { zodResolver } from "@hookform/resolvers/zod";
 import type { Availability, Player } from "../utils/types.ts";
-import { DEFAULT_VALUES } from "../utils/constants.ts";
+import { DEFAULT_PLAYER } from "../utils/constants.ts";
 import { generateNextTimes, parseTime } from "../utils/helpers.ts";
 
 export function EditPlayerDialogProvider({ children }: PropsWithChildren) {
@@ -23,7 +23,7 @@ export function EditPlayerDialogProvider({ children }: PropsWithChildren) {
     formState: { isSubmitting, isValidating, errors },
   } = useForm<z.infer<typeof PlayerSchema>>({
     resolver: zodResolver(PlayerSchema),
-    defaultValues: DEFAULT_VALUES,
+    defaultValues: DEFAULT_PLAYER,
     mode: "onSubmit",
     reValidateMode: "onSubmit",
   });

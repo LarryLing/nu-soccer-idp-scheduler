@@ -2,6 +2,7 @@ import type { TrainingBlock } from "../../utils/types.ts";
 import TrainingBlockCard from "./TrainingBlockCard.tsx";
 import { Grid } from "@radix-ui/themes";
 import { useEditTrainingBlockDialog } from "../../hooks/useEditTrainingBlockDialog.tsx";
+import EditTrainingBlockDialog from "./EditTrainingBlockDialog.tsx";
 
 type TrainingBlocksGridProps = {
   trainingBlocks: TrainingBlock[];
@@ -10,7 +11,22 @@ type TrainingBlocksGridProps = {
 export default function TrainingBlocksGrid({
   trainingBlocks,
 }: TrainingBlocksGridProps) {
-  const { EditTrainingBlockDialog, handleOpen } = useEditTrainingBlockDialog();
+  const {
+    trainingBlockId,
+    isOpen,
+    setIsOpen,
+    register,
+    control,
+    isSubmitting,
+    isSaving,
+    setIsSaving,
+    isValidating,
+    setError,
+    errors,
+    handleClose,
+    handleSubmit,
+    handleOpen,
+  } = useEditTrainingBlockDialog();
 
   return (
     <>
@@ -29,7 +45,22 @@ export default function TrainingBlocksGrid({
           />
         ))}
       </Grid>
-      <EditTrainingBlockDialog />
+      <EditTrainingBlockDialog
+        trainingBlockId={trainingBlockId}
+        isOpen={isOpen}
+        setIsOpen={setIsOpen}
+        register={register}
+        control={control}
+        isSubmitting={isSubmitting}
+        isSaving={isSaving}
+        setIsSaving={setIsSaving}
+        isValidating={isValidating}
+        setError={setError}
+        errors={errors}
+        handleClose={handleClose}
+        handleSubmit={handleSubmit}
+        trainingBlocks={trainingBlocks}
+      />
     </>
   );
 }

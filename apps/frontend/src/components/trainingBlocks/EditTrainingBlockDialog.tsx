@@ -7,54 +7,60 @@ import {
   Text,
   TextField,
 } from "@radix-ui/themes";
-import { useForm, Controller, type SubmitHandler } from "react-hook-form";
-import { TrainingBlockSchema } from "../../utils/schemas.ts";
+import {
+  type Control,
+  Controller,
+  type FormState,
+  type SubmitHandler,
+  type UseFormHandleSubmit,
+  type UseFormRegister,
+  type UseFormSetError,
+} from "react-hook-form";
+import { DAYS } from "../../utils/constants.ts";
 import { z } from "zod";
-import { PlusIcon } from "lucide-react";
-import { useState } from "react";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { addDoc, collection } from "firebase/firestore";
-import { clientFirestore } from "../../utils/firebase.ts";
-import type { TrainingBlock, User } from "../../utils/types.ts";
-import { DAYS, DEFAULT_TRAINING_BLOCK } from "../../utils/constants.ts";
+import { TrainingBlockSchema } from "../../utils/schemas.ts";
+import { useUser } from "../../hooks/useUser.ts";
 import { parseTime } from "../../utils/helpers.ts";
+import { doc, updateDoc } from "firebase/firestore";
+import { clientFirestore } from "../../utils/firebase.ts";
+import type { TrainingBlock } from "../../utils/types.ts";
 
-type AddTrainingBlockDialogProps = {
-  user: User | null;
+type EditPlayerDialogProps = {
+  trainingBlockId: string;
+  isOpen: boolean;
+  setIsOpen: (isOpen: boolean) => void;
+  register: UseFormRegister<z.infer<typeof TrainingBlockSchema>>;
+  control: Control<z.infer<typeof TrainingBlockSchema>>;
+  isSubmitting: boolean;
+  isSaving: boolean;
+  setIsSaving: (isSaving: boolean) => void;
+  isValidating: boolean;
+  setError: UseFormSetError<z.infer<typeof TrainingBlockSchema>>;
+  errors: FormState<z.infer<typeof TrainingBlockSchema>>["errors"];
+  handleClose: () => void;
+  handleSubmit: UseFormHandleSubmit<z.infer<typeof TrainingBlockSchema>>;
   trainingBlocks: TrainingBlock[];
 };
 
-export default function AddTrainingBlockDialog({
-  user,
+export default function EditTrainingBlockDialog({
+  trainingBlockId,
+  isOpen,
+  setIsOpen,
+  register,
+  control,
+  isSubmitting,
+  isSaving,
+  setIsSaving,
+  isValidating,
+  setError,
+  errors,
+  handleClose,
+  handleSubmit,
   trainingBlocks,
-}: AddTrainingBlockDialogProps) {
-  const [isOpen, setIsOpen] = useState(false);
-  const [isAdding, setIsAdding] = useState(false);
+}: EditPlayerDialogProps) {
+  const { user } = useUser();
 
-  const {
-    register,
-    handleSubmit,
-    reset,
-    control,
-    setError,
-    clearErrors,
-    formState: { isSubmitting, isValidating, errors },
-  } = useForm<z.infer<typeof TrainingBlockSchema>>({
-    defaultValues: DEFAULT_TRAINING_BLOCK,
-    resolver: zodResolver(TrainingBlockSchema),
-    mode: "onSubmit",
-    reValidateMode: "onSubmit",
-  });
-
-  const handleOpen = () => {
-    reset();
-    setIsOpen(true);
-  };
-
-  const handleClose = () => {
-    clearErrors();
-    setIsOpen(false);
-  };
+  const isFormDisabled = isSubmitting || isValidating || isSaving;
 
   const onSubmit: SubmitHandler<z.infer<typeof TrainingBlockSchema>> = async (
     data,
@@ -74,6 +80,7 @@ export default function AddTrainingBlockDialog({
 
     const hasOverlaps = filteredTrainingBlocks.some((current, index) => {
       if (index === 0) return false;
+      if (current.id === trainingBlockId) return false;
       return parseTime(data.start) <= parseTime(current.end);
     });
 
@@ -86,42 +93,34 @@ export default function AddTrainingBlockDialog({
       return;
     }
 
-    setIsAdding(true);
+    setIsSaving(true);
 
     try {
-      await addDoc(
-        collection(clientFirestore, `users/${user.uid}/trainingBlocks`),
-        {
-          ...data,
-          assignedPlayers: [],
-        },
+      await updateDoc(
+        doc(
+          clientFirestore,
+          `users/${user.uid}/trainingBlocks/${trainingBlockId}`,
+        ),
+        data,
       );
       setIsOpen(false);
     } catch (error) {
-      console.error("Failed to add training block:", error);
+      console.error("Failed to edit training block:", error);
       setError("day", {
         type: "manual",
         message: "An unexpected error occurred",
       });
     } finally {
-      setIsAdding(false);
+      setIsSaving(false);
     }
   };
 
-  const isFormDisabled = isSubmitting || isValidating || isAdding;
-
   return (
     <Dialog.Root open={isOpen} onOpenChange={setIsOpen}>
-      <Dialog.Trigger>
-        <Button onClick={handleOpen}>
-          <PlusIcon size={15} />
-          Add Training Block
-        </Button>
-      </Dialog.Trigger>
       <Dialog.Content width="350px">
-        <Dialog.Title>Add Training Block</Dialog.Title>
+        <Dialog.Title>Edit Training Block</Dialog.Title>
         <Dialog.Description mb="3">
-          Insert training block information
+          Modify training block information
         </Dialog.Description>
         <form
           onSubmit={(e) => {
@@ -199,7 +198,7 @@ export default function AddTrainingBlockDialog({
           </Box>
           <Flex direction="row-reverse" gap="2">
             <Button type="submit" disabled={isFormDisabled}>
-              {isAdding ? "Adding..." : "Add Training Block"}
+              {isSaving ? "Saving..." : "Save Changes"}
             </Button>
             <Button
               variant="soft"

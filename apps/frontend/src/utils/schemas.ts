@@ -130,20 +130,30 @@ export const PlayerSchema = z.object({
   availabilities: z.array(AvailabilitySchema),
 });
 
-export const TrainingBlockSchema = z.object({
-  day: z.enum([
-    "Monday",
-    "Tuesday",
-    "Wednesday",
-    "Thursday",
-    "Friday",
-    "Saturday",
-    "Sunday",
-  ]),
-  start: z.string().regex(/^(1[0-2]|0?[1-9]):([0-5][0-9])([AP]M)$/, {
-    message: "Start time must be in format '9:30AM' or '12:45PM'.",
-  }),
-  end: z.string().regex(/^(1[0-2]|0?[1-9]):([0-5][0-9])([AP]M)$/, {
-    message: "End time must be in format '9:30AM' or '12:45PM'.",
-  }),
-});
+export const TrainingBlockSchema = z
+  .object({
+    day: z.enum([
+      "Monday",
+      "Tuesday",
+      "Wednesday",
+      "Thursday",
+      "Friday",
+      "Saturday",
+      "Sunday",
+    ]),
+    start: z.string().regex(/^(1[0-2]|0?[1-9]):([0-5][0-9])([AP]M)$/, {
+      message: "Start time must be in format '9:30AM' or '12:45PM'.",
+    }),
+    end: z.string().regex(/^(1[0-2]|0?[1-9]):([0-5][0-9])([AP]M)$/, {
+      message: "End time must be in format '9:30AM' or '12:45PM'.",
+    }),
+  })
+  .refine(
+    (data) => {
+      return parseTime(data.end) > parseTime(data.start);
+    },
+    {
+      message: "End time must be after start time.",
+      path: ["end"],
+    },
+  );

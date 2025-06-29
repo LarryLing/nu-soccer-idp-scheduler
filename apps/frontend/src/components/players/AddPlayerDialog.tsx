@@ -23,7 +23,7 @@ import { clientFirestore } from "../../utils/firebase.ts";
 import type { Availability, Player, User } from "../../utils/types.ts";
 import {
   DAYS,
-  DEFAULT_VALUES,
+  DEFAULT_PLAYER,
   POSITION_OPTIONS,
 } from "../../utils/constants.ts";
 import { AvailabilityInputBox } from "./AvailabilityInputBox.tsx";
@@ -51,7 +51,7 @@ export default function AddPlayerDialog({
     formState: { isSubmitting, isValidating, errors },
   } = useForm<z.infer<typeof PlayerSchema>>({
     resolver: zodResolver(PlayerSchema),
-    defaultValues: DEFAULT_VALUES,
+    defaultValues: DEFAULT_PLAYER,
     mode: "onSubmit",
     reValidateMode: "onSubmit",
   });
@@ -62,7 +62,7 @@ export default function AddPlayerDialog({
   });
 
   const handleOpen = () => {
-    reset(DEFAULT_VALUES);
+    reset();
     setIsOpen(true);
   };
 

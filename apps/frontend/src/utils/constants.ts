@@ -1,12 +1,18 @@
 import { z } from "zod";
-import { PlayerSchema } from "./schemas.ts";
+import { PlayerSchema, TrainingBlockSchema } from "./schemas.ts";
 
-export const DEFAULT_VALUES: z.infer<typeof PlayerSchema> = {
+export const DEFAULT_PLAYER: z.infer<typeof PlayerSchema> = {
   name: "",
   number: 0,
   position: "Goalkeeper",
   availabilities: [],
 } as const;
+
+export const DEFAULT_TRAINING_BLOCK: z.infer<typeof TrainingBlockSchema> = {
+  day: "Monday",
+  start: "8:00AM",
+  end: "9:00AM",
+};
 
 export const POSITION_OPTIONS = [
   "Goalkeeper",
