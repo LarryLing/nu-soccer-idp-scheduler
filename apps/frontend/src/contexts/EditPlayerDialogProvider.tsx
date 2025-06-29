@@ -24,7 +24,7 @@ export function EditPlayerDialogProvider({ children }: PropsWithChildren) {
   } = useForm<z.infer<typeof PlayerSchema>>({
     resolver: zodResolver(PlayerSchema),
     defaultValues: DEFAULT_VALUES,
-    mode: 'onSubmit',
+    mode: "onSubmit",
     reValidateMode: "onSubmit",
   });
 

@@ -26,7 +26,7 @@ export default function CreateAnAccountCard() {
     formState: { isSubmitting, isValidating, errors },
   } = useForm<z.infer<typeof CreateAnAccountSchema>>({
     resolver: zodResolver(CreateAnAccountSchema),
-    mode: 'onSubmit',
+    mode: "onSubmit",
     reValidateMode: "onSubmit",
   });
 

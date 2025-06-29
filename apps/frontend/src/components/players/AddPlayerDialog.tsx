@@ -52,7 +52,7 @@ export default function AddPlayerDialog({
   } = useForm<z.infer<typeof PlayerSchema>>({
     resolver: zodResolver(PlayerSchema),
     defaultValues: DEFAULT_VALUES,
-    mode: 'onSubmit',
+    mode: "onSubmit",
     reValidateMode: "onSubmit",
   });
 

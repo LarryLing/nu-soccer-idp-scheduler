@@ -27,7 +27,7 @@ export default function SignIn() {
     formState: { isSubmitting, isValidating, errors },
   } = useForm<z.infer<typeof SignInFormSchema>>({
     resolver: zodResolver(SignInFormSchema),
-    mode: 'onSubmit',
+    mode: "onSubmit",
     reValidateMode: "onSubmit",
   });
 
