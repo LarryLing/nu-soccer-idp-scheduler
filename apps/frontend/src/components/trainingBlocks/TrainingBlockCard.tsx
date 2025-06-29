@@ -9,7 +9,7 @@ import {
   Text,
 } from "@radix-ui/themes";
 import { Calendar, Clock, PencilIcon, TrashIcon } from "lucide-react";
-import { useEffect, useState } from "react";
+import { memo, useEffect, useState } from "react";
 import {
   collection,
   documentId,
@@ -123,3 +123,18 @@ export default function TrainingBlockCard({
     </Card>
   );
 }
+
+export const MemoizedTrainingBlockCard = memo(
+  TrainingBlockCard,
+  (prevProps: TrainingBlockCardProps, nextProps: TrainingBlockCardProps) => {
+    return (
+      prevProps.trainingBlock.id === nextProps.trainingBlock.id &&
+      prevProps.trainingBlock.day === nextProps.trainingBlock.day &&
+      prevProps.trainingBlock.start === nextProps.trainingBlock.start &&
+      prevProps.trainingBlock.end === nextProps.trainingBlock.end &&
+      JSON.stringify(prevProps.trainingBlock.assignedPlayers) ===
+        JSON.stringify(nextProps.trainingBlock.assignedPlayers) &&
+      prevProps.handleOpen === nextProps.handleOpen
+    );
+  },
+);

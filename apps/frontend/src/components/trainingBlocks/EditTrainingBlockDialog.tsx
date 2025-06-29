@@ -25,7 +25,7 @@ import { doc, updateDoc } from "firebase/firestore";
 import { clientFirestore } from "../../utils/firebase.ts";
 import type { TrainingBlock } from "../../utils/types.ts";
 
-type EditPlayerDialogProps = {
+type EditTrainingBlockDialogProps = {
   trainingBlockId: string;
   isOpen: boolean;
   setIsOpen: (isOpen: boolean) => void;
@@ -57,7 +57,7 @@ export default function EditTrainingBlockDialog({
   handleClose,
   handleSubmit,
   trainingBlocks,
-}: EditPlayerDialogProps) {
+}: EditTrainingBlockDialogProps) {
   const { user } = useUser();
 
   const isFormDisabled = isSubmitting || isValidating || isSaving;

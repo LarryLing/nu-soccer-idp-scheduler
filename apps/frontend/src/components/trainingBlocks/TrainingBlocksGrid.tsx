@@ -1,5 +1,5 @@
 import type { TrainingBlock } from "../../utils/types.ts";
-import TrainingBlockCard from "./TrainingBlockCard.tsx";
+import { MemoizedTrainingBlockCard } from "./TrainingBlockCard.tsx";
 import { Grid } from "@radix-ui/themes";
 import { useEditTrainingBlockDialog } from "../../hooks/useEditTrainingBlockDialog.tsx";
 import EditTrainingBlockDialog from "./EditTrainingBlockDialog.tsx";
@@ -38,7 +38,7 @@ export default function TrainingBlocksGrid({
         }}
       >
         {trainingBlocks.map((trainingBlock) => (
-          <TrainingBlockCard
+          <MemoizedTrainingBlockCard
             key={trainingBlock.id}
             trainingBlock={trainingBlock}
             handleOpen={handleOpen}
