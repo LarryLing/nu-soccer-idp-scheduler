@@ -36,7 +36,11 @@ export default function TrainingBlockCard({
 
   useEffect(() => {
     const fetchAssignedPlayers = async () => {
-      if (!user || !trainingBlock.assignedPlayers || trainingBlock.assignedPlayers.length === 0) {
+      if (
+        !user ||
+        !trainingBlock.assignedPlayers ||
+        trainingBlock.assignedPlayers.length === 0
+      ) {
         return;
       }
 
@@ -63,14 +67,12 @@ export default function TrainingBlockCard({
   }, [trainingBlock, user]);
 
   return (
-    <Card>
-      <Box p="2" mb="2">
+    <Card size="2">
+      <Box mb="2">
         <Flex justify="between" align="center" mb="2">
           <Flex align="center" gap="1">
-            <Calendar size={15}/>
-            <Heading size="3">
-              {trainingBlock.day}
-            </Heading>
+            <Calendar size={15} />
+            <Heading size="3">{trainingBlock.day}</Heading>
           </Flex>
           <Flex align="center" gap="4">
             <IconButton
@@ -92,7 +94,7 @@ export default function TrainingBlockCard({
               {trainingBlock.start} - {trainingBlock.end}
             </Text>
           </Flex>
-          <Badge>{trainingBlock.assignedPlayers.length} players assigned</Badge>
+          <Badge>{trainingBlock.assignedPlayers.length} players</Badge>
         </Flex>
       </Box>
       <Flex
@@ -109,7 +111,9 @@ export default function TrainingBlockCard({
         }}
       >
         {assignedPlayers.length === 0 ? (
-          <Text size="2" color="gray">Drop players here to assign them</Text>
+          <Text size="2" color="gray">
+            Drop players here to assign them
+          </Text>
         ) : (
           assignedPlayers.map((player) => (
             <PlayerCard key={player.id} {...player} />

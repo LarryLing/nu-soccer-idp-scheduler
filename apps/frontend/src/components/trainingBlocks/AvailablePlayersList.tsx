@@ -8,14 +8,14 @@ type AvailablePlayersListProps = {
 
 export function AvailablePlayersList({ players }: AvailablePlayersListProps) {
   return (
-    <Card>
+    <Card size="2">
       <Flex justify="between" align="center" mb="3">
         <Heading>Available Players</Heading>
         <Badge>{players.length}</Badge>
       </Flex>
-      <Flex direction="column" gap="2">
+      <Flex direction="column" gap="3" maxHeight="600px" overflowY="scroll">
         {players.map((player) => (
-          <PlayerCard {...player} />
+          <PlayerCard key={player.id} {...player} />
         ))}
       </Flex>
     </Card>

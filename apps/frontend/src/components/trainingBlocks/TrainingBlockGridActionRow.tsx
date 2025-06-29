@@ -30,7 +30,7 @@ export default function TrainingBlocksGridActionRow({
       const link = document.createElement("a");
 
       link.href = jsonURL;
-      link.download = `players_${new Date().toISOString().split("T")[0]}.json`;
+      link.download = `training_blocks_${new Date().toISOString().split("T")[0]}.json`;
       link.click();
 
       setTimeout(() => URL.revokeObjectURL(jsonURL), 100);
@@ -81,7 +81,7 @@ export default function TrainingBlocksGridActionRow({
       const parsedTrainingBlocks = JSON.parse(text);
 
       if (!validateTrainingBlockData(parsedTrainingBlocks)) {
-        throw new Error("Invalid player data format");
+        throw new Error("Invalid training block data format");
       }
 
       const batch = writeBatch(clientFirestore);
@@ -158,9 +158,7 @@ export default function TrainingBlocksGridActionRow({
           <UploadIcon size={15} />
           {isImporting ? "Importing..." : "Import JSON"}
         </Button>
-        <Button
-          variant="outline"
-        >
+        <Button variant="outline">
           <Shuffle size={15} />
           Auto Assign
         </Button>

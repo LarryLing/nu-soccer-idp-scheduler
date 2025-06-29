@@ -88,19 +88,23 @@ export default function TrainingBlocks() {
         </Text>
       </Section>
       <Section p="0">
-        <Flex gap="4">
+        <Flex
+          direction={{
+            initial: "column",
+            sm: "row",
+          }}
+          gap="4"
+        >
           <Box
-            style={{
-              flexBasis: "25%",
+            flexBasis="25%"
+            minWidth={{
+              initial: "256px",
+              xs: "275px",
             }}
           >
             <AvailablePlayersList players={availablePlayers} />
           </Box>
-          <Box
-            style={{
-              flexBasis: "75%",
-            }}
-          >
+          <Box flexBasis="75%">
             <TrainingBlocksGridActionRow trainingBlocks={trainingBlocks} />
             <TrainingBlocksGrid trainingBlocks={trainingBlocks} />
           </Box>

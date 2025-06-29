@@ -45,8 +45,12 @@ export default function PlayerCard({
         {viewAvailability ? "Hide Availabilities" : "Show Availabilities"}
       </Button>
       {viewAvailability &&
-        availabilities.map((availability) => (
-          <Flex justify="between" align="center">
+        availabilities.map((availability, index) => (
+          <Flex
+            key={`${availability.day}.${availability.start}.${availability.end}.${index}`}
+            justify="between"
+            align="center"
+          >
             <Text size="1" weight="bold">
               {availability.day}
             </Text>

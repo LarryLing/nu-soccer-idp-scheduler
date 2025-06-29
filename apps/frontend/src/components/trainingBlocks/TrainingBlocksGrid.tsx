@@ -14,7 +14,13 @@ export default function TrainingBlocksGrid({
 
   return (
     <>
-      <Grid columns="3" gap="4" width="100%">
+      <Grid
+        columns="3"
+        gap="4"
+        style={{
+          gridTemplateColumns: "repeat(auto-fit, minmax(256px, 1fr))",
+        }}
+      >
         {trainingBlocks.map((trainingBlock) => (
           <TrainingBlockCard
             key={trainingBlock.id}
