@@ -8,7 +8,6 @@
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/apps/frontend/src/components/trainingBlocks/TrainingBlockCard.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/components/trainingBlocks/TrainingBlockCard.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/apps/frontend/src/components/trainingBlocks/TrainingBlocksGrid.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/components/trainingBlocks/TrainingBlocksGrid.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/src/hooks/useEditTrainingBlockDialog.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/hooks/useEditTrainingBlockDialog.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -125,7 +124,7 @@
       <workItem from="1750452312080" duration="26836000" />
       <workItem from="1750814721487" duration="8388000" />
       <workItem from="1751065335496" duration="11963000" />
-      <workItem from="1751168320227" duration="18385000" />
+      <workItem from="1751168320227" duration="19812000" />
     </task>
     <servers />
   </component>

@@ -11,7 +11,7 @@ import {
 import { Calendar, Clock, PencilIcon, TrashIcon } from "lucide-react";
 import { memo, useEffect, useState } from "react";
 import {
-  collection,
+  collection, deleteDoc, doc,
   documentId,
   getDocs,
   query,
@@ -66,6 +66,20 @@ export default function TrainingBlockCard({
     fetchAssignedPlayers();
   }, [trainingBlock, user]);
 
+  const handleRemoveTrainingBlock = async () => {
+    if (!user) {
+      throw new Error("User not authenticated");
+    }
+
+    try {
+      await deleteDoc(
+        doc(clientFirestore, `users/${user.uid!}/trainingBlocks/${trainingBlock.id}`),
+      );
+    } catch (error) {
+      console.error("Failed to delete training block:", error);
+    }
+  };
+
   return (
     <Card size="2">
       <Box mb="2">
@@ -82,7 +96,7 @@ export default function TrainingBlockCard({
             >
               <PencilIcon size={15} />
             </IconButton>
-            <IconButton color="red" variant="ghost">
+            <IconButton color="red" variant="ghost" onClick={handleRemoveTrainingBlock}>
               <TrashIcon size={15} />
             </IconButton>
           </Flex>

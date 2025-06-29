@@ -34,7 +34,7 @@ export default function TrainingBlocksGrid({
         columns="3"
         gap="4"
         style={{
-          gridTemplateColumns: "repeat(auto-fit, minmax(256px, 1fr))",
+          gridTemplateColumns: "repeat(auto-fill, minmax(max(256px, calc((100% - 32px) / 3)), 1fr))",
         }}
       >
         {trainingBlocks.map((trainingBlock) => (
