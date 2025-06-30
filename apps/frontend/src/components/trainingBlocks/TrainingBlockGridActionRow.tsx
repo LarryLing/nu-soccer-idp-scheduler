@@ -1,4 +1,4 @@
-import { Button, Flex } from "@radix-ui/themes";
+import { Box, Button, Flex, Select } from "@radix-ui/themes";
 import { DownloadIcon, Shuffle, UploadIcon } from "lucide-react";
 import type { TrainingBlock } from "../../utils/types.ts";
 import { type ChangeEvent, useRef, useState } from "react";
@@ -6,13 +6,18 @@ import { doc, writeBatch } from "firebase/firestore";
 import { clientFirestore } from "../../utils/firebase.ts";
 import { useUser } from "../../hooks/useUser.ts";
 import AddTrainingBlockDialog from "./AddTrainingBlockDialog.tsx";
+import { DAYS } from "../../utils/constants.ts";
 
 type TrainingBlocksGridActionRowProps = {
   trainingBlocks: TrainingBlock[];
+  dayFilter: string;
+  setDayFilter: (dayFilter: string) => void;
 };
 
 export default function TrainingBlocksGridActionRow({
   trainingBlocks,
+  dayFilter,
+  setDayFilter,
 }: TrainingBlocksGridActionRowProps) {
   const { user } = useUser();
 
@@ -165,6 +170,19 @@ export default function TrainingBlocksGridActionRow({
           Auto Assign
         </Button>
       </Flex>
+      <Box width="125px">
+        <Select.Root value={dayFilter} onValueChange={setDayFilter} >
+          <Select.Trigger style={{ width: "100%" }}/>
+          <Select.Content>
+            <Select.Item value="All">All Days</Select.Item>
+            {DAYS.map((position) => (
+              <Select.Item key={position} value={position}>
+                {position}
+              </Select.Item>
+            ))}
+          </Select.Content>
+        </Select.Root>
+      </Box>
     </Flex>
   );
 }

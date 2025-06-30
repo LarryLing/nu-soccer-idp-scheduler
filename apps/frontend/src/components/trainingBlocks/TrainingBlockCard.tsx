@@ -95,8 +95,8 @@ export default function TrainingBlockCard({
         align="center"
         gap="2"
         p="2"
-        minHeight="337px"
-        maxHeight="444px"
+        minHeight="350px"
+        maxHeight="450px"
         overflowY="scroll"
         style={{
           ...style,

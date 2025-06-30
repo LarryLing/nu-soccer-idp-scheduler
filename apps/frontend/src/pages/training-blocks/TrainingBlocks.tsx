@@ -41,6 +41,7 @@ export default function TrainingBlocks() {
   const [originalContainerId, setOriginalContainerId] = useState<string | null>(
     null,
   );
+  const [dayFilter, setDayFilter] = useState("All");
 
   const assignedPlayerIds = useMemo(() => {
     const ids = new Set<string>();
@@ -111,9 +112,11 @@ export default function TrainingBlocks() {
     ]);
   }, [availablePlayerIds, players, trainingBlocks]);
 
-  const trainingBlockContainers = containers.filter(
-    (container) => container.type !== "available",
-  );
+  const trainingBlockContainers = containers
+    .filter((container) => container.type !== "available")
+    .filter((container) => {
+      return dayFilter === "All" || container.day === dayFilter;
+    });
 
   const findContainerId = (id: string) => {
     if (containers.some((container) => container.id === id)) {
@@ -313,7 +316,11 @@ export default function TrainingBlocks() {
               />
             </Box>
             <Box flexBasis="75%">
-              <TrainingBlocksGridActionRow trainingBlocks={trainingBlocks} />
+              <TrainingBlocksGridActionRow
+                trainingBlocks={trainingBlocks}
+                dayFilter={dayFilter}
+                setDayFilter={setDayFilter}
+              />
               <TrainingBlocksGrid
                 players={players}
                 trainingBlockContainers={trainingBlockContainers}
