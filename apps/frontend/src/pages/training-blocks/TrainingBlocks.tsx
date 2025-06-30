@@ -38,6 +38,9 @@ export default function TrainingBlocks() {
   const [players, setPlayers] = useState<Player[]>([]);
   const [trainingBlocks, setTrainingBlocks] = useState<TrainingBlock[]>([]);
   const [containers, setContainers] = useState<ContainerItem[]>([]);
+  const [originalContainerId, setOriginalContainerId] = useState<string | null>(
+    null,
+  );
 
   const assignedPlayerIds = useMemo(() => {
     const ids = new Set<string>();
@@ -125,23 +128,19 @@ export default function TrainingBlocks() {
   };
 
   const handleDragStart = (event: DragStartEvent) => {
-    setActivePlayer(
-      players.find((player) => player.id === event.active.id) || null,
-    );
+    const player =
+      players.find((player) => player.id === event.active.id) || null;
+    setActivePlayer(player);
+
+    if (player) {
+      setOriginalContainerId(findContainerId(player.id) || null);
+    }
   };
 
   const handleDragOver = async (event: DragOverEvent) => {
-    if (!user) {
-      return;
-    }
-
-    if (!activePlayer) {
-      return;
-    }
-
     const { over } = event;
 
-    if (!over) {
+    if (!user || !activePlayer || !over) {
       return;
     }
 
@@ -193,30 +192,39 @@ export default function TrainingBlocks() {
   };
 
   const handleDragEnd = async (event: DragEndEvent) => {
-    const { active, over } = event;
+    const { over } = event;
 
-    if (!over || !user) {
+    if (!over || !user || !activePlayer) {
       setActivePlayer(null);
+      setOriginalContainerId(null);
       return;
     }
 
-    const activeContainerId = findContainerId(active.id.toString());
-    const overContainerId = findContainerId(over.id.toString());
+    const finalContainerId = findContainerId(over.id.toString());
 
-    if (!activeContainerId || !overContainerId) {
-      setActivePlayer(null);
-      return;
-    }
-
-    if (activeContainerId === overContainerId && active.id !== over.id) {
+    if (originalContainerId !== finalContainerId && finalContainerId) {
       try {
         const batch = writeBatch(clientFirestore);
 
-        containers.forEach((container) => {
-          if (container.type === "available") {
-            return;
-          }
+        const containersToUpdate = containers.filter(
+          (container) => container.type !== "available",
+        );
 
+        const changedContainers = containersToUpdate.filter((container) => {
+          const originalBlock = trainingBlocks.find(
+            (block) => block.id === container.id,
+          );
+          if (!originalBlock) return false;
+
+          const currentPlayers = container.assignedPlayers.sort();
+          const originalPlayers = originalBlock.assignedPlayers.sort();
+
+          return (
+            JSON.stringify(currentPlayers) !== JSON.stringify(originalPlayers)
+          );
+        });
+
+        changedContainers.forEach((container) => {
           const trainingBlockRef = doc(
             clientFirestore,
             `users/${user.uid}/trainingBlocks/${container.id}`,
@@ -227,11 +235,28 @@ export default function TrainingBlocks() {
           });
         });
 
-        await batch.commit();
+        if (changedContainers.length > 0) {
+          await batch.commit();
+        }
       } catch (error) {
         console.error("Failed to update assigned players:", error);
+
+        setContainers([
+          {
+            type: "available",
+            id: "availablePlayers",
+            assignedPlayers: availablePlayerIds,
+          },
+          ...trainingBlocks.map((block) => ({
+            ...block,
+            type: "training-block" as const,
+          })),
+        ]);
       }
     }
+
+    setActivePlayer(null);
+    setOriginalContainerId(null);
   };
 
   const mouseSensor = useSensor(MouseSensor, {
