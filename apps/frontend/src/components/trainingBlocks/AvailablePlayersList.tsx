@@ -4,11 +4,13 @@ import PlayerCard from "./PlayerCard.tsx";
 import { useDroppable } from "@dnd-kit/core";
 
 type AvailablePlayersListProps = {
-  availablePlayers: Player[];
+  availablePlayerIds: Player["id"][];
+  players: Player[];
 };
 
 export function AvailablePlayersList({
-  availablePlayers,
+  availablePlayerIds,
+  players,
 }: AvailablePlayersListProps) {
   const { setNodeRef, isOver } = useDroppable({
     id: "availablePlayers",
@@ -17,6 +19,10 @@ export function AvailablePlayersList({
   const style = {
     backgroundColor: isOver ? "var(--green-3)" : "",
   };
+
+  const availablePlayers = players.filter((player) =>
+    availablePlayerIds.includes(player.id),
+  );
 
   return (
     <Card size="2">

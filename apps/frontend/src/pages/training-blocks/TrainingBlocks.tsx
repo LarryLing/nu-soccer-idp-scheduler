@@ -6,7 +6,8 @@ import type {
   TrainingBlock,
 } from "../../utils/types.ts";
 import {
-  collection, doc,
+  collection,
+  doc,
   onSnapshot,
   orderBy,
   query,
@@ -23,7 +24,10 @@ import {
   type DragEndEvent,
   type DragOverEvent,
   type DragStartEvent,
-  DragOverlay, useSensor, MouseSensor, TouchSensor,
+  DragOverlay,
+  useSensor,
+  MouseSensor,
+  TouchSensor,
 } from "@dnd-kit/core";
 import PlayerCardOverlay from "../../components/trainingBlocks/PlayerCardOverlay.tsx";
 
@@ -38,13 +42,15 @@ export default function TrainingBlocks() {
   const assignedPlayerIds = useMemo(() => {
     const ids = new Set<string>();
     trainingBlocks.forEach((block) => {
-      block.assignedPlayers.forEach((player) => ids.add(player.id));
+      block.assignedPlayers.forEach((playerId) => ids.add(playerId));
     });
     return ids;
   }, [trainingBlocks]);
 
-  const availablePlayers = useMemo(() => {
-    return players.filter((player) => !assignedPlayerIds.has(player.id));
+  const availablePlayerIds = useMemo(() => {
+    return players
+      .filter((player) => !assignedPlayerIds.has(player.id))
+      .map((player) => player.id);
   }, [players, assignedPlayerIds]);
 
   useEffect(() => {
@@ -93,18 +99,14 @@ export default function TrainingBlocks() {
       {
         type: "available",
         id: "availablePlayers",
-        assignedPlayers: availablePlayers,
+        assignedPlayers: availablePlayerIds,
       },
       ...trainingBlocks.map((block) => ({
         ...block,
         type: "training-block" as const,
       })),
     ]);
-  }, [availablePlayers, players, trainingBlocks]);
-
-  const availablePlayersContainer = containers.find(
-    (container) => container.type === "available",
-  );
+  }, [availablePlayerIds, players, trainingBlocks]);
 
   const trainingBlockContainers = containers.filter(
     (container) => container.type !== "available",
@@ -117,7 +119,7 @@ export default function TrainingBlocks() {
 
     return containers.find((container) =>
       container.assignedPlayers.some(
-        (assignedPlayer) => assignedPlayer.id === id,
+        (assignedPlayerId) => assignedPlayerId === id,
       ),
     )?.id;
   };
@@ -164,7 +166,7 @@ export default function TrainingBlocks() {
       }
 
       const activeItem = activeContainer.assignedPlayers.find(
-        (assignedPlayer) => assignedPlayer.id === activePlayer.id,
+        (assignedPlayerId) => assignedPlayerId === activePlayer.id,
       );
 
       if (!activeItem) {
@@ -176,13 +178,13 @@ export default function TrainingBlocks() {
           return {
             ...container,
             assignedPlayers: container.assignedPlayers.filter(
-              (assignedPlayer) => assignedPlayer.id !== activePlayer.id,
+              (assignedPlayerId) => assignedPlayerId !== activePlayer.id,
             ),
           };
         } else if (container.id === overContainerId) {
           return {
             ...container,
-            assignedPlayers: [...container.assignedPlayers, activePlayer],
+            assignedPlayers: [...container.assignedPlayers, activePlayer.id],
           };
         }
         return container;
@@ -208,24 +210,11 @@ export default function TrainingBlocks() {
 
     if (activeContainerId === overContainerId && active.id !== over.id) {
       try {
-        const newContainers = containers.map((container) => {
-          if (container.id === activeContainerId) {
-            return {
-              ...container,
-              assignedPlayers: container.assignedPlayers.sort(
-                (a, b) => a.number - b.number,
-              ),
-            };
-          }
-
-          return container;
-        });
-
         const batch = writeBatch(clientFirestore);
 
-        newContainers.forEach((container) => {
+        containers.forEach((container) => {
           if (container.type === "available") {
-            return
+            return;
           }
 
           const trainingBlockRef = doc(
@@ -236,11 +225,9 @@ export default function TrainingBlocks() {
           batch.update(trainingBlockRef, {
             assignedPlayers: container.assignedPlayers,
           });
-        })
+        });
 
         await batch.commit();
-
-        setContainers(newContainers);
       } catch (error) {
         console.error("Failed to update assigned players:", error);
       }
@@ -261,7 +248,7 @@ export default function TrainingBlocks() {
       tolerance: 5,
       distance: 10,
     },
-  })
+  });
 
   return (
     <>
@@ -296,14 +283,14 @@ export default function TrainingBlocks() {
               }}
             >
               <AvailablePlayersList
-                availablePlayers={
-                  availablePlayersContainer?.assignedPlayers || []
-                }
+                players={players}
+                availablePlayerIds={availablePlayerIds}
               />
             </Box>
             <Box flexBasis="75%">
               <TrainingBlocksGridActionRow trainingBlocks={trainingBlocks} />
               <TrainingBlocksGrid
+                players={players}
                 trainingBlockContainers={trainingBlockContainers}
               />
             </Box>

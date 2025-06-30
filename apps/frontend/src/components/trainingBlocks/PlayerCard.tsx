@@ -59,9 +59,12 @@ export default function PlayerCard({
         onClick={() => setViewAvailability(!viewAvailability)}
         color="gray"
       >
-        {viewAvailability && !isDragging ? "Hide Availabilities" : "Show Availabilities"}
+        {viewAvailability && !isDragging
+          ? "Hide Availabilities"
+          : "Show Availabilities"}
       </Button>
-      {viewAvailability && !isDragging &&
+      {viewAvailability &&
+        !isDragging &&
         availabilities.map((availability, index) => (
           <Flex
             key={`${availability.day}.${availability.start}.${availability.end}.${index}`}

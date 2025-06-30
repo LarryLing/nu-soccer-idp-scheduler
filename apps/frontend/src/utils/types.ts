@@ -24,9 +24,9 @@ export type Player = {
 
 export type Availability = z.infer<typeof AvailabilitySchema>;
 
-export type Container = {
+type Container = {
   id: string;
-  assignedPlayers: Player[];
+  assignedPlayers: Player["id"][];
 };
 
 export type TrainingBlock = Container & z.infer<typeof TrainingBlockSchema>;

@@ -1,4 +1,8 @@
-import type { ContainerItem, TrainingBlock } from "../../utils/types.ts";
+import type {
+  ContainerItem,
+  Player,
+  TrainingBlock,
+} from "../../utils/types.ts";
 import TrainingBlockCard from "./TrainingBlockCard.tsx";
 import { Grid } from "@radix-ui/themes";
 import { useEditTrainingBlockDialog } from "../../hooks/useEditTrainingBlockDialog.tsx";
@@ -6,10 +10,12 @@ import EditTrainingBlockDialog from "./EditTrainingBlockDialog.tsx";
 
 type TrainingBlocksGridProps = {
   trainingBlockContainers: ContainerItem[];
+  players: Player[];
 };
 
 export default function TrainingBlocksGrid({
   trainingBlockContainers,
+  players,
 }: TrainingBlocksGridProps) {
   const {
     trainingBlockId,
@@ -43,13 +49,20 @@ export default function TrainingBlocksGrid({
             "repeat(auto-fill, minmax(max(256px, calc((100% - 32px) / 3)), 1fr))",
         }}
       >
-        {trainingBlocks.map((trainingBlock) => (
-          <TrainingBlockCard
-            key={trainingBlock.id}
-            trainingBlock={trainingBlock}
-            handleOpen={handleOpen}
-          />
-        ))}
+        {trainingBlocks.map((trainingBlock) => {
+          const assignedPlayers = players.filter((player) =>
+            trainingBlock.assignedPlayers.includes(player.id),
+          );
+
+          return (
+            <TrainingBlockCard
+              key={trainingBlock.id}
+              trainingBlock={trainingBlock}
+              handleOpen={handleOpen}
+              assignedPlayers={assignedPlayers}
+            />
+          );
+        })}
       </Grid>
       <EditTrainingBlockDialog
         trainingBlockId={trainingBlockId}

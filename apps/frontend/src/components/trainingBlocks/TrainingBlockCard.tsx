@@ -1,4 +1,4 @@
-import type { TrainingBlock } from "../../utils/types.ts";
+import type { Player, TrainingBlock } from "../../utils/types.ts";
 import {
   Badge,
   Box,
@@ -18,11 +18,13 @@ import { useDroppable } from "@dnd-kit/core";
 type TrainingBlockCardProps = {
   handleOpen: (trainingBlock: TrainingBlock) => void;
   trainingBlock: TrainingBlock;
+  assignedPlayers: Player[];
 };
 
 export default function TrainingBlockCard({
   handleOpen,
   trainingBlock,
+  assignedPlayers,
 }: TrainingBlockCardProps) {
   const { user } = useUser();
 
@@ -101,13 +103,13 @@ export default function TrainingBlockCard({
           borderRadius: "12px",
         }}
       >
-        {trainingBlock.assignedPlayers.length === 0 ? (
+        {assignedPlayers.length === 0 ? (
           <Text size="2" color="gray">
             Drop players here to assign them
           </Text>
         ) : (
-          trainingBlock.assignedPlayers.map((player) => (
-            <PlayerCard key={player.id} {...player} />
+          assignedPlayers.map((assignedPlayer) => (
+            <PlayerCard key={assignedPlayer.id} {...assignedPlayer} />
           ))
         )}
       </Flex>
