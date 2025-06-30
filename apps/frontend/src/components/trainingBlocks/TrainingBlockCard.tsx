@@ -1,4 +1,4 @@
-import type { Player, TrainingBlock } from "../../utils/types.ts";
+import type { TrainingBlock } from "../../utils/types.ts";
 import {
   Badge,
   Box,
@@ -9,17 +9,11 @@ import {
   Text,
 } from "@radix-ui/themes";
 import { Calendar, Clock, PencilIcon, TrashIcon } from "lucide-react";
-import { memo, useEffect, useState } from "react";
-import {
-  collection, deleteDoc, doc,
-  documentId,
-  getDocs,
-  query,
-  where,
-} from "firebase/firestore";
+import { deleteDoc, doc } from "firebase/firestore";
 import { clientFirestore } from "../../utils/firebase.ts";
 import { useUser } from "../../hooks/useUser.ts";
 import PlayerCard from "./PlayerCard.tsx";
+import { useDroppable } from "@dnd-kit/core";
 
 type TrainingBlockCardProps = {
   handleOpen: (trainingBlock: TrainingBlock) => void;
@@ -32,39 +26,13 @@ export default function TrainingBlockCard({
 }: TrainingBlockCardProps) {
   const { user } = useUser();
 
-  const [assignedPlayers, setAssignedPlayers] = useState<Player[]>([]);
+  const { isOver, setNodeRef } = useDroppable({
+    id: trainingBlock.id,
+  });
 
-  useEffect(() => {
-    const fetchAssignedPlayers = async () => {
-      if (
-        !user ||
-        !trainingBlock.assignedPlayers ||
-        trainingBlock.assignedPlayers.length === 0
-      ) {
-        return;
-      }
-
-      const assignedPlayersQuery = query(
-        collection(clientFirestore, `users/${user.uid}/trainingBlocks`),
-        where(documentId(), "in", trainingBlock.assignedPlayers),
-      );
-
-      try {
-        const assignedPlayersSnapshot = await getDocs(assignedPlayersQuery);
-
-        setAssignedPlayers(
-          assignedPlayersSnapshot.docs.map((doc) => ({
-            id: doc.id,
-            ...doc.data(),
-          })) as Player[],
-        );
-      } catch (error) {
-        console.error("Failed to fetch assigned players:", error);
-      }
-    };
-
-    fetchAssignedPlayers();
-  }, [trainingBlock, user]);
+  const style = {
+    backgroundColor: isOver ? "var(--violet-6)" : "",
+  };
 
   const handleRemoveTrainingBlock = async () => {
     if (!user) {
@@ -73,7 +41,10 @@ export default function TrainingBlockCard({
 
     try {
       await deleteDoc(
-        doc(clientFirestore, `users/${user.uid!}/trainingBlocks/${trainingBlock.id}`),
+        doc(
+          clientFirestore,
+          `users/${user.uid!}/trainingBlocks/${trainingBlock.id}`,
+        ),
       );
     } catch (error) {
       console.error("Failed to delete training block:", error);
@@ -96,7 +67,11 @@ export default function TrainingBlockCard({
             >
               <PencilIcon size={15} />
             </IconButton>
-            <IconButton color="red" variant="ghost" onClick={handleRemoveTrainingBlock}>
+            <IconButton
+              color="red"
+              variant="ghost"
+              onClick={handleRemoveTrainingBlock}
+            >
               <TrashIcon size={15} />
             </IconButton>
           </Flex>
@@ -112,6 +87,7 @@ export default function TrainingBlockCard({
         </Flex>
       </Box>
       <Flex
+        ref={setNodeRef}
         direction="column"
         justify="start"
         align="center"
@@ -120,16 +96,17 @@ export default function TrainingBlockCard({
         minHeight="250px"
         overflowY="scroll"
         style={{
+          ...style,
           border: "1px dashed var(--gray-6)",
           borderRadius: "12px",
         }}
       >
-        {assignedPlayers.length === 0 ? (
+        {trainingBlock.assignedPlayers.length === 0 ? (
           <Text size="2" color="gray">
             Drop players here to assign them
           </Text>
         ) : (
-          assignedPlayers.map((player) => (
+          trainingBlock.assignedPlayers.map((player) => (
             <PlayerCard key={player.id} {...player} />
           ))
         )}
@@ -137,18 +114,3 @@ export default function TrainingBlockCard({
     </Card>
   );
 }
-
-export const MemoizedTrainingBlockCard = memo(
-  TrainingBlockCard,
-  (prevProps: TrainingBlockCardProps, nextProps: TrainingBlockCardProps) => {
-    return (
-      prevProps.trainingBlock.id === nextProps.trainingBlock.id &&
-      prevProps.trainingBlock.day === nextProps.trainingBlock.day &&
-      prevProps.trainingBlock.start === nextProps.trainingBlock.start &&
-      prevProps.trainingBlock.end === nextProps.trainingBlock.end &&
-      JSON.stringify(prevProps.trainingBlock.assignedPlayers) ===
-        JSON.stringify(nextProps.trainingBlock.assignedPlayers) &&
-      prevProps.handleOpen === nextProps.handleOpen
-    );
-  },
-);

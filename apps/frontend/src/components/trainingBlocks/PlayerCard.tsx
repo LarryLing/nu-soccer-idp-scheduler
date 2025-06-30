@@ -1,8 +1,11 @@
 import type { Player } from "../../utils/types.ts";
 import { Button, Flex, Heading, Separator, Text } from "@radix-ui/themes";
 import { useState } from "react";
+import { useDraggable } from "@dnd-kit/core";
+import { CSS } from "@dnd-kit/utilities";
 
 export default function PlayerCard({
+  id,
   name,
   number,
   position,
@@ -10,17 +13,29 @@ export default function PlayerCard({
 }: Player) {
   const [viewAvailability, setViewAvailability] = useState(false);
 
+  const { attributes, listeners, setNodeRef, transform } = useDraggable({
+    id: id,
+  });
+
+  const style = {
+    transform: CSS.Translate.toString(transform),
+  };
+
   return (
     <Flex
+      ref={setNodeRef}
       direction="column"
       gap="2"
       p="2"
       width="100%"
       style={{
+        ...style,
         border: "1px solid var(--gray-6)",
         borderRadius: "12px",
         backgroundColor: "var(--color-panel)",
       }}
+      {...listeners}
+      {...attributes}
     >
       <Flex justify="between" align="center">
         <Flex direction="column" align="start">

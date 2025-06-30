@@ -1,19 +1,31 @@
 import { Box, Flex, Heading, Section, Text } from "@radix-ui/themes";
 import { useEffect, useState } from "react";
-import type { Player, TrainingBlock } from "../../utils/types.ts";
+import type {
+  ContainerItem,
+  Player,
+  TrainingBlock,
+} from "../../utils/types.ts";
 import { collection, onSnapshot, orderBy, query } from "firebase/firestore";
 import { clientFirestore } from "../../utils/firebase.ts";
 import { useUser } from "../../hooks/useUser.ts";
 import { AvailablePlayersList } from "../../components/trainingBlocks/AvailablePlayersList.tsx";
 import TrainingBlocksGridActionRow from "../../components/trainingBlocks/TrainingBlockGridActionRow.tsx";
 import TrainingBlocksGrid from "../../components/trainingBlocks/TrainingBlocksGrid.tsx";
+import {
+  closestCenter,
+  DndContext,
+  type DragEndEvent,
+  type DragOverEvent,
+  type DragStartEvent,
+} from "@dnd-kit/core";
 
 export default function TrainingBlocks() {
   const { user } = useUser();
 
+  const [activePlayer, setActivePlayer] = useState<Player | null>(null);
   const [players, setPlayers] = useState<Player[]>([]);
   const [trainingBlocks, setTrainingBlocks] = useState<TrainingBlock[]>([]);
-  const [availablePlayers, setAvailablePlayers] = useState<Player[]>([]);
+  const [containers, setContainers] = useState<ContainerItem[]>([]);
 
   useEffect(() => {
     if (!user) {
@@ -57,25 +69,155 @@ export default function TrainingBlocks() {
   }, [user]);
 
   useEffect(() => {
-    if (players.length === 0 && trainingBlocks.length === 0) {
+    if (players.length === 0 || trainingBlocks.length === 0) {
       return;
     }
 
+    const containerItems: ContainerItem[] = [];
+
     const assignedPlayerIds = new Set();
-    trainingBlocks.forEach((block) => {
-      if (block.assignedPlayers.length > 0) {
-        block.assignedPlayers.forEach((playerId) => {
-          assignedPlayerIds.add(playerId);
-        });
-      }
+    trainingBlocks.forEach((trainingBlock) => {
+      trainingBlock.assignedPlayers.forEach((assignedPlayer) =>
+        assignedPlayerIds.add(assignedPlayer.id),
+      );
     });
 
-    const available = players.filter(
+    const availablePlayers = players.filter(
       (player) => !assignedPlayerIds.has(player.id),
     );
 
-    setAvailablePlayers(available);
+    containerItems.push({
+      type: "available",
+      id: "availablePlayers",
+      assignedPlayers: availablePlayers,
+    });
+
+    trainingBlocks.forEach((trainingBlock) => {
+      containerItems.push({
+        ...trainingBlock,
+        type: "training-block",
+      });
+    });
+
+    setContainers(containerItems);
   }, [players, trainingBlocks]);
+
+  const handleDragStart = (event: DragStartEvent) => {
+    setActivePlayer(
+      players.find((player) => player.id === event.active.id) || null,
+    );
+  };
+
+  const findContainerId = (id: string) => {
+    if (containers.some((container) => container.id === id)) {
+      return id;
+    }
+
+    return containers.find((container) =>
+      container.assignedPlayers.some(
+        (assignedPlayer) => assignedPlayer.id === id,
+      ),
+    )?.id;
+  };
+
+  const handleDragOver = async (event: DragOverEvent) => {
+    if (!user) {
+      return;
+    }
+
+    if (!activePlayer) {
+      return;
+    }
+
+    const { over } = event;
+
+    if (!over) {
+      return;
+    }
+
+    const activeContainerId = findContainerId(activePlayer.id);
+    const overContainerId = findContainerId(over.id.toString());
+
+    if (
+      !activeContainerId ||
+      !overContainerId ||
+      activeContainerId === overContainerId
+    ) {
+      return;
+    }
+
+    setContainers((prev) => {
+      const activeContainer = prev.find(
+        (container) => container.id === activeContainerId,
+      );
+
+      if (!activeContainer) {
+        console.log("returning activeContainer check");
+        return prev;
+      }
+
+      const activeItem = activeContainer.assignedPlayers.find(
+        (assignedPlayer) => assignedPlayer.id === activePlayer.id,
+      );
+
+      if (!activeItem) {
+        console.log("returning activeItem check");
+
+        return prev;
+      }
+
+      return prev.map((container) => {
+        if (container.id === activeContainerId) {
+          return {
+            ...container,
+            assignedPlayers: container.assignedPlayers.filter(
+              (assignedPlayer) => assignedPlayer.id !== activePlayer.id,
+            ),
+          };
+        } else if (container.id === overContainerId) {
+          return {
+            ...container,
+            assignedPlayers: [...container.assignedPlayers, activePlayer],
+          };
+        }
+        return container;
+      });
+    });
+  };
+
+  const handleDragEnd = (event: DragEndEvent) => {
+    const { active, over } = event;
+
+    if (!over) {
+      setActivePlayer(null);
+      return;
+    }
+
+    const activeContainerId = findContainerId(active.id.toString());
+    const overContainerId = findContainerId(over.id.toString());
+
+    if (!activeContainerId || !overContainerId) {
+      setActivePlayer(null);
+      return;
+    }
+
+    if (activeContainerId === overContainerId && active.id !== over.id) {
+      setContainers((prev) => {
+        return prev.map((container) => {
+          if (container.id === activeContainerId) {
+            return {
+              ...container,
+              assignedPlayers: container.assignedPlayers.sort(
+                (a, b) => a.number - b.number,
+              ),
+            };
+          }
+
+          return container;
+        });
+      });
+    }
+  };
 
   return (
     <>
@@ -88,27 +230,43 @@ export default function TrainingBlocks() {
         </Text>
       </Section>
       <Section p="0">
-        <Flex
-          direction={{
-            initial: "column",
-            sm: "row",
-          }}
-          gap="4"
+        <DndContext
+          onDragStart={handleDragStart}
+          onDragOver={handleDragOver}
+          onDragEnd={handleDragEnd}
+          collisionDetection={closestCenter}
         >
-          <Box
-            flexBasis="25%"
-            minWidth={{
-              initial: "256px",
-              xs: "275px",
+          <Flex
+            direction={{
+              initial: "column",
+              sm: "row",
             }}
+            gap="4"
           >
-            <AvailablePlayersList players={availablePlayers} />
-          </Box>
-          <Box flexBasis="75%">
-            <TrainingBlocksGridActionRow trainingBlocks={trainingBlocks} />
-            <TrainingBlocksGrid trainingBlocks={trainingBlocks} />
-          </Box>
-        </Flex>
+            <Box
+              flexBasis="25%"
+              minWidth={{
+                initial: "256px",
+                xs: "275px",
+              }}
+            >
+              <AvailablePlayersList
+                availablePlayers={
+                  containers.find((container) => container.type === "available")
+                    ?.assignedPlayers || []
+                }
+              />
+            </Box>
+            <Box flexBasis="75%">
+              <TrainingBlocksGridActionRow trainingBlocks={trainingBlocks} />
+              <TrainingBlocksGrid
+                trainingBlockContainers={containers.filter(
+                  (container) => container.type !== "available",
+                )}
+              />
+            </Box>
+          </Flex>
+        </DndContext>
       </Section>
     </>
   );

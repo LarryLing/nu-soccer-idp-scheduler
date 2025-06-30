@@ -24,10 +24,16 @@ export type Player = {
 
 export type Availability = z.infer<typeof AvailabilitySchema>;
 
-export type TrainingBlock = z.infer<typeof TrainingBlockSchema> & {
+export type Container = {
   id: string;
   assignedPlayers: Player[];
 };
+
+export type TrainingBlock = Container & z.infer<typeof TrainingBlockSchema>;
+
+export type ContainerItem =
+  | (Container & { type: "available" })
+  | (TrainingBlock & { type: "training-block" });
 
 export type UserContextType = {
   user: User | null;

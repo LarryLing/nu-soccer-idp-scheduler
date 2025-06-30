@@ -44,12 +44,12 @@ export function EditPlayerDialogProvider({ children }: PropsWithChildren) {
     });
     setPlayerId(player.id);
     setIsOpen(true);
-  }
+  };
 
   const handleClose = () => {
     clearErrors();
     setIsOpen(false);
-  }
+  };
 
   const addAvailability = (day: Availability["day"]) => {
     const availabilitiesForDay = fields
@@ -79,7 +79,7 @@ export function EditPlayerDialogProvider({ children }: PropsWithChildren) {
       start: nextStartTime,
       end: nextEndTime,
     });
-  }
+  };
 
   const value = {
     playerId,
@@ -99,7 +99,7 @@ export function EditPlayerDialogProvider({ children }: PropsWithChildren) {
     handleClose,
     addAvailability,
     handleSubmit,
-  }
+  };
 
   return (
     <EditPlayerDialogContext.Provider value={value}>
