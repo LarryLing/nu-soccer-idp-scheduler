@@ -110,7 +110,13 @@ export default function TrainingBlockCard({
           </Text>
         ) : (
           assignedPlayers.map((assignedPlayer) => (
-            <PlayerCard key={assignedPlayer.id} {...assignedPlayer} />
+            <PlayerCard
+              key={assignedPlayer.id}
+              {...assignedPlayer}
+              trainingBlockId={trainingBlock.id}
+              assignedPlayers={trainingBlock.assignedPlayers}
+              assigned
+            />
           ))
         )}
       </Flex>

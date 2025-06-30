@@ -171,8 +171,8 @@ export default function TrainingBlocksGridActionRow({
         </Button>
       </Flex>
       <Box width="125px">
-        <Select.Root value={dayFilter} onValueChange={setDayFilter} >
-          <Select.Trigger style={{ width: "100%" }}/>
+        <Select.Root value={dayFilter} onValueChange={setDayFilter}>
+          <Select.Trigger style={{ width: "100%" }} />
           <Select.Content>
             <Select.Item value="All">All Days</Select.Item>
             {DAYS.map((position) => (
