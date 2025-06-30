@@ -19,16 +19,25 @@ export function AvailablePlayersList({
   };
 
   return (
-    <Card size="2" ref={setNodeRef} style={style}>
+    <Card size="2">
       <Flex justify="between" align="center" mb="3">
         <Heading>Available Players</Heading>
         <Badge>{availablePlayers.length}</Badge>
       </Flex>
       <Flex
+        ref={setNodeRef}
         direction="column"
+        justify="start"
+        align="center"
         gap="3"
+        p="2"
         maxHeight="600px"
         overflowY="scroll"
+        style={{
+          ...style,
+          border: "1px dashed var(--gray-6)",
+          borderRadius: "12px",
+        }}
       >
         {availablePlayers.map((availablePlayer) => (
           <PlayerCard key={availablePlayer.id} {...availablePlayer} />

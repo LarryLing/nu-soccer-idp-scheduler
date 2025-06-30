@@ -5,7 +5,13 @@ import type {
   Player,
   TrainingBlock,
 } from "../../utils/types.ts";
-import { collection, onSnapshot, orderBy, query } from "firebase/firestore";
+import {
+  collection, doc,
+  onSnapshot,
+  orderBy,
+  query,
+  writeBatch,
+} from "firebase/firestore";
 import { clientFirestore } from "../../utils/firebase.ts";
 import { useUser } from "../../hooks/useUser.ts";
 import { AvailablePlayersList } from "../../components/trainingBlocks/AvailablePlayersList.tsx";
@@ -16,7 +22,8 @@ import {
   DndContext,
   type DragEndEvent,
   type DragOverEvent,
-  type DragStartEvent, DragOverlay,
+  type DragStartEvent,
+  DragOverlay,
 } from "@dnd-kit/core";
 import PlayerCardOverlay from "../../components/trainingBlocks/PlayerCardOverlay.tsx";
 import { snapCenterToCursor } from "@dnd-kit/modifiers";
@@ -83,11 +90,7 @@ export default function TrainingBlocks() {
   }, [user]);
 
   useEffect(() => {
-    if (players.length === 0 || trainingBlocks.length === 0) {
-      return;
-    }
-
-    const containerItems: ContainerItem[] = [
+    setContainers([
       {
         type: "available",
         id: "availablePlayers",
@@ -97,9 +100,7 @@ export default function TrainingBlocks() {
         ...block,
         type: "training-block" as const,
       })),
-    ];
-
-    setContainers(containerItems);
+    ]);
   }, [availablePlayers, players, trainingBlocks]);
 
   const findContainerId = (id: string) => {
@@ -182,10 +183,10 @@ export default function TrainingBlocks() {
     });
   };
 
-  const handleDragEnd = (event: DragEndEvent) => {
+  const handleDragEnd = async (event: DragEndEvent) => {
     const { active, over } = event;
 
-    if (!over) {
+    if (!over || !user) {
       setActivePlayer(null);
       return;
     }
@@ -199,20 +200,39 @@ export default function TrainingBlocks() {
     }
 
     if (activeContainerId === overContainerId && active.id !== over.id) {
-      setContainers((prev) => {
-        return prev.map((container) => {
-          if (container.id === activeContainerId) {
-            return {
-              ...container,
-              assignedPlayers: container.assignedPlayers.sort(
-                (a, b) => a.number - b.number,
-              ),
-            };
-          }
+      const newContainers = containers.map((container) => {
+        if (container.id === activeContainerId) {
+          return {
+            ...container,
+            assignedPlayers: container.assignedPlayers.sort(
+              (a, b) => a.number - b.number,
+            ),
+          };
+        }
 
-          return container;
-        });
+        return container;
       });
+
+      setContainers(newContainers);
+
+      const batch = writeBatch(clientFirestore);
+
+      newContainers.forEach((container) => {
+        if (container.type === "available") {
+          return
+        }
+
+        const trainingBlockRef = doc(
+          clientFirestore,
+          `users/${user.uid}/trainingBlocks/${container.id}`,
+        );
+
+        batch.update(trainingBlockRef, {
+          assignedPlayers: container.assignedPlayers,
+        });
+      })
+
+      await batch.commit();
     }
   };
 
@@ -269,7 +289,7 @@ export default function TrainingBlocks() {
             </Box>
           </Flex>
           <DragOverlay modifiers={[snapCenterToCursor]}>
-            { activePlayer && <PlayerCardOverlay {...activePlayer} /> }
+            {activePlayer && <PlayerCardOverlay {...activePlayer} />}
           </DragOverlay>
         </DndContext>
       </Section>

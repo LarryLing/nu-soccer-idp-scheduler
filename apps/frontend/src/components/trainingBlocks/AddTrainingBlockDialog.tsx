@@ -72,8 +72,7 @@ export default function AddTrainingBlockDialog({
         return parseTime(a.start) - parseTime(b.start);
       });
 
-    const hasOverlaps = filteredTrainingBlocks.some((current, index) => {
-      if (index === 0) return false;
+    const hasOverlaps = filteredTrainingBlocks.some((current) => {
       return parseTime(data.start) <= parseTime(current.end);
     });
 
