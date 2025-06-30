@@ -1,5 +1,5 @@
 import { Box, Flex, Heading, Section, Text } from "@radix-ui/themes";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import type {
   ContainerItem,
   Player,
@@ -12,12 +12,14 @@ import { AvailablePlayersList } from "../../components/trainingBlocks/AvailableP
 import TrainingBlocksGridActionRow from "../../components/trainingBlocks/TrainingBlockGridActionRow.tsx";
 import TrainingBlocksGrid from "../../components/trainingBlocks/TrainingBlocksGrid.tsx";
 import {
-  closestCenter,
+  pointerWithin,
   DndContext,
   type DragEndEvent,
   type DragOverEvent,
-  type DragStartEvent,
+  type DragStartEvent, DragOverlay,
 } from "@dnd-kit/core";
+import PlayerCardOverlay from "../../components/trainingBlocks/PlayerCardOverlay.tsx";
+import { snapCenterToCursor } from "@dnd-kit/modifiers";
 
 export default function TrainingBlocks() {
   const { user } = useUser();
@@ -26,6 +28,18 @@ export default function TrainingBlocks() {
   const [players, setPlayers] = useState<Player[]>([]);
   const [trainingBlocks, setTrainingBlocks] = useState<TrainingBlock[]>([]);
   const [containers, setContainers] = useState<ContainerItem[]>([]);
+
+  const assignedPlayerIds = useMemo(() => {
+    const ids = new Set<string>();
+    trainingBlocks.forEach((block) => {
+      block.assignedPlayers.forEach((player) => ids.add(player.id));
+    });
+    return ids;
+  }, [trainingBlocks]);
+
+  const availablePlayers = useMemo(() => {
+    return players.filter((player) => !assignedPlayerIds.has(player.id));
+  }, [players, assignedPlayerIds]);
 
   useEffect(() => {
     if (!user) {
@@ -73,40 +87,20 @@ export default function TrainingBlocks() {
       return;
     }
 
-    const containerItems: ContainerItem[] = [];
-
-    const assignedPlayerIds = new Set();
-    trainingBlocks.forEach((trainingBlock) => {
-      trainingBlock.assignedPlayers.forEach((assignedPlayer) =>
-        assignedPlayerIds.add(assignedPlayer.id),
-      );
-    });
-
-    const availablePlayers = players.filter(
-      (player) => !assignedPlayerIds.has(player.id),
-    );
-
-    containerItems.push({
-      type: "available",
-      id: "availablePlayers",
-      assignedPlayers: availablePlayers,
-    });
-
-    trainingBlocks.forEach((trainingBlock) => {
-      containerItems.push({
-        ...trainingBlock,
-        type: "training-block",
-      });
-    });
+    const containerItems: ContainerItem[] = [
+      {
+        type: "available",
+        id: "availablePlayers",
+        assignedPlayers: availablePlayers,
+      },
+      ...trainingBlocks.map((block) => ({
+        ...block,
+        type: "training-block" as const,
+      })),
+    ];
 
     setContainers(containerItems);
-  }, [players, trainingBlocks]);
-
-  const handleDragStart = (event: DragStartEvent) => {
-    setActivePlayer(
-      players.find((player) => player.id === event.active.id) || null,
-    );
-  };
+  }, [availablePlayers, players, trainingBlocks]);
 
   const findContainerId = (id: string) => {
     if (containers.some((container) => container.id === id)) {
@@ -118,6 +112,12 @@ export default function TrainingBlocks() {
         (assignedPlayer) => assignedPlayer.id === id,
       ),
     )?.id;
+  };
+
+  const handleDragStart = (event: DragStartEvent) => {
+    setActivePlayer(
+      players.find((player) => player.id === event.active.id) || null,
+    );
   };
 
   const handleDragOver = async (event: DragOverEvent) => {
@@ -152,7 +152,6 @@ export default function TrainingBlocks() {
       );
 
       if (!activeContainer) {
-        console.log("returning activeContainer check");
         return prev;
       }
 
@@ -161,8 +160,6 @@ export default function TrainingBlocks() {
       );
 
       if (!activeItem) {
-        console.log("returning activeItem check");
-
         return prev;
       }
 
@@ -219,6 +216,14 @@ export default function TrainingBlocks() {
     }
   };
 
+  const availablePlayersContainer = containers.find(
+    (container) => container.type === "available",
+  );
+
+  const trainingBlockContainers = containers.filter(
+    (container) => container.type !== "available",
+  );
+
   return (
     <>
       <Section p="0">
@@ -234,7 +239,7 @@ export default function TrainingBlocks() {
           onDragStart={handleDragStart}
           onDragOver={handleDragOver}
           onDragEnd={handleDragEnd}
-          collisionDetection={closestCenter}
+          collisionDetection={pointerWithin}
         >
           <Flex
             direction={{
@@ -252,20 +257,20 @@ export default function TrainingBlocks() {
             >
               <AvailablePlayersList
                 availablePlayers={
-                  containers.find((container) => container.type === "available")
-                    ?.assignedPlayers || []
+                  availablePlayersContainer?.assignedPlayers || []
                 }
               />
             </Box>
             <Box flexBasis="75%">
               <TrainingBlocksGridActionRow trainingBlocks={trainingBlocks} />
               <TrainingBlocksGrid
-                trainingBlockContainers={containers.filter(
-                  (container) => container.type !== "available",
-                )}
+                trainingBlockContainers={trainingBlockContainers}
               />
             </Box>
           </Flex>
+          <DragOverlay modifiers={[snapCenterToCursor]}>
+            { activePlayer && <PlayerCardOverlay {...activePlayer} /> }
+          </DragOverlay>
         </DndContext>
       </Section>
     </>

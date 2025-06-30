@@ -10,18 +10,21 @@ type AvailablePlayersListProps = {
 export function AvailablePlayersList({
   availablePlayers,
 }: AvailablePlayersListProps) {
-  const { setNodeRef } = useDroppable({
+  const { setNodeRef, isOver } = useDroppable({
     id: "availablePlayers",
   });
 
+  const style = {
+    backgroundColor: isOver ? "var(--green-3)" : "",
+  };
+
   return (
-    <Card size="2">
+    <Card size="2" ref={setNodeRef} style={style}>
       <Flex justify="between" align="center" mb="3">
         <Heading>Available Players</Heading>
         <Badge>{availablePlayers.length}</Badge>
       </Flex>
       <Flex
-        ref={setNodeRef}
         direction="column"
         gap="3"
         maxHeight="600px"

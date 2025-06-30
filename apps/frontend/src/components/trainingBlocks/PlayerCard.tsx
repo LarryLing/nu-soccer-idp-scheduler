@@ -13,12 +13,13 @@ export default function PlayerCard({
 }: Player) {
   const [viewAvailability, setViewAvailability] = useState(false);
 
-  const { attributes, listeners, setNodeRef, transform } = useDraggable({
+  const { attributes, listeners, setNodeRef, transform, isDragging } = useDraggable({
     id: id,
   });
 
   const style = {
-    transform: CSS.Translate.toString(transform),
+    transform: isDragging ? undefined : CSS.Translate.toString(transform),
+    opacity: isDragging ? 0.5 : 1,
   };
 
   return (

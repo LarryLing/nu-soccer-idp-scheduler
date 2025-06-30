@@ -31,7 +31,7 @@ export default function TrainingBlockCard({
   });
 
   const style = {
-    backgroundColor: isOver ? "var(--violet-6)" : "",
+    backgroundColor: isOver ? "var(--green-3)" : "",
   };
 
   const handleRemoveTrainingBlock = async () => {
@@ -93,7 +93,7 @@ export default function TrainingBlockCard({
         align="center"
         gap="2"
         p="2"
-        minHeight="250px"
+        minHeight="300px"
         overflowY="scroll"
         style={{
           ...style,
