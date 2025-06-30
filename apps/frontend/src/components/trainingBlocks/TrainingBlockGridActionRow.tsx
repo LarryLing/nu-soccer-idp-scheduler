@@ -51,7 +51,8 @@ export default function TrainingBlocksGridActionRow({
         "id" in item &&
         "day" in item &&
         "start" in item &&
-        "end" in item,
+        "end" in item &&
+        "assignedPlayers" in item,
     );
   };
 
@@ -108,6 +109,7 @@ export default function TrainingBlocksGridActionRow({
               day: parsedTrainingBlock.day,
               start: parsedTrainingBlock.start,
               end: parsedTrainingBlock.end,
+              assignedPlayers: parsedTrainingBlock.assignedPlayers,
             },
           );
         }

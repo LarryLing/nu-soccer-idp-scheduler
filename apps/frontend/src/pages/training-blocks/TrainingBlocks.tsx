@@ -23,10 +23,9 @@ import {
   type DragEndEvent,
   type DragOverEvent,
   type DragStartEvent,
-  DragOverlay,
+  DragOverlay, useSensor, MouseSensor, TouchSensor,
 } from "@dnd-kit/core";
 import PlayerCardOverlay from "../../components/trainingBlocks/PlayerCardOverlay.tsx";
-import { snapCenterToCursor } from "@dnd-kit/modifiers";
 
 export default function TrainingBlocks() {
   const { user } = useUser();
@@ -102,6 +101,14 @@ export default function TrainingBlocks() {
       })),
     ]);
   }, [availablePlayers, players, trainingBlocks]);
+
+  const availablePlayersContainer = containers.find(
+    (container) => container.type === "available",
+  );
+
+  const trainingBlockContainers = containers.filter(
+    (container) => container.type !== "available",
+  );
 
   const findContainerId = (id: string) => {
     if (containers.some((container) => container.id === id)) {
@@ -200,49 +207,61 @@ export default function TrainingBlocks() {
     }
 
     if (activeContainerId === overContainerId && active.id !== over.id) {
-      const newContainers = containers.map((container) => {
-        if (container.id === activeContainerId) {
-          return {
-            ...container,
-            assignedPlayers: container.assignedPlayers.sort(
-              (a, b) => a.number - b.number,
-            ),
-          };
-        }
+      try {
+        const newContainers = containers.map((container) => {
+          if (container.id === activeContainerId) {
+            return {
+              ...container,
+              assignedPlayers: container.assignedPlayers.sort(
+                (a, b) => a.number - b.number,
+              ),
+            };
+          }
 
-        return container;
-      });
-
-      setContainers(newContainers);
-
-      const batch = writeBatch(clientFirestore);
-
-      newContainers.forEach((container) => {
-        if (container.type === "available") {
-          return
-        }
-
-        const trainingBlockRef = doc(
-          clientFirestore,
-          `users/${user.uid}/trainingBlocks/${container.id}`,
-        );
-
-        batch.update(trainingBlockRef, {
-          assignedPlayers: container.assignedPlayers,
+          return container;
         });
-      })
 
-      await batch.commit();
+        const batch = writeBatch(clientFirestore);
+
+        newContainers.forEach((container) => {
+          if (container.type === "available") {
+            return
+          }
+
+          const trainingBlockRef = doc(
+            clientFirestore,
+            `users/${user.uid}/trainingBlocks/${container.id}`,
+          );
+
+          batch.update(trainingBlockRef, {
+            assignedPlayers: container.assignedPlayers,
+          });
+        })
+
+        await batch.commit();
+
+        setContainers(newContainers);
+      } catch (error) {
+        console.error("Failed to update assigned players:", error);
+      }
     }
   };
 
-  const availablePlayersContainer = containers.find(
-    (container) => container.type === "available",
-  );
+  const mouseSensor = useSensor(MouseSensor, {
+    activationConstraint: {
+      delay: 175,
+      tolerance: 5,
+      distance: 10,
+    },
+  });
 
-  const trainingBlockContainers = containers.filter(
-    (container) => container.type !== "available",
-  );
+  const touchSensor = useSensor(TouchSensor, {
+    activationConstraint: {
+      delay: 175,
+      tolerance: 5,
+      distance: 10,
+    },
+  })
 
   return (
     <>
@@ -260,6 +279,7 @@ export default function TrainingBlocks() {
           onDragOver={handleDragOver}
           onDragEnd={handleDragEnd}
           collisionDetection={pointerWithin}
+          sensors={[mouseSensor, touchSensor]}
         >
           <Flex
             direction={{
@@ -288,7 +308,7 @@ export default function TrainingBlocks() {
               />
             </Box>
           </Flex>
-          <DragOverlay modifiers={[snapCenterToCursor]}>
+          <DragOverlay>
             {activePlayer && <PlayerCardOverlay {...activePlayer} />}
           </DragOverlay>
         </DndContext>
