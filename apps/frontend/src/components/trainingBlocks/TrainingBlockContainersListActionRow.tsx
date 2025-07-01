@@ -1,5 +1,5 @@
 import { Box, Button, Flex, Select } from "@radix-ui/themes";
-import { DownloadIcon, Shuffle, UploadIcon } from "lucide-react";
+import { DownloadIcon, Shuffle, TrashIcon, UploadIcon } from "lucide-react";
 import type { TrainingBlock } from "../../utils/types.ts";
 import { type ChangeEvent, useRef, useState } from "react";
 import { doc, writeBatch } from "firebase/firestore";
@@ -24,6 +24,10 @@ export default function TrainingBlocksContainersListActionRow({
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const [isImporting, setIsImporting] = useState(false);
+
+  const isPlayerAssigned = trainingBlocks.some(
+    (block) => block.assignedPlayers.length > 0,
+  );
 
   const exportJSON = () => {
     try {
@@ -135,6 +139,26 @@ export default function TrainingBlocksContainersListActionRow({
     fileInputRef.current?.click();
   };
 
+  const handleClearAssignments = async () => {
+    if (!user?.uid) {
+      console.error("User not authenticated");
+      return;
+    }
+
+    const batch = writeBatch(clientFirestore);
+
+    trainingBlocks.forEach((block) => {
+      batch.update(
+        doc(clientFirestore, `users/${user.uid}/trainingBlocks/${block.id}`),
+        {
+          assignedPlayers: [],
+        },
+      );
+    });
+
+    await batch.commit();
+  };
+
   return (
     <Flex
       direction={{ initial: "column", sm: "row" }}
@@ -169,6 +193,16 @@ export default function TrainingBlocksContainersListActionRow({
           <Shuffle size={15} />
           Auto Assign
         </Button>
+        {isPlayerAssigned && (
+          <Button
+            variant="outline"
+            color="red"
+            onClick={handleClearAssignments}
+          >
+            <TrashIcon size={15} />
+            Clear Assignments
+          </Button>
+        )}
       </Flex>
       <Box width="125px">
         <Select.Root value={dayFilter} onValueChange={setDayFilter}>
