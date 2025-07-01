@@ -8,17 +8,17 @@ import { useUser } from "../../hooks/useUser.ts";
 import AddTrainingBlockDialog from "./AddTrainingBlockDialog.tsx";
 import { DAYS } from "../../utils/constants.ts";
 
-type TrainingBlocksGridActionRowProps = {
+type TrainingBlocksContainersListActionRowProps = {
   trainingBlocks: TrainingBlock[];
   dayFilter: string;
   setDayFilter: (dayFilter: string) => void;
 };
 
-export default function TrainingBlocksGridActionRow({
+export default function TrainingBlocksContainersListActionRow({
   trainingBlocks,
   dayFilter,
   setDayFilter,
-}: TrainingBlocksGridActionRowProps) {
+}: TrainingBlocksContainersListActionRowProps) {
   const { user } = useUser();
 
   const fileInputRef = useRef<HTMLInputElement>(null);

@@ -1,14 +1,6 @@
 import type { Player, TrainingBlock } from "../../utils/types.ts";
-import {
-  Badge,
-  Box,
-  Card,
-  Flex,
-  Heading,
-  IconButton,
-  Text,
-} from "@radix-ui/themes";
-import { Calendar, Clock, PencilIcon, TrashIcon } from "lucide-react";
+import { Badge, Card, Flex, IconButton, Text } from "@radix-ui/themes";
+import { Clock, PencilIcon, TrashIcon, Users } from "lucide-react";
 import { deleteDoc, doc } from "firebase/firestore";
 import { clientFirestore } from "../../utils/firebase.ts";
 import { useUser } from "../../hooks/useUser.ts";
@@ -17,20 +9,20 @@ import { useDroppable } from "@dnd-kit/core";
 import { parseTime } from "../../utils/helpers.ts";
 import { ConflictHoverCard } from "./ConflictHoverCard.tsx";
 
-type TrainingBlockCardProps = {
+type TrainingBlockContainerProps = {
   handleOpen: (trainingBlock: TrainingBlock) => void;
   trainingBlock: TrainingBlock;
   assignedPlayers: Player[];
 };
 
-export default function TrainingBlockCard({
+export default function TrainingBlockContainer({
   handleOpen,
   trainingBlock,
   assignedPlayers,
-}: TrainingBlockCardProps) {
+}: TrainingBlockContainerProps) {
   const { user } = useUser();
 
-  const { setNodeRef } = useDroppable({
+  const { isOver, setNodeRef } = useDroppable({
     id: trainingBlock.id,
   });
 
@@ -67,54 +59,55 @@ export default function TrainingBlockCard({
     .map((assignedPlayer) => assignedPlayer.name);
 
   return (
-    <Card size="2">
-      <Box mb="2">
-        <Flex justify="between" align="center" mb="2">
-          <Flex align="center" gap="1">
-            <Calendar size={15} />
-            <Heading size="3">{trainingBlock.day}</Heading>
-          </Flex>
-          <Flex align="center" gap="4">
-            <IconButton
-              color="gray"
-              variant="ghost"
-              onClick={() => handleOpen(trainingBlock)}
-            >
-              <PencilIcon size={15} />
-            </IconButton>
-            <IconButton
-              color="red"
-              variant="ghost"
-              onClick={handleRemoveTrainingBlock}
-            >
-              <TrashIcon size={15} />
-            </IconButton>
-          </Flex>
-        </Flex>
-        <Flex justify="between" align="center">
+    <Card
+      size="2"
+      ref={setNodeRef}
+      style={{
+        borderColor: isOver ? "var(--purple-6)" : "var(--gray-6)",
+        backgroundColor: isOver ? "var(--purple-6)" : "var(--color-panel)",
+      }}
+    >
+      <Flex justify="between" align="center" mb="3">
+        <Flex align="center" gap="4">
           <Flex align="center" gap="1">
             <Clock size={15} />
-            <Text size="2" color="gray">
+            <Text size="2" color="gray" weight="bold">
               {trainingBlock.start} - {trainingBlock.end}
             </Text>
           </Flex>
-          <Flex align="center" gap="1">
-            {conflictPlayerNames.length > 0 && (
-              <ConflictHoverCard conflictPlayerNames={conflictPlayerNames} />
-            )}
-            <Badge>{trainingBlock.assignedPlayers.length} players</Badge>
-          </Flex>
+          <Badge size="2" color="gray">
+            <Users size={15} />
+            {trainingBlock.assignedPlayers.length} players
+          </Badge>
+          {conflictPlayerNames.length > 0 && (
+            <ConflictHoverCard conflictPlayerNames={conflictPlayerNames} />
+          )}
         </Flex>
-      </Box>
+        <Flex align="center" gap="4">
+          <IconButton
+            color="gray"
+            variant="ghost"
+            size="3"
+            onClick={() => handleOpen(trainingBlock)}
+          >
+            <PencilIcon size={15} />
+          </IconButton>
+          <IconButton
+            color="red"
+            variant="ghost"
+            size="3"
+            onClick={handleRemoveTrainingBlock}
+          >
+            <TrashIcon size={15} />
+          </IconButton>
+        </Flex>
+      </Flex>
       <Flex
-        ref={setNodeRef}
         direction="column"
         justify="start"
         align="center"
         gap="2"
         p="2"
-        minHeight="350px"
-        maxHeight="450px"
         overflowY="scroll"
         style={{
           border: "1px dashed var(--gray-6)",
@@ -122,7 +115,7 @@ export default function TrainingBlockCard({
         }}
       >
         {assignedPlayers.length === 0 ? (
-          <Text size="2" color="gray">
+          <Text size="1" color="gray">
             Drop players here to assign them
           </Text>
         ) : (

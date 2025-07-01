@@ -12,8 +12,9 @@ export function ConflictHoverCard({
   return (
     <HoverCard.Root>
       <HoverCard.Trigger>
-        <Badge color="yellow">
+        <Badge color="yellow" size="2">
           <CircleAlert size={15} />
+          {conflictPlayerNames.length} conflicts
         </Badge>
       </HoverCard.Trigger>
       <HoverCard.Content size="1">

@@ -16,8 +16,7 @@ import {
 import { clientFirestore } from "../../utils/firebase.ts";
 import { useUser } from "../../hooks/useUser.ts";
 import { AvailablePlayersList } from "../../components/trainingBlocks/AvailablePlayersList.tsx";
-import TrainingBlocksGridActionRow from "../../components/trainingBlocks/TrainingBlockGridActionRow.tsx";
-import TrainingBlocksGrid from "../../components/trainingBlocks/TrainingBlocksGrid.tsx";
+import TrainingBlocksContainersListActionRow from "../../components/trainingBlocks/TrainingBlockContainersListActionRow.tsx";
 import {
   pointerWithin,
   DndContext,
@@ -30,6 +29,7 @@ import {
   TouchSensor,
 } from "@dnd-kit/core";
 import PlayerCardOverlay from "../../components/trainingBlocks/PlayerCardOverlay.tsx";
+import TrainingBlockContainersList from "../../components/trainingBlocks/TrainingBlockContainersList.tsx";
 
 export default function TrainingBlocks() {
   const { user } = useUser();
@@ -317,12 +317,12 @@ export default function TrainingBlocks() {
               />
             </Box>
             <Box flexBasis="75%">
-              <TrainingBlocksGridActionRow
+              <TrainingBlocksContainersListActionRow
                 trainingBlocks={trainingBlocks}
                 dayFilter={dayFilter}
                 setDayFilter={setDayFilter}
               />
-              <TrainingBlocksGrid
+              <TrainingBlockContainersList
                 players={players}
                 trainingBlockContainers={trainingBlockContainers}
               />
