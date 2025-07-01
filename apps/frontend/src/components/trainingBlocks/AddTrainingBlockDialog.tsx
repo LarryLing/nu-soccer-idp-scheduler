@@ -73,7 +73,7 @@ export default function AddTrainingBlockDialog({
       });
 
     const hasOverlaps = filteredTrainingBlocks.some((current) => {
-      return parseTime(data.start) <= parseTime(current.end);
+      return parseTime(data.start) < parseTime(current.end);
     });
 
     if (hasOverlaps) {

@@ -2,6 +2,7 @@ import type { Player } from "../../utils/types.ts";
 import {
   Badge,
   Box,
+  Button,
   Card,
   Flex,
   Heading,
@@ -11,8 +12,8 @@ import {
 } from "@radix-ui/themes";
 import PlayerCard from "./PlayerCard.tsx";
 import { useDroppable } from "@dnd-kit/core";
-import { SearchIcon } from "lucide-react";
-import { POSITION_OPTIONS } from "../../utils/constants.ts";
+import { FilterIcon, SearchIcon } from "lucide-react";
+import { DAYS, POSITION_OPTIONS } from "../../utils/constants.ts";
 import { useMemo, useState } from "react";
 
 type AvailablePlayersListProps = {
@@ -26,6 +27,8 @@ export function AvailablePlayersList({
 }: AvailablePlayersListProps) {
   const [searchValue, setSearchValue] = useState("");
   const [positionFilter, setPositionFilter] = useState("All");
+  const [dayFilter, setDayFilter] = useState("All");
+  const [isFiltersOpen, setIsFiltersOpen] = useState(false);
 
   const { setNodeRef } = useDroppable({
     id: "availablePlayers",
@@ -40,12 +43,15 @@ export function AvailablePlayersList({
       const matchesPosition =
         positionFilter === "All" || player.position === positionFilter;
 
+      const matchesDay =
+        dayFilter === "All" || player.availabilities.some((availability) => availability.day === dayFilter);
+
       const matchesSearch =
         searchValue === "" ||
         player.name.toLowerCase().includes(searchValue.toLowerCase()) ||
         player.number.toString().includes(searchValue);
 
-      return matchesPosition && matchesSearch;
+      return matchesPosition && matchesSearch && matchesDay;
     });
   }, [players, availablePlayerIds, positionFilter, searchValue]);
 
@@ -55,8 +61,7 @@ export function AvailablePlayersList({
         <Heading>Available Players</Heading>
         <Badge>{filteredAvailablePlayers.length}</Badge>
       </Flex>
-      <Flex justify="between" mb="3" gap="4">
-        <Box maxWidth="250px">
+      <Box mb="3">
           <TextField.Root
             placeholder="Search"
             value={searchValue}
@@ -67,18 +72,54 @@ export function AvailablePlayersList({
             </TextField.Slot>
           </TextField.Root>
         </Box>
-        <Select.Root value={positionFilter} onValueChange={setPositionFilter}>
-          <Select.Trigger />
-          <Select.Content>
-            <Select.Item value="All">All Positions</Select.Item>
-            {POSITION_OPTIONS.map((position) => (
-              <Select.Item key={position} value={position}>
-                {position}
-              </Select.Item>
-            ))}
-          </Select.Content>
-        </Select.Root>
-      </Flex>
+        <Button onClick={() => setIsFiltersOpen(!isFiltersOpen)} color="gray" variant="outline" mb="3">
+          <FilterIcon size={15} />
+          Filters
+        </Button>
+        {isFiltersOpen && (
+          <Flex justify="between" mb="3" gap="4" p="2" direction="column" style={{
+            border: "1px solid var(--gray-6)",
+            backgroundColor: "var(--gray-2)",
+            borderRadius: "12px",
+          }}>
+            <Box>
+              <Text size="2" color="gray" weight="bold" as="p" mb="2">
+                Day
+              </Text>
+              <Box>
+                <Select.Root value={dayFilter} onValueChange={setDayFilter}>
+                  <Select.Trigger style={{ width: "100%" }} />
+                  <Select.Content style={{ width: "100%" }}>
+                    <Select.Item value="All">All Days</Select.Item>
+                    {DAYS.map((day) => (
+                      <Select.Item key={day} value={day}>
+                        {day}
+                      </Select.Item>
+                    ))}
+                  </Select.Content>
+                </Select.Root>
+              </Box>
+            </Box>
+            <Box>
+              <Text size="2" color="gray" weight="bold" as="p" mb="2">
+                Position
+              </Text>
+              <Box width="100%">
+                <Select.Root value={positionFilter} onValueChange={setPositionFilter}>
+                  <Select.Trigger style={{ width: "100%" }} />
+                  <Select.Content style={{ width: "100%" }}>
+                    <Select.Item value="All">All Positions</Select.Item>
+                    {POSITION_OPTIONS.map((position) => (
+                      <Select.Item key={position} value={position}>
+                        {position}
+                      </Select.Item>
+                    ))}
+                  </Select.Content>
+                </Select.Root>
+              </Box>
+            </Box>
+          </Flex>
+        )}
       <Flex
         ref={setNodeRef}
         direction="column"
