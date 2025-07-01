@@ -14,6 +14,8 @@ import { clientFirestore } from "../../utils/firebase.ts";
 import { useUser } from "../../hooks/useUser.ts";
 import PlayerCard from "./PlayerCard.tsx";
 import { useDroppable } from "@dnd-kit/core";
+import { parseTime } from "../../utils/helpers.ts";
+import { ConflictHoverCard } from "./ConflictHoverCard.tsx";
 
 type TrainingBlockCardProps = {
   handleOpen: (trainingBlock: TrainingBlock) => void;
@@ -28,13 +30,9 @@ export default function TrainingBlockCard({
 }: TrainingBlockCardProps) {
   const { user } = useUser();
 
-  const { isOver, setNodeRef } = useDroppable({
+  const { setNodeRef } = useDroppable({
     id: trainingBlock.id,
   });
-
-  const style = {
-    backgroundColor: isOver ? "var(--green-3)" : "",
-  };
 
   const handleRemoveTrainingBlock = async () => {
     if (!user) {
@@ -52,6 +50,21 @@ export default function TrainingBlockCard({
       console.error("Failed to delete training block:", error);
     }
   };
+
+  const conflictPlayerNames = assignedPlayers
+    .filter((assignedPlayer) => {
+      if (assignedPlayer.availabilities.length === 0) {
+        return false;
+      }
+
+      return !assignedPlayer.availabilities.some(
+        (availability) =>
+          parseTime(trainingBlock.start) >= parseTime(availability.start) &&
+          parseTime(trainingBlock.end) <= parseTime(availability.end) &&
+          trainingBlock.day === availability.day,
+      );
+    })
+    .map((assignedPlayer) => assignedPlayer.name);
 
   return (
     <Card size="2">
@@ -85,7 +98,12 @@ export default function TrainingBlockCard({
               {trainingBlock.start} - {trainingBlock.end}
             </Text>
           </Flex>
-          <Badge>{trainingBlock.assignedPlayers.length} players</Badge>
+          <Flex align="center" gap="1">
+            {conflictPlayerNames.length > 0 && (
+              <ConflictHoverCard conflictPlayerNames={conflictPlayerNames} />
+            )}
+            <Badge>{trainingBlock.assignedPlayers.length} players</Badge>
+          </Flex>
         </Flex>
       </Box>
       <Flex
@@ -99,7 +117,6 @@ export default function TrainingBlockCard({
         maxHeight="450px"
         overflowY="scroll"
         style={{
-          ...style,
           border: "1px dashed var(--gray-6)",
           borderRadius: "12px",
         }}
@@ -114,7 +131,7 @@ export default function TrainingBlockCard({
               key={assignedPlayer.id}
               {...assignedPlayer}
               trainingBlockId={trainingBlock.id}
-              assignedPlayers={trainingBlock.assignedPlayers}
+              assignedPlayerIds={trainingBlock.assignedPlayers}
               assigned
             />
           ))

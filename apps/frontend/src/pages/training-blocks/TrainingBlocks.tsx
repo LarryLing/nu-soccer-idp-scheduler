@@ -78,6 +78,7 @@ export default function TrainingBlocks() {
 
     const trainingBlocksQuery = query(
       collection(clientFirestore, `users/${user.uid}/trainingBlocks`),
+      orderBy("createdAt", "asc"),
     );
 
     const trainingBlocksUnsubscribe = onSnapshot(

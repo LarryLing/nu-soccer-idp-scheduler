@@ -18,7 +18,7 @@ import { useUser } from "../../hooks/useUser.ts";
 type PlayerCardProps = {
   assigned?: boolean;
   trainingBlockId?: string;
-  assignedPlayers?: Player["id"][];
+  assignedPlayerIds?: Player["id"][];
 } & Player;
 
 export default function PlayerCard({
@@ -29,7 +29,7 @@ export default function PlayerCard({
   availabilities,
   assigned = false,
   trainingBlockId,
-  assignedPlayers,
+  assignedPlayerIds,
 }: PlayerCardProps) {
   const { user } = useUser();
 
@@ -41,11 +41,6 @@ export default function PlayerCard({
       id: id,
     });
 
-  const style = {
-    transform: isDragging ? undefined : CSS.Translate.toString(transform),
-    opacity: isDragging ? 0.5 : 1,
-  };
-
   const handleMouseEnter = () => {
     setIsHovered(true);
   };
@@ -55,7 +50,7 @@ export default function PlayerCard({
   };
 
   const handleUnassignPlayer = async () => {
-    if (!user || !trainingBlockId || !assignedPlayers) {
+    if (!user || !trainingBlockId || !assignedPlayerIds) {
       return;
     }
 
@@ -65,7 +60,7 @@ export default function PlayerCard({
     );
 
     await updateDoc(trainingBlockDocRef, {
-      assignedPlayers: assignedPlayers.filter((assignedPlayerId) => {
+      assignedPlayers: assignedPlayerIds.filter((assignedPlayerId) => {
         return assignedPlayerId !== id;
       }),
     });
@@ -79,7 +74,8 @@ export default function PlayerCard({
       p="2"
       width="100%"
       style={{
-        ...style,
+        transform: isDragging ? undefined : CSS.Translate.toString(transform),
+        opacity: isDragging ? 0.5 : 1,
         border: "1px solid var(--gray-6)",
         borderRadius: "12px",
         backgroundColor: "var(--color-panel)",

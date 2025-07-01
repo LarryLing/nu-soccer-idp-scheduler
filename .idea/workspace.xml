@@ -5,11 +5,16 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b05902af-5cdc-4fb0-944c-d2d26c9f2b39" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/apps/frontend/src/components/trainingBlocks/ConflictHoverCard.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/components/trainingBlocks/AddTrainingBlockDialog.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/components/trainingBlocks/AddTrainingBlockDialog.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/apps/frontend/src/components/trainingBlocks/AvailablePlayersList.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/components/trainingBlocks/AvailablePlayersList.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/components/trainingBlocks/EditTrainingBlockDialog.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/components/trainingBlocks/EditTrainingBlockDialog.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/apps/frontend/src/components/trainingBlocks/PlayerCard.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/components/trainingBlocks/PlayerCard.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/apps/frontend/src/components/trainingBlocks/TrainingBlockCard.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/components/trainingBlocks/TrainingBlockCard.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/frontend/src/components/trainingBlocks/TrainingBlockGridActionRow.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/components/trainingBlocks/TrainingBlockGridActionRow.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/components/trainingBlocks/TrainingBlocksGrid.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/components/trainingBlocks/TrainingBlocksGrid.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/pages/training-blocks/TrainingBlocks.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/pages/training-blocks/TrainingBlocks.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/src/utils/types.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/src/utils/types.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -126,7 +131,7 @@
       <workItem from="1750452312080" duration="26836000" />
       <workItem from="1750814721487" duration="8388000" />
       <workItem from="1751065335496" duration="11963000" />
-      <workItem from="1751168320227" duration="65201000" />
+      <workItem from="1751168320227" duration="73322000" />
     </task>
     <servers />
   </component>

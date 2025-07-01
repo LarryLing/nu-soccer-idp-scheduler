@@ -6,6 +6,7 @@ import {
   Flex,
   Heading,
   Select,
+  Text,
   TextField,
 } from "@radix-ui/themes";
 import PlayerCard from "./PlayerCard.tsx";
@@ -26,13 +27,9 @@ export function AvailablePlayersList({
   const [searchValue, setSearchValue] = useState("");
   const [positionFilter, setPositionFilter] = useState("All");
 
-  const { setNodeRef, isOver } = useDroppable({
+  const { setNodeRef } = useDroppable({
     id: "availablePlayers",
   });
-
-  const style = {
-    backgroundColor: isOver ? "var(--green-3)" : "",
-  };
 
   const filteredAvailablePlayers = useMemo(() => {
     const availablePlayers = players.filter((player) =>
@@ -89,17 +86,23 @@ export function AvailablePlayersList({
         align="center"
         gap="3"
         p="2"
+        minHeight="345px"
         maxHeight="600px"
         overflowY="scroll"
         style={{
-          ...style,
           border: "1px dashed var(--gray-6)",
           borderRadius: "12px",
         }}
       >
-        {filteredAvailablePlayers.map((availablePlayer) => (
-          <PlayerCard key={availablePlayer.id} {...availablePlayer} />
-        ))}
+        {filteredAvailablePlayers.length === 0 ? (
+          <Text size="2" color="gray">
+            No available players
+          </Text>
+        ) : (
+          filteredAvailablePlayers.map((availablePlayer) => (
+            <PlayerCard key={availablePlayer.id} {...availablePlayer} />
+          ))
+        )}
       </Flex>
     </Card>
   );

@@ -95,13 +95,11 @@ export default function EditTrainingBlockDialog({
     setIsSaving(true);
 
     try {
-      await updateDoc(
-        doc(
-          clientFirestore,
-          `users/${user.uid}/trainingBlocks/${trainingBlockId}`,
-        ),
-        data,
+      const trainingBlockDocRef = doc(
+        clientFirestore,
+        `users/${user.uid}/trainingBlocks/${trainingBlockId}`,
       );
+      await updateDoc(trainingBlockDocRef, data);
       setIsOpen(false);
     } catch (error) {
       console.error("Failed to edit training block:", error);
