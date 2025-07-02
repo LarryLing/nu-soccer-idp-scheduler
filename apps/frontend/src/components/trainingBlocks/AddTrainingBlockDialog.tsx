@@ -9,7 +9,7 @@ import { addDoc, collection } from "firebase/firestore";
 import { clientFirestore } from "../../utils/firebase.ts";
 import type { TrainingBlock, User } from "../../utils/types.ts";
 import { DAYS, DEFAULT_TRAINING_BLOCK } from "../../utils/constants.ts";
-import { checkFormTrainingBlockOverlaps } from "../../utils/helpers.ts";
+import { checkTrainingBlockOverlaps } from "../../utils/helpers.ts";
 import FormField from "../miscellaneous/FormField.tsx";
 import FormActions from "../miscellaneous/FormActions.tsx";
 
@@ -58,7 +58,7 @@ export default function AddTrainingBlockDialog({
       return;
     }
 
-    if (checkFormTrainingBlockOverlaps(trainingBlocks, data)) {
+    if (checkTrainingBlockOverlaps(trainingBlocks, data)) {
       console.error("Current training block overlaps with an existing one.");
       setError("start", {
         type: "manual",

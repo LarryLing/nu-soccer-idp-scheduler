@@ -1,19 +1,6 @@
 import { z } from "zod";
-import { parseTime } from "./helpers.ts";
-import { DAYS, POSITIONS } from "./constants.ts";
-
-const TIME_REGEX = /^(1[0-2]|0?[1-9]):([0-5][0-9])([AP]M)$/;
-const TIME_MESSAGE = "Time must be in format '9:30AM' or '12:45PM'.";
-
-const validatePassword = (password: string) => ({
-  hasUppercase: /[A-Z]/.test(password),
-  hasLowercase: /[a-z]/.test(password),
-  hasNumber: /[0-9]/.test(password),
-  hasSpecial: /[!@#$%^&*]/.test(password),
-});
-
-const validateTimeOrder = (data: { start: string; end: string }) =>
-  parseTime(data.end) > parseTime(data.start);
+import { validatePassword, validateTimeOrder } from "./helpers.ts";
+import { DAYS, POSITIONS, TIME_MESSAGE, TIME_REGEX } from "./constants.ts";
 
 const DaySchema = z.enum(DAYS);
 const TimeSchema = z.string().regex(TIME_REGEX, { message: TIME_MESSAGE });

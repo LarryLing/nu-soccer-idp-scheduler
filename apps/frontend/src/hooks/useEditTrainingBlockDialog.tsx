@@ -1,6 +1,6 @@
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { useCallback, useState } from "react";
+import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import type { TrainingBlock } from "../utils/types.ts";
 import { DEFAULT_TRAINING_BLOCK } from "../utils/constants.ts";
@@ -26,18 +26,15 @@ export const useEditTrainingBlockDialog = () => {
     reValidateMode: "onSubmit",
   });
 
-  const handleOpen = useCallback(
-    (trainingBlock: TrainingBlock) => {
-      reset({
-        day: trainingBlock.day,
-        start: trainingBlock.start,
-        end: trainingBlock.end,
-      });
-      setTrainingBlockId(trainingBlock.id);
-      setIsOpen(true);
-    },
-    [reset],
-  );
+  const handleOpen = (trainingBlock: TrainingBlock) => {
+    reset({
+      day: trainingBlock.day,
+      start: trainingBlock.start,
+      end: trainingBlock.end,
+    });
+    setTrainingBlockId(trainingBlock.id);
+    setIsOpen(true);
+  }
 
   const handleClose = () => {
     setIsOpen(false);

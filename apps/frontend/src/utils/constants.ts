@@ -30,3 +30,6 @@ export const DAYS = [
   "Saturday",
   "Sunday",
 ] as const;
+
+export const TIME_REGEX = /^(1[0-2]|0?[1-9]):([0-5][0-9])([AP]M)$/;
+export const TIME_MESSAGE = "Time must be in format '9:30AM' or '12:45PM'.";

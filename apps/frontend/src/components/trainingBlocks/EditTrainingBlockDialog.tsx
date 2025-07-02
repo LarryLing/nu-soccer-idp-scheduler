@@ -9,7 +9,7 @@ import {
 import { z } from "zod";
 import { TrainingBlockSchema } from "../../utils/schemas.ts";
 import { useUser } from "../../hooks/useUser.ts";
-import { checkFormTrainingBlockOverlaps } from "../../utils/helpers.ts";
+import { checkTrainingBlockOverlaps } from "../../utils/helpers.ts";
 import { doc, updateDoc } from "firebase/firestore";
 import { clientFirestore } from "../../utils/firebase.ts";
 import type { TrainingBlock } from "../../utils/types.ts";
@@ -59,7 +59,7 @@ export default function EditTrainingBlockDialog({
       return;
     }
 
-    if (checkFormTrainingBlockOverlaps(trainingBlocks, data)) {
+    if (checkTrainingBlockOverlaps(trainingBlocks, data, trainingBlockId)) {
       console.error("Current training block overlaps with an existing one.");
       setError("start", {
         type: "manual",

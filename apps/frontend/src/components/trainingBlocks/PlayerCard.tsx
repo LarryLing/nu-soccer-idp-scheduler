@@ -15,6 +15,7 @@ import { CalendarX, XIcon } from "lucide-react";
 import { arrayRemove, doc, updateDoc } from "firebase/firestore";
 import { clientFirestore } from "../../utils/firebase.ts";
 import { useUser } from "../../hooks/useUser.ts";
+import "../../styles/playercard.css";
 
 type PlayerCardProps = {
   assigned?: boolean;
@@ -34,15 +35,11 @@ export default function PlayerCard({
 }: PlayerCardProps) {
   const { user } = useUser();
   const [viewAvailability, setViewAvailability] = useState(false);
-  const [isHovered, setIsHovered] = useState(false);
 
   const { attributes, listeners, setNodeRef, transform, isDragging } =
     useDraggable({
       id: id,
     });
-
-  const handleMouseEnter = () => setIsHovered(true);
-  const handleMouseLeave = () => setIsHovered(false);
 
   const handleUnassignPlayer = useCallback(async () => {
     if (!user || !trainingBlockId) {
@@ -63,7 +60,7 @@ export default function PlayerCard({
     setViewAvailability(!viewAvailability);
   };
 
-  const showUnassignButton = isHovered && !isDragging && assigned;
+  const showUnassignButton = assigned && !isDragging;
   const showAvailabilityList = viewAvailability && !isDragging;
   const buttonText =
     viewAvailability && !isDragging
@@ -73,6 +70,7 @@ export default function PlayerCard({
   return (
     <Flex
       ref={setNodeRef}
+      className="player-card"
       direction="column"
       gap="2"
       p="2"
@@ -86,29 +84,15 @@ export default function PlayerCard({
       }}
       {...listeners}
       {...attributes}
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
     >
-      <Flex justify="between" align="center">
-        <Flex align="center" gap="2">
-          {showUnassignButton && (
-            <IconButton
-              color="red"
-              variant="soft"
-              size="1"
-              onClick={handleUnassignPlayer}
-            >
-              <XIcon size={15} />
-            </IconButton>
-          )}
-          <PlayerInfo
-            name={name}
-            position={position}
-            number={number}
-            isConflictPlayer={isConflictPlayer}
-          />
-        </Flex>
-      </Flex>
+      <PlayerInfo
+        name={name}
+        position={position}
+        number={number}
+        isConflictPlayer={isConflictPlayer}
+        showUnassignButton={showUnassignButton}
+        handleUnassignPlayer={handleUnassignPlayer}
+      />
       <Separator size="4" />
       <Button
         variant="soft"
@@ -135,19 +119,39 @@ const PlayerInfo = memo(
     position,
     number,
     isConflictPlayer = false,
+    showUnassignButton,
+    handleUnassignPlayer,
   }: {
     name: string;
     position: string;
     number: number;
     isConflictPlayer?: boolean;
+    showUnassignButton: boolean;
+    handleUnassignPlayer: () => void;
   }) => (
-    <Flex direction="column" align="start">
-      <Heading size="3" color="gray">
-        {name}
-      </Heading>
-      <Text size="2" weight="regular" color="gray">
-        {position}
-      </Text>
+    <Flex justify="between" align="center">
+      <Flex align="center" gap="2">
+        <span className="unassign-btn-wrapper">
+          {showUnassignButton && (
+            <IconButton
+              color="red"
+              variant="soft"
+              size="1"
+              onClick={handleUnassignPlayer}
+            >
+              <XIcon size={15} />
+            </IconButton>
+          )}
+        </span>
+        <Flex direction="column">
+          <Heading size="3" color="gray">
+            {name}
+          </Heading>
+          <Text size="2" weight="regular" color="gray">
+            {position}
+          </Text>
+        </Flex>
+      </Flex>
       <Flex
         direction={{
           initial: "column",

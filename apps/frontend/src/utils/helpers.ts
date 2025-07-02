@@ -16,6 +16,16 @@ export const parseTime = (timeStr: string) => {
   return totalHours * 60 + minutes;
 };
 
+export const validatePassword = (password: string) => ({
+  hasUppercase: /[A-Z]/.test(password),
+  hasLowercase: /[a-z]/.test(password),
+  hasNumber: /[0-9]/.test(password),
+  hasSpecial: /[!@#$%^&*]/.test(password),
+});
+
+export const validateTimeOrder = (data: { start: string; end: string }) =>
+  parseTime(data.end) > parseTime(data.start);
+
 export const generateNextTimes = (prevTime: string) => {
   const [timeStr, period] = [
     prevTime.slice(0, -2),
@@ -43,16 +53,22 @@ export const generateNextTimes = (prevTime: string) => {
   return [formatTime(nextStartHour, minutes), formatTime(nextEndHour, minutes)];
 };
 
-export const checkFormTrainingBlockOverlaps = (
+export const checkTrainingBlockOverlaps = (
   trainingBlocks: TrainingBlock[],
   submittedTrainingBlock: z.infer<typeof TrainingBlockSchema>,
+  trainingBlockId?: string,
 ): boolean => {
-  const filteredTrainingBlocks = trainingBlocks
-    .filter((trainingBlock) => trainingBlock.day === submittedTrainingBlock.day)
-    .sort((a, b) => parseTime(a.start) - parseTime(b.start));
-
-  return filteredTrainingBlocks.some(
-    (current) =>
-      parseTime(submittedTrainingBlock.start) < parseTime(current.end),
+  const filteredTrainingBlocks = trainingBlocks.filter(
+    (block) =>
+      block.day === submittedTrainingBlock.day && block.id !== trainingBlockId,
   );
+
+  const submittedStart = parseTime(submittedTrainingBlock.start);
+  const submittedEnd = parseTime(submittedTrainingBlock.end);
+
+  return filteredTrainingBlocks.some((block) => {
+    const blockStart = parseTime(block.start);
+    const blockEnd = parseTime(block.end);
+    return submittedStart < blockEnd && blockStart < submittedEnd;
+  });
 };

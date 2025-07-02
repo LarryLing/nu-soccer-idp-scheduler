@@ -1,0 +1,7 @@
+.player-card .unassign-btn-wrapper {
+  display: none;
+}
+
+.player-card:hover .unassign-btn-wrapper {
+  display: flex;
+}
