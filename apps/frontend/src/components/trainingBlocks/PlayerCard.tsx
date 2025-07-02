@@ -1,11 +1,10 @@
-import type { Player } from "../../utils/types.ts";
+import type { Availability, Player, TrainingBlock } from "../../utils/types.ts";
 import {
   Badge,
   Button,
   Flex,
   Heading,
   IconButton,
-  Separator,
   Text,
 } from "@radix-ui/themes";
 import { useState, memo, useCallback } from "react";
@@ -15,12 +14,14 @@ import { CalendarX, XIcon } from "lucide-react";
 import { arrayRemove, doc, updateDoc } from "firebase/firestore";
 import { clientFirestore } from "../../utils/firebase.ts";
 import { useUser } from "../../hooks/useUser.ts";
+import { parseTime } from "../../utils/helpers.ts";
+import { DAYS } from "../../utils/constants.ts";
 import "../../styles/playercard.css";
 
 type PlayerCardProps = {
   assigned?: boolean;
-  trainingBlockId?: string;
-  isConflictPlayer?: boolean;
+  trainingBlock?: TrainingBlock;
+  conflictDay?: Availability["day"];
 } & Player;
 
 export default function PlayerCard({
@@ -30,8 +31,8 @@ export default function PlayerCard({
   position,
   availabilities,
   assigned = false,
-  trainingBlockId,
-  isConflictPlayer = false,
+  trainingBlock,
+  conflictDay,
 }: PlayerCardProps) {
   const { user } = useUser();
   const [viewAvailability, setViewAvailability] = useState(false);
@@ -42,19 +43,19 @@ export default function PlayerCard({
     });
 
   const handleUnassignPlayer = useCallback(async () => {
-    if (!user || !trainingBlockId) {
+    if (!user || !trainingBlock) {
       return;
     }
 
     const trainingBlockDocRef = doc(
       clientFirestore,
-      `users/${user.uid}/trainingBlocks/${trainingBlockId}`,
+      `users/${user.uid}/trainingBlocks/${trainingBlock.id}`,
     );
 
     await updateDoc(trainingBlockDocRef, {
       assignedPlayers: arrayRemove(id),
     });
-  }, [user, trainingBlockId, id]);
+  }, [user, trainingBlock, id]);
 
   const handleToggleAvailability = () => {
     setViewAvailability(!viewAvailability);
@@ -89,13 +90,12 @@ export default function PlayerCard({
         name={name}
         position={position}
         number={number}
-        isConflictPlayer={isConflictPlayer}
+        conflictDay={conflictDay}
         showUnassignButton={showUnassignButton}
         handleUnassignPlayer={handleUnassignPlayer}
       />
-      <Separator size="4" />
       <Button
-        variant="soft"
+        variant="outline"
         size="1"
         onClick={handleToggleAvailability}
         color="gray"
@@ -103,12 +103,22 @@ export default function PlayerCard({
         {buttonText}
       </Button>
       {showAvailabilityList &&
-        availabilities.map((availability, index) => (
-          <AvailabilityItem
-            key={`${availability.day}.${availability.start}.${availability.end}.${index}`}
-            {...availability}
-          />
-        ))}
+        DAYS.map((day) => {
+          const filteredAvailabilities = availabilities.filter(
+            (availability) => availability.day === day,
+          );
+
+          if (filteredAvailabilities.length === 0) return null;
+
+          return (
+            <DayAvailability
+              key={day}
+              day={day}
+              availabilities={filteredAvailabilities}
+              conflictDay={conflictDay}
+            />
+          );
+        })}
     </Flex>
   );
 }
@@ -118,14 +128,14 @@ const PlayerInfo = memo(
     name,
     position,
     number,
-    isConflictPlayer = false,
+    conflictDay,
     showUnassignButton,
     handleUnassignPlayer,
   }: {
     name: string;
     position: string;
     number: number;
-    isConflictPlayer?: boolean;
+    conflictDay?: Availability["day"];
     showUnassignButton: boolean;
     handleUnassignPlayer: () => void;
   }) => (
@@ -165,7 +175,7 @@ const PlayerInfo = memo(
             #{number}
           </Text>
         </Badge>
-        {isConflictPlayer && (
+        {conflictDay && (
           <Badge size="2" color="red" variant="solid">
             <CalendarX size={15} />
           </Badge>
@@ -175,15 +185,41 @@ const PlayerInfo = memo(
   ),
 );
 
-const AvailabilityItem = memo(
-  ({ day, start, end }: { day: string; start: string; end: string }) => (
-    <Flex justify="between" align="center">
+const DayAvailability = ({
+  day,
+  availabilities,
+  conflictDay,
+}: {
+  day: string;
+  availabilities: Availability[];
+  conflictDay?: Availability["day"];
+}) => {
+  const sortedAvailabilities = availabilities.sort(
+    (a, b) => parseTime(a.start) - parseTime(b.start),
+  );
+  return (
+    <Flex
+      justify="between"
+      align="start"
+      p="2"
+      style={{
+        backgroundColor: conflictDay === day ? "var(--red-4)" : "var(--gray-2)",
+        borderRadius: "4px",
+      }}
+    >
       <Text size="1" weight="bold">
         {day}
       </Text>
-      <Text size="1">
-        {start} - {end}
-      </Text>
+      <Flex direction="column">
+        {sortedAvailabilities.map((availability, index) => (
+          <Text
+            key={`${availability.day}.${availability.start}.${availability.end}.${index}`}
+            size="1"
+          >
+            {availability.start} - {availability.end}
+          </Text>
+        ))}
+      </Flex>
     </Flex>
-  ),
-);
+  );
+};

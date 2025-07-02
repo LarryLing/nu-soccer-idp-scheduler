@@ -6,6 +6,8 @@ import type { TrainingBlock } from "../utils/types.ts";
 import { DEFAULT_TRAINING_BLOCK } from "../utils/constants.ts";
 import { TrainingBlockSchema } from "../utils/schemas.ts";
 
+type FormData = z.infer<typeof TrainingBlockSchema>;
+
 export const useEditTrainingBlockDialog = () => {
   const [trainingBlockId, setTrainingBlockId] =
     useState<TrainingBlock["id"]>("");
@@ -19,7 +21,7 @@ export const useEditTrainingBlockDialog = () => {
     setError,
     clearErrors,
     formState: { isSubmitting, isValidating, errors },
-  } = useForm<z.infer<typeof TrainingBlockSchema>>({
+  } = useForm<FormData>({
     defaultValues: DEFAULT_TRAINING_BLOCK,
     resolver: zodResolver(TrainingBlockSchema),
     mode: "onSubmit",
@@ -34,7 +36,7 @@ export const useEditTrainingBlockDialog = () => {
     });
     setTrainingBlockId(trainingBlock.id);
     setIsOpen(true);
-  }
+  };
 
   const handleClose = () => {
     setIsOpen(false);

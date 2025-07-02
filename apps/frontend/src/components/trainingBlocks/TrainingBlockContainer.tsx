@@ -1,4 +1,4 @@
-import type { Player, TrainingBlock } from "../../utils/types.ts";
+import type { Availability, Player, TrainingBlock } from "../../utils/types.ts";
 import { Badge, Card, Flex, IconButton, Text } from "@radix-ui/themes";
 import { CalendarX, Clock, PencilIcon, TrashIcon, Users } from "lucide-react";
 import { deleteDoc, doc } from "firebase/firestore";
@@ -25,30 +25,6 @@ export default function TrainingBlockContainer({
   const { isOver, setNodeRef } = useDroppable({
     id: trainingBlock.id,
   });
-
-  const conflictPlayerNames = useMemo(
-    () =>
-      assignedPlayers
-        .filter((assignedPlayer) => {
-          if (assignedPlayer.availabilities.length === 0) {
-            return false;
-          }
-
-          return !assignedPlayer.availabilities.some(
-            (availability) =>
-              parseTime(trainingBlock.start) >= parseTime(availability.start) &&
-              parseTime(trainingBlock.end) <= parseTime(availability.end) &&
-              trainingBlock.day === availability.day,
-          );
-        })
-        .map((assignedPlayer) => assignedPlayer.name),
-    [
-      assignedPlayers,
-      trainingBlock.start,
-      trainingBlock.end,
-      trainingBlock.day,
-    ],
-  );
 
   const handleRemoveTrainingBlock = useCallback(async () => {
     if (!user) {
@@ -79,6 +55,21 @@ export default function TrainingBlockContainer({
     [isOver],
   );
 
+  const conflictPlayers = assignedPlayers
+    .map((player) => {
+      const hasFullAvailability = player.availabilities.some(
+        (availability) =>
+          availability.day === trainingBlock.day &&
+          parseTime(availability.start) <= parseTime(trainingBlock.start) &&
+          parseTime(availability.end) >= parseTime(trainingBlock.end),
+      );
+      if (!hasFullAvailability) {
+        return { name: player.name, day: trainingBlock.day };
+      }
+      return null;
+    })
+    .filter(Boolean) as { name: string; day: Availability["day"] }[];
+
   return (
     <Card ref={setNodeRef} style={cardStyles}>
       <Flex justify="between" align="center" gap="3" mb="3">
@@ -86,7 +77,7 @@ export default function TrainingBlockContainer({
           start={trainingBlock.start}
           end={trainingBlock.end}
           playerCount={trainingBlock.assignedPlayers.length}
-          conflictCount={conflictPlayerNames.length}
+          conflictCount={conflictPlayers.length}
         />
         <ActionButtons
           onEdit={handleEdit}
@@ -95,9 +86,8 @@ export default function TrainingBlockContainer({
       </Flex>
       <PlayerDropZone
         assignedPlayers={assignedPlayers}
-        trainingBlockId={trainingBlock.id}
-        assignedPlayerIds={trainingBlock.assignedPlayers}
-        conflictPlayerNames={conflictPlayerNames}
+        trainingBlock={trainingBlock}
+        conflictPlayers={conflictPlayers}
       />
     </Card>
   );
@@ -162,13 +152,12 @@ const ActionButtons = memo(
 
 const PlayerDropZone = ({
   assignedPlayers,
-  trainingBlockId,
-  conflictPlayerNames,
+  trainingBlock,
+  conflictPlayers,
 }: {
   assignedPlayers: Player[];
-  trainingBlockId: string;
-  assignedPlayerIds: string[];
-  conflictPlayerNames: string[];
+  trainingBlock: TrainingBlock;
+  conflictPlayers: { name: string; day: Availability["day"] }[];
 }) => (
   <Flex
     direction="column"
@@ -189,16 +178,16 @@ const PlayerDropZone = ({
       </Text>
     ) : (
       assignedPlayers.map((assignedPlayer) => {
-        const isConflictPlayer =
-          conflictPlayerNames &&
-          conflictPlayerNames.includes(assignedPlayer.name);
+        const conflictDay = conflictPlayers?.find(
+          (player) => player.name === assignedPlayer.name,
+        )?.day;
 
         return (
           <PlayerCard
             key={assignedPlayer.id}
             {...assignedPlayer}
-            trainingBlockId={trainingBlockId}
-            isConflictPlayer={isConflictPlayer}
+            trainingBlock={trainingBlock}
+            conflictDay={conflictDay}
             assigned
           />
         );

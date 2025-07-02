@@ -12,13 +12,13 @@ import { Calendar } from "lucide-react";
 import TrainingBlockContainer from "./TrainingBlockContainer.tsx";
 
 type TrainingBlockContainersList = {
-  trainingBlockContainers: ContainerItem[];
   players: Player[];
+  trainingBlockContainers: ContainerItem[];
 };
 
 export default function TrainingBlockContainersList({
-  trainingBlockContainers,
   players,
+  trainingBlockContainers,
 }: TrainingBlockContainersList) {
   const {
     trainingBlockId,

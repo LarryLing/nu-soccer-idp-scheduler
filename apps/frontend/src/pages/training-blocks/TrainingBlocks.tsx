@@ -30,18 +30,19 @@ import {
 } from "@dnd-kit/core";
 import PlayerCardOverlay from "../../components/trainingBlocks/PlayerCardOverlay.tsx";
 import TrainingBlockContainersList from "../../components/trainingBlocks/TrainingBlockContainersList.tsx";
+import { snapCenterToCursor } from "@dnd-kit/modifiers";
 
 export default function TrainingBlocks() {
   const { user } = useUser();
 
-  const [activePlayer, setActivePlayer] = useState<Player | null>(null);
   const [players, setPlayers] = useState<Player[]>([]);
   const [trainingBlocks, setTrainingBlocks] = useState<TrainingBlock[]>([]);
-  const [containers, setContainers] = useState<ContainerItem[]>([]);
+  const [activePlayerId, setActivePlayerId] = useState<string | null>(null);
   const [originalContainerId, setOriginalContainerId] = useState<string | null>(
     null,
   );
   const [dayFilter, setDayFilter] = useState("All");
+  const [containers, setContainers] = useState<ContainerItem[]>([]);
 
   const mouseSensor = useSensor(MouseSensor, {
     activationConstraint: {
@@ -59,19 +60,19 @@ export default function TrainingBlocks() {
     },
   });
 
-  const getAssignedPlayerIds = () => {
-    const ids = new Set<string>();
-    trainingBlocks.forEach((block) => {
-      block.assignedPlayers.forEach((playerId) => ids.add(playerId));
-    });
-    return ids;
-  };
+  const availablePlayerIds = players
+    .filter(
+      (player) =>
+        !trainingBlocks.some((block) =>
+          block.assignedPlayers.includes(player.id),
+        ),
+    )
+    .map((player) => player.id);
 
   const findContainerId = (playerId: string): string | undefined => {
     if (containers.some((container) => container.id === playerId)) {
       return playerId;
     }
-
     return containers.find((container) =>
       container.assignedPlayers.some(
         (assignedPlayerId) => assignedPlayerId === playerId,
@@ -79,29 +80,50 @@ export default function TrainingBlocks() {
     )?.id;
   };
 
-  const resetDragState = () => {
-    setActivePlayer(null);
-    setOriginalContainerId(null);
+  const getChangedContainers = (): ContainerItem[] => {
+    const containersToUpdate = containers.filter(
+      (container) => container.type !== "available",
+    );
+
+    return containersToUpdate.filter((container) => {
+      const originalBlock = trainingBlocks.find(
+        (block) => block.id === container.id,
+      );
+      if (!originalBlock) return false;
+
+      const currentPlayers = container.assignedPlayers.sort();
+      const originalPlayers = originalBlock.assignedPlayers.sort();
+
+      return JSON.stringify(currentPlayers) !== JSON.stringify(originalPlayers);
+    });
   };
 
-  const resetContainersToOriginalState = () => {
-    setContainers([
-      {
-        type: "available",
-        id: "availablePlayers",
-        assignedPlayers: availablePlayerIds,
-      },
-      ...trainingBlocks.map((block) => ({
-        ...block,
-        type: "training-block" as const,
-      })),
-    ]);
+  const handleDragStart = (event: DragStartEvent) => {
+    const { active } = event;
+    const player = players.find((player) => player.id === active.id) || null;
+    setActivePlayerId(player?.id || null);
+
+    if (player) {
+      setOriginalContainerId(findContainerId(player.id) || null);
+    }
   };
 
-  const updateContainersOnDrag = (
-    activeContainerId: string,
-    overContainerId: string,
-  ) => {
+  const handleDragOver = (event: DragOverEvent) => {
+    const { active, over } = event;
+
+    if (!user || !over) return;
+
+    const activeContainerId = findContainerId(active.id.toString());
+    const overContainerId = findContainerId(over.id.toString());
+
+    if (
+      !activeContainerId ||
+      !overContainerId ||
+      activeContainerId === overContainerId
+    ) {
+      return;
+    }
+
     setContainers((prev) => {
       const activeContainer = prev.find(
         (container) => container.id === activeContainerId,
@@ -132,75 +154,12 @@ export default function TrainingBlocks() {
     });
   };
 
-  const saveChangesToFirestore = async (changedContainers: ContainerItem[]) => {
-    const batch = writeBatch(clientFirestore);
-
-    changedContainers.forEach((container) => {
-      const trainingBlockRef = doc(
-        clientFirestore,
-        `users/${user!.uid}/trainingBlocks/${container.id}`,
-      );
-
-      batch.update(trainingBlockRef, {
-        assignedPlayers: container.assignedPlayers,
-      });
-    });
-
-    await batch.commit();
-  };
-
-  const getChangedContainers = (): ContainerItem[] => {
-    const containersToUpdate = containers.filter(
-      (container) => container.type !== "available",
-    );
-
-    return containersToUpdate.filter((container) => {
-      const originalBlock = trainingBlocks.find(
-        (block) => block.id === container.id,
-      );
-      if (!originalBlock) return false;
-
-      const currentPlayers = container.assignedPlayers.sort();
-      const originalPlayers = originalBlock.assignedPlayers.sort();
-
-      return JSON.stringify(currentPlayers) !== JSON.stringify(originalPlayers);
-    });
-  };
-
-  const handleDragStart = (event: DragStartEvent) => {
-    const player =
-      players.find((player) => player.id === event.active.id) || null;
-    setActivePlayer(player);
-
-    if (player) {
-      setOriginalContainerId(findContainerId(player.id) || null);
-    }
-  };
-
-  const handleDragOver = (event: DragOverEvent) => {
-    const { over } = event;
-
-    if (!user || !activePlayer || !over) return;
-
-    const activeContainerId = findContainerId(activePlayer.id);
-    const overContainerId = findContainerId(over.id.toString());
-
-    if (
-      !activeContainerId ||
-      !overContainerId ||
-      activeContainerId === overContainerId
-    ) {
-      return;
-    }
-
-    updateContainersOnDrag(activeContainerId, overContainerId);
-  };
-
   const handleDragEnd = async (event: DragEndEvent) => {
     const { over } = event;
 
-    if (!over || !user || !activePlayer) {
-      resetDragState();
+    if (!over || !user) {
+      setActivePlayerId(null);
+      setOriginalContainerId(null);
       return;
     }
 
@@ -211,20 +170,43 @@ export default function TrainingBlocks() {
         const changedContainers = getChangedContainers();
 
         if (changedContainers.length > 0) {
-          await saveChangesToFirestore(changedContainers);
+          const batch = writeBatch(clientFirestore);
+
+          changedContainers.forEach((container) => {
+            const trainingBlockRef = doc(
+              clientFirestore,
+              `users/${user!.uid}/trainingBlocks/${container.id}`,
+            );
+
+            batch.update(trainingBlockRef, {
+              assignedPlayers: container.assignedPlayers,
+            });
+          });
+
+          await batch.commit();
         }
       } catch (error) {
         console.error("Failed to update assigned players:", error);
-        resetContainersToOriginalState();
+        setContainers([
+          {
+            type: "available",
+            id: "availablePlayers",
+            assignedPlayers: availablePlayerIds,
+          },
+          ...trainingBlocks.map((block) => ({
+            ...block,
+            type: "training-block" as const,
+          })),
+        ]);
       }
     }
 
-    resetDragState();
+    setActivePlayerId(null);
+    setOriginalContainerId(null);
   };
 
-  const availablePlayerIds = players
-    .filter((player) => !getAssignedPlayerIds().has(player.id))
-    .map((player) => player.id);
+  const activePlayer =
+    players.find((player) => player.id === activePlayerId) || null;
 
   const trainingBlockContainers = containers
     .filter((container) => container.type !== "available")
@@ -333,7 +315,7 @@ export default function TrainingBlocks() {
               />
             </Box>
           </Flex>
-          <DragOverlay>
+          <DragOverlay modifiers={[snapCenterToCursor]}>
             {activePlayer && <PlayerCardOverlay {...activePlayer} />}
           </DragOverlay>
         </DndContext>
