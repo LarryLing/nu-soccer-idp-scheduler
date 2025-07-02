@@ -1,5 +1,5 @@
 import type { Player } from "../../utils/types.ts";
-import { Button, Flex, Heading, Separator, Text } from "@radix-ui/themes";
+import { Badge, Button, Flex, Heading, Separator, Text } from "@radix-ui/themes";
 
 export default function PlayerCardOverlay({ name, number, position }: Player) {
   return (
@@ -23,9 +23,11 @@ export default function PlayerCardOverlay({ name, number, position }: Player) {
             {position}
           </Text>
         </Flex>
-        <Text weight="bold" color="gray">
-          #{number}
-        </Text>
+        <Badge size="2" color="gray">
+          <Text size="1" weight="bold" color="gray">
+            #{number}
+          </Text>
+        </Badge>
       </Flex>
       <Separator size="4" />
       <Button variant="soft" size="1" color="gray">

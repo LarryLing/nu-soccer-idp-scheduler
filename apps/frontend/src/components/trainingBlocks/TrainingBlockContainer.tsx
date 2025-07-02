@@ -1,13 +1,12 @@
 import type { Player, TrainingBlock } from "../../utils/types.ts";
 import { Badge, Card, Flex, IconButton, Text } from "@radix-ui/themes";
-import { Clock, PencilIcon, TrashIcon, Users } from "lucide-react";
+import {CalendarX, Clock, PencilIcon, TrashIcon, Users } from "lucide-react";
 import { deleteDoc, doc } from "firebase/firestore";
 import { clientFirestore } from "../../utils/firebase.ts";
 import { useUser } from "../../hooks/useUser.ts";
 import PlayerCard from "./PlayerCard.tsx";
 import { useDroppable } from "@dnd-kit/core";
 import { parseTime } from "../../utils/helpers.ts";
-import { ConflictHoverCard } from "./ConflictHoverCard.tsx";
 
 type TrainingBlockContainerProps = {
   handleOpen: (trainingBlock: TrainingBlock) => void;
@@ -60,15 +59,25 @@ export default function TrainingBlockContainer({
 
   return (
     <Card
-      size="2"
       ref={setNodeRef}
       style={{
         borderColor: isOver ? "var(--purple-6)" : "var(--gray-6)",
         backgroundColor: isOver ? "var(--purple-6)" : "var(--color-panel)",
       }}
     >
-      <Flex justify="between" align="center" mb="3">
-        <Flex align="center" gap="4">
+      <Flex justify="between" align="center" gap="3" mb="3">
+        <Flex
+          direction={{
+            initial: "column",
+            xs: "row",
+          }}
+          align={{
+            initial: "start",
+            xs: "center",
+          }}
+          gap="3"
+          wrap="wrap"
+        >
           <Flex align="center" gap="1">
             <Clock size={15} />
             <Text size="2" color="gray" weight="bold">
@@ -80,10 +89,13 @@ export default function TrainingBlockContainer({
             {trainingBlock.assignedPlayers.length} players
           </Badge>
           {conflictPlayerNames.length > 0 && (
-            <ConflictHoverCard conflictPlayerNames={conflictPlayerNames} />
+            <Badge size="2" color="red" variant="solid">
+              <CalendarX size={15} />
+              {conflictPlayerNames.length} conflicts
+            </Badge>
           )}
         </Flex>
-        <Flex align="center" gap="4">
+        <Flex align="center" gap="5" mr="2">
           <IconButton
             color="gray"
             variant="ghost"
@@ -108,6 +120,7 @@ export default function TrainingBlockContainer({
         align="center"
         gap="2"
         p="2"
+        maxHeight="450px"
         overflowY="scroll"
         style={{
           border: "1px dashed var(--gray-6)",
@@ -125,6 +138,7 @@ export default function TrainingBlockContainer({
               {...assignedPlayer}
               trainingBlockId={trainingBlock.id}
               assignedPlayerIds={trainingBlock.assignedPlayers}
+              conflictPlayerNames={conflictPlayerNames}
               assigned
             />
           ))

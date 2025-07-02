@@ -66,7 +66,7 @@ export default function TrainingBlockContainersList({
                 borderRadius: "12px",
               }}
             >
-              <Flex align="center" gap="4" mb="3">
+              <Flex justify="between"align="center" gap="4" mb="3">
                 <Flex align="center" gap="1">
                   <Text size="5" color="gray" weight="bold">
                     {day}

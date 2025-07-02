@@ -1,5 +1,6 @@
 import type { Player } from "../../utils/types.ts";
 import {
+  Badge,
   Button,
   Flex,
   Heading,
@@ -10,7 +11,7 @@ import {
 import { useState } from "react";
 import { useDraggable } from "@dnd-kit/core";
 import { CSS } from "@dnd-kit/utilities";
-import { XIcon } from "lucide-react";
+import { CalendarX, XIcon } from "lucide-react";
 import { doc, updateDoc } from "firebase/firestore";
 import { clientFirestore } from "../../utils/firebase.ts";
 import { useUser } from "../../hooks/useUser.ts";
@@ -19,6 +20,7 @@ type PlayerCardProps = {
   assigned?: boolean;
   trainingBlockId?: string;
   assignedPlayerIds?: Player["id"][];
+  conflictPlayerNames?: string[];
 } & Player;
 
 export default function PlayerCard({
@@ -30,6 +32,7 @@ export default function PlayerCard({
   assigned = false,
   trainingBlockId,
   assignedPlayerIds,
+  conflictPlayerNames,
 }: PlayerCardProps) {
   const { user } = useUser();
 
@@ -106,9 +109,25 @@ export default function PlayerCard({
             </Text>
           </Flex>
         </Flex>
-        <Text weight="bold" color="gray">
-          #{number}
-        </Text>
+        <Flex
+          direction={{
+            initial: "column",
+            xs: "row",
+          }}
+          align="center"
+          gap="2"
+        >
+          <Badge size="2" color="gray">
+            <Text size="1" weight="bold" color="gray">
+              #{number}
+            </Text>
+          </Badge>
+          {conflictPlayerNames && conflictPlayerNames.includes(name) && (
+            <Badge size="2" color="red" variant="solid">
+              <CalendarX size={15} />
+            </Badge>
+          )}
+        </Flex>
       </Flex>
       <Separator size="4" />
       <Button

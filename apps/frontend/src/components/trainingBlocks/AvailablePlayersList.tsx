@@ -62,11 +62,11 @@ export function AvailablePlayersList({
     <Card size="2">
       <Flex justify="between" align="center" mb="3">
         <Heading>Available Players</Heading>
-        <Badge>{filteredAvailablePlayers.length}</Badge>
+        <Badge size="2">{filteredAvailablePlayers.length}</Badge>
       </Flex>
       <Box mb="3">
         <TextField.Root
-          placeholder="Search"
+          placeholder="Search players"
           value={searchValue}
           onChange={(e) => setSearchValue(e.target.value)}
         >
