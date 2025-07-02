@@ -21,11 +21,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { addDoc, collection } from "firebase/firestore";
 import { clientFirestore } from "../../utils/firebase.ts";
 import type { Availability, Player, User } from "../../utils/types.ts";
-import {
-  DAYS,
-  DEFAULT_PLAYER,
-  POSITION_OPTIONS,
-} from "../../utils/constants.ts";
+import { DAYS, DEFAULT_PLAYER, POSITIONS } from "../../utils/constants.ts";
 import { AvailabilityInputBox } from "./AvailabilityInputBox.tsx";
 import { generateNextTimes, parseTime } from "../../utils/helpers.ts";
 
@@ -257,7 +253,7 @@ export default function AddPlayerDialog({
                 >
                   <Select.Trigger style={{ width: "100%" }} id="position" />
                   <Select.Content>
-                    {POSITION_OPTIONS.map((position) => (
+                    {POSITIONS.map((position) => (
                       <Select.Item key={position} value={position}>
                         {position}
                       </Select.Item>

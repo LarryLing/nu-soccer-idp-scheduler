@@ -8,19 +8,18 @@ import {
   Separator,
   Text,
 } from "@radix-ui/themes";
-import { useState } from "react";
+import { useState, memo, useCallback } from "react";
 import { useDraggable } from "@dnd-kit/core";
 import { CSS } from "@dnd-kit/utilities";
 import { CalendarX, XIcon } from "lucide-react";
-import { doc, updateDoc } from "firebase/firestore";
+import { arrayRemove, doc, updateDoc } from "firebase/firestore";
 import { clientFirestore } from "../../utils/firebase.ts";
 import { useUser } from "../../hooks/useUser.ts";
 
 type PlayerCardProps = {
   assigned?: boolean;
   trainingBlockId?: string;
-  assignedPlayerIds?: Player["id"][];
-  conflictPlayerNames?: string[];
+  isConflictPlayer?: boolean;
 } & Player;
 
 export default function PlayerCard({
@@ -31,11 +30,9 @@ export default function PlayerCard({
   availabilities,
   assigned = false,
   trainingBlockId,
-  assignedPlayerIds,
-  conflictPlayerNames,
+  isConflictPlayer = false,
 }: PlayerCardProps) {
   const { user } = useUser();
-
   const [viewAvailability, setViewAvailability] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
 
@@ -44,16 +41,11 @@ export default function PlayerCard({
       id: id,
     });
 
-  const handleMouseEnter = () => {
-    setIsHovered(true);
-  };
+  const handleMouseEnter = () => setIsHovered(true);
+  const handleMouseLeave = () => setIsHovered(false);
 
-  const handleMouseLeave = () => {
-    setIsHovered(false);
-  };
-
-  const handleUnassignPlayer = async () => {
-    if (!user || !trainingBlockId || !assignedPlayerIds) {
+  const handleUnassignPlayer = useCallback(async () => {
+    if (!user || !trainingBlockId) {
       return;
     }
 
@@ -63,11 +55,20 @@ export default function PlayerCard({
     );
 
     await updateDoc(trainingBlockDocRef, {
-      assignedPlayers: assignedPlayerIds.filter((assignedPlayerId) => {
-        return assignedPlayerId !== id;
-      }),
+      assignedPlayers: arrayRemove(id),
     });
+  }, [user, trainingBlockId, id]);
+
+  const handleToggleAvailability = () => {
+    setViewAvailability(!viewAvailability);
   };
+
+  const showUnassignButton = isHovered && !isDragging && assigned;
+  const showAvailabilityList = viewAvailability && !isDragging;
+  const buttonText =
+    viewAvailability && !isDragging
+      ? "Hide Availabilities"
+      : "Show Availabilities";
 
   return (
     <Flex
@@ -90,7 +91,7 @@ export default function PlayerCard({
     >
       <Flex justify="between" align="center">
         <Flex align="center" gap="2">
-          {isHovered && !isDragging && assigned && (
+          {showUnassignButton && (
             <IconButton
               color="red"
               variant="soft"
@@ -100,62 +101,85 @@ export default function PlayerCard({
               <XIcon size={15} />
             </IconButton>
           )}
-          <Flex direction="column" align="start">
-            <Heading size="3" color="gray">
-              {name}
-            </Heading>
-            <Text size="2" weight="regular" color="gray">
-              {position}
-            </Text>
-          </Flex>
-        </Flex>
-        <Flex
-          direction={{
-            initial: "column",
-            xs: "row",
-          }}
-          align="center"
-          gap="2"
-        >
-          <Badge size="2" color="gray">
-            <Text size="1" weight="bold" color="gray">
-              #{number}
-            </Text>
-          </Badge>
-          {conflictPlayerNames && conflictPlayerNames.includes(name) && (
-            <Badge size="2" color="red" variant="solid">
-              <CalendarX size={15} />
-            </Badge>
-          )}
+          <PlayerInfo
+            name={name}
+            position={position}
+            number={number}
+            isConflictPlayer={isConflictPlayer}
+          />
         </Flex>
       </Flex>
       <Separator size="4" />
       <Button
         variant="soft"
         size="1"
-        onClick={() => setViewAvailability(!viewAvailability)}
+        onClick={handleToggleAvailability}
         color="gray"
       >
-        {viewAvailability && !isDragging
-          ? "Hide Availabilities"
-          : "Show Availabilities"}
+        {buttonText}
       </Button>
-      {viewAvailability &&
-        !isDragging &&
+      {showAvailabilityList &&
         availabilities.map((availability, index) => (
-          <Flex
+          <AvailabilityItem
             key={`${availability.day}.${availability.start}.${availability.end}.${index}`}
-            justify="between"
-            align="center"
-          >
-            <Text size="1" weight="bold">
-              {availability.day}
-            </Text>
-            <Text size="1">
-              {availability.start} - {availability.end}
-            </Text>
-          </Flex>
+            {...availability}
+          />
         ))}
     </Flex>
   );
 }
+
+const PlayerInfo = memo(
+  ({
+    name,
+    position,
+    number,
+    isConflictPlayer = false,
+  }: {
+    name: string;
+    position: string;
+    number: number;
+    isConflictPlayer?: boolean;
+  }) => (
+    <Flex direction="column" align="start">
+      <Heading size="3" color="gray">
+        {name}
+      </Heading>
+      <Text size="2" weight="regular" color="gray">
+        {position}
+      </Text>
+      <Flex
+        direction={{
+          initial: "column",
+          xs: "row",
+        }}
+        align="center"
+        gap="2"
+      >
+        <Badge size="2" color="gray">
+          <Text size="1" weight="bold" color="gray">
+            #{number}
+          </Text>
+        </Badge>
+        {isConflictPlayer && (
+          <Badge size="2" color="red" variant="solid">
+            <CalendarX size={15} />
+          </Badge>
+        )}
+      </Flex>
+    </Flex>
+  ),
+);
+
+const AvailabilityItem = memo(
+  ({ day, start, end }: { day: string; start: string; end: string }) => (
+    <Flex justify="between" align="center">
+      <Text size="1" weight="bold">
+        {day}
+      </Text>
+      <Text size="1">
+        {start} - {end}
+      </Text>
+    </Flex>
+  ),
+);

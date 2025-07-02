@@ -1,7 +1,20 @@
 import type { Player } from "../../utils/types.ts";
-import { Badge, Button, Flex, Heading, Separator, Text } from "@radix-ui/themes";
+import {
+  Badge,
+  Button,
+  Flex,
+  Heading,
+  Separator,
+  Text,
+} from "@radix-ui/themes";
 
-export default function PlayerCardOverlay({ name, number, position }: Player) {
+type PlayerCardOverlayProps = Pick<Player, "name" | "number" | "position">;
+
+export default function PlayerCardOverlay({
+  name,
+  number,
+  position,
+}: PlayerCardOverlayProps) {
   return (
     <Flex
       direction="column"

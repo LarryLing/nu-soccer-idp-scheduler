@@ -25,7 +25,6 @@ export default function TrainingBlockContainersList({
     isOpen,
     setIsOpen,
     register,
-    control,
     isSubmitting,
     isSaving,
     setIsSaving,
@@ -66,7 +65,7 @@ export default function TrainingBlockContainersList({
                 borderRadius: "12px",
               }}
             >
-              <Flex justify="between"align="center" gap="4" mb="3">
+              <Flex justify="between" align="center" gap="4" mb="3">
                 <Flex align="center" gap="1">
                   <Text size="5" color="gray" weight="bold">
                     {day}
@@ -102,7 +101,6 @@ export default function TrainingBlockContainersList({
         isOpen={isOpen}
         setIsOpen={setIsOpen}
         register={register}
-        control={control}
         isSubmitting={isSubmitting}
         isSaving={isSaving}
         setIsSaving={setIsSaving}

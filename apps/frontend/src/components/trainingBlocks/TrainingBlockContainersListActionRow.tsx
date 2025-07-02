@@ -7,6 +7,8 @@ import { clientFirestore } from "../../utils/firebase.ts";
 import { useUser } from "../../hooks/useUser.ts";
 import AddTrainingBlockDialog from "./AddTrainingBlockDialog.tsx";
 import { DAYS } from "../../utils/constants.ts";
+import { TrainingBlockSchema } from "../../utils/schemas.ts";
+import z from "zod";
 
 type TrainingBlocksContainersListActionRowProps = {
   trainingBlocks: TrainingBlock[];
@@ -21,13 +23,28 @@ export default function TrainingBlocksContainersListActionRow({
 }: TrainingBlocksContainersListActionRowProps) {
   const { user } = useUser();
 
-  const fileInputRef = useRef<HTMLInputElement>(null);
-
   const [isImporting, setIsImporting] = useState(false);
 
-  const isPlayerAssigned = trainingBlocks.some(
-    (block) => block.assignedPlayers.length > 0,
-  );
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const TrainingBlockImportSchema = z
+    .object({
+      id: z.string(),
+      assignedPlayers: z.array(z.string()),
+      createdAt: z.number(),
+    })
+    .and(TrainingBlockSchema);
+
+  const validateTrainingBlockData = (
+    data: unknown,
+  ): data is TrainingBlock[] => {
+    if (!Array.isArray(data)) return false;
+
+    return data.every((item) => {
+      const result = TrainingBlockImportSchema.safeParse(item);
+      return result.success;
+    });
+  };
 
   const exportJSON = () => {
     try {
@@ -46,23 +63,6 @@ export default function TrainingBlocksContainersListActionRow({
     } catch (error) {
       console.error("Failed to export JSON:", error);
     }
-  };
-
-  const validateTrainingBlockData = (
-    data: unknown,
-  ): data is TrainingBlock[] => {
-    if (!Array.isArray(data)) return false;
-
-    return data.every(
-      (item) =>
-        typeof item === "object" &&
-        item !== null &&
-        "id" in item &&
-        "day" in item &&
-        "start" in item &&
-        "end" in item &&
-        "assignedPlayers" in item,
-    );
   };
 
   const importJSON = async (event: ChangeEvent<HTMLInputElement>) => {
@@ -119,6 +119,7 @@ export default function TrainingBlocksContainersListActionRow({
               start: parsedTrainingBlock.start,
               end: parsedTrainingBlock.end,
               assignedPlayers: parsedTrainingBlock.assignedPlayers,
+              createdAt: parsedTrainingBlock.createdAt,
             },
           );
         }
@@ -159,6 +160,11 @@ export default function TrainingBlocksContainersListActionRow({
     await batch.commit();
   };
 
+  const handleAutoAssign = () => {
+    // TODO: Implement auto-assignment logic
+    console.log("Auto assign functionality not yet implemented");
+  };
+
   return (
     <Flex
       direction={{ initial: "column", sm: "row" }}
@@ -167,56 +173,92 @@ export default function TrainingBlocksContainersListActionRow({
       gap={{ initial: "4", sm: "0" }}
       mb="4"
     >
-      <Flex align="center" gap="2" wrap="wrap">
-        <AddTrainingBlockDialog user={user} trainingBlocks={trainingBlocks} />
-        <Button variant="outline" onClick={exportJSON}>
-          <DownloadIcon size={15} />
-          Export JSON
-        </Button>
-        <input
-          ref={fileInputRef}
-          type="file"
-          accept=".json,application/json"
-          onChange={importJSON}
-          style={{ display: "none" }}
-          aria-label="Import JSON file"
-        />
-        <Button
-          variant="outline"
-          onClick={handleImportClick}
-          disabled={isImporting}
-        >
-          <UploadIcon size={15} />
-          {isImporting ? "Importing..." : "Import JSON"}
-        </Button>
-        <Button variant="outline">
-          <Shuffle size={15} />
-          Auto Assign
-        </Button>
-        {isPlayerAssigned && (
-          <Button
-            variant="outline"
-            color="red"
-            onClick={handleClearAssignments}
-          >
-            <TrashIcon size={15} />
-            Clear Assignments
-          </Button>
-        )}
-      </Flex>
-      <Box width="125px">
-        <Select.Root value={dayFilter} onValueChange={setDayFilter}>
-          <Select.Trigger style={{ width: "100%" }} />
-          <Select.Content>
-            <Select.Item value="All">All Days</Select.Item>
-            {DAYS.map((position) => (
-              <Select.Item key={position} value={position}>
-                {position}
-              </Select.Item>
-            ))}
-          </Select.Content>
-        </Select.Root>
-      </Box>
+      <ActionButtons
+        trainingBlocks={trainingBlocks}
+        onExport={exportJSON}
+        onImport={handleImportClick}
+        onAutoAssign={handleAutoAssign}
+        onClearAssignments={handleClearAssignments}
+        isImporting={isImporting}
+      />
+      <DayFilter dayFilter={dayFilter} onDayFilterChange={setDayFilter} />
+      <input
+        ref={fileInputRef}
+        type="file"
+        accept=".json,application/json"
+        onChange={importJSON}
+        style={{ display: "none" }}
+        aria-label="Import JSON file"
+      />
     </Flex>
   );
 }
+
+const ActionButtons = ({
+  trainingBlocks,
+  onExport,
+  onImport,
+  onAutoAssign,
+  onClearAssignments,
+  isImporting,
+}: {
+  trainingBlocks: TrainingBlock[];
+  onExport: () => void;
+  onImport: () => void;
+  onAutoAssign: () => void;
+  onClearAssignments: () => void;
+  isImporting: boolean;
+}) => {
+  const isPlayerAssigned = trainingBlocks.some(
+    (block) => block.assignedPlayers.length > 0,
+  );
+
+  return (
+    <Flex align="center" gap="2" wrap="wrap">
+      <AddTrainingBlockDialog
+        user={useUser().user}
+        trainingBlocks={trainingBlocks}
+      />
+      <Button variant="outline" onClick={onExport}>
+        <DownloadIcon size={15} />
+        Export JSON
+      </Button>
+      <Button variant="outline" onClick={onImport} disabled={isImporting}>
+        <UploadIcon size={15} />
+        {isImporting ? "Importing..." : "Import JSON"}
+      </Button>
+      <Button variant="outline" onClick={onAutoAssign}>
+        <Shuffle size={15} />
+        Auto Assign
+      </Button>
+      {isPlayerAssigned && (
+        <Button variant="outline" color="red" onClick={onClearAssignments}>
+          <TrashIcon size={15} />
+          Clear Assignments
+        </Button>
+      )}
+    </Flex>
+  );
+};
+
+const DayFilter = ({
+  dayFilter,
+  onDayFilterChange,
+}: {
+  dayFilter: string;
+  onDayFilterChange: (value: string) => void;
+}) => (
+  <Box width="125px">
+    <Select.Root value={dayFilter} onValueChange={onDayFilterChange}>
+      <Select.Trigger style={{ width: "100%" }} />
+      <Select.Content>
+        <Select.Item value="All">All Days</Select.Item>
+        {DAYS.map((day) => (
+          <Select.Item key={day} value={day}>
+            {day}
+          </Select.Item>
+        ))}
+      </Select.Content>
+    </Select.Root>
+  </Box>
+);

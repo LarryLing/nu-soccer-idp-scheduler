@@ -14,7 +14,7 @@ export const DEFAULT_TRAINING_BLOCK: z.infer<typeof TrainingBlockSchema> = {
   end: "9:00AM",
 };
 
-export const POSITION_OPTIONS = [
+export const POSITIONS = [
   "Goalkeeper",
   "Defender",
   "Midfielder",

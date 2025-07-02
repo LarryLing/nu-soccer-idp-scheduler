@@ -1,12 +1,4 @@
-import {
-  Box,
-  Button,
-  Dialog,
-  Flex,
-  Select,
-  Text,
-  TextField,
-} from "@radix-ui/themes";
+import { Button, Dialog, Select, TextField } from "@radix-ui/themes";
 import { useForm, Controller, type SubmitHandler } from "react-hook-form";
 import { TrainingBlockSchema } from "../../utils/schemas.ts";
 import { z } from "zod";
@@ -17,12 +9,16 @@ import { addDoc, collection } from "firebase/firestore";
 import { clientFirestore } from "../../utils/firebase.ts";
 import type { TrainingBlock, User } from "../../utils/types.ts";
 import { DAYS, DEFAULT_TRAINING_BLOCK } from "../../utils/constants.ts";
-import { parseTime } from "../../utils/helpers.ts";
+import { checkFormTrainingBlockOverlaps } from "../../utils/helpers.ts";
+import FormField from "../miscellaneous/FormField.tsx";
+import FormActions from "../miscellaneous/FormActions.tsx";
 
 type AddTrainingBlockDialogProps = {
   user: User | null;
   trainingBlocks: TrainingBlock[];
 };
+
+type FormData = z.infer<typeof TrainingBlockSchema>;
 
 export default function AddTrainingBlockDialog({
   user,
@@ -39,7 +35,7 @@ export default function AddTrainingBlockDialog({
     setError,
     clearErrors,
     formState: { isSubmitting, isValidating, errors },
-  } = useForm<z.infer<typeof TrainingBlockSchema>>({
+  } = useForm<FormData>({
     defaultValues: DEFAULT_TRAINING_BLOCK,
     resolver: zodResolver(TrainingBlockSchema),
     mode: "onSubmit",
@@ -56,27 +52,13 @@ export default function AddTrainingBlockDialog({
     setIsOpen(false);
   };
 
-  const onSubmit: SubmitHandler<z.infer<typeof TrainingBlockSchema>> = async (
-    data,
-  ) => {
+  const onSubmit: SubmitHandler<FormData> = async (data) => {
     if (!user?.uid) {
       console.error("User not authenticated");
       return;
     }
 
-    const filteredTrainingBlocks = trainingBlocks
-      .filter((trainingBlock) => {
-        return trainingBlock.day === data.day;
-      })
-      .sort((a, b) => {
-        return parseTime(a.start) - parseTime(b.start);
-      });
-
-    const hasOverlaps = filteredTrainingBlocks.some((current) => {
-      return parseTime(data.start) < parseTime(current.end);
-    });
-
-    if (hasOverlaps) {
+    if (checkFormTrainingBlockOverlaps(trainingBlocks, data)) {
       console.error("Current training block overlaps with an existing one.");
       setError("start", {
         type: "manual",
@@ -123,18 +105,8 @@ export default function AddTrainingBlockDialog({
         <Dialog.Description mb="3">
           Insert training block information
         </Dialog.Description>
-        <form
-          onSubmit={(e) => {
-            console.log("Form submit event triggered");
-            handleSubmit(onSubmit)(e);
-          }}
-        >
-          <Box mb="3">
-            <label htmlFor="day">
-              <Text size="2" weight="medium" mb="1" as="p">
-                Day
-              </Text>
-            </label>
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <FormField label="Day" id="day" error={errors.day?.message}>
             <Controller
               name="day"
               control={control}
@@ -146,70 +118,37 @@ export default function AddTrainingBlockDialog({
                 >
                   <Select.Trigger style={{ width: "100%" }} id="day" />
                   <Select.Content>
-                    {DAYS.map((position) => (
-                      <Select.Item key={position} value={position}>
-                        {position}
+                    {DAYS.map((day) => (
+                      <Select.Item key={day} value={day}>
+                        {day}
                       </Select.Item>
                     ))}
                   </Select.Content>
                 </Select.Root>
               )}
             />
-            {errors.day && (
-              <Text size="2" weight="regular" as="p" color="red">
-                {errors.day.message}
-              </Text>
-            )}
-          </Box>
-          <Box mb="3">
-            <label htmlFor="start">
-              <Text size="2" weight="medium" mb="1" as="p">
-                Start
-              </Text>
-            </label>
+          </FormField>
+          <FormField label="Start" id="start" error={errors.start?.message}>
             <TextField.Root
               id="start"
               placeholder="9:30AM"
               disabled={isFormDisabled}
               {...register("start")}
             />
-            {errors.start && (
-              <Text size="2" weight="regular" as="p" color="red">
-                {errors.start.message}
-              </Text>
-            )}
-          </Box>
-          <Box mb="3">
-            <label htmlFor="end">
-              <Text size="2" weight="medium" mb="1" as="p">
-                End
-              </Text>
-            </label>
+          </FormField>
+          <FormField label="End" id="end" error={errors.end?.message}>
             <TextField.Root
               id="end"
               placeholder="10:30AM"
               disabled={isFormDisabled}
               {...register("end")}
             />
-            {errors.end && (
-              <Text size="2" weight="regular" as="p" color="red">
-                {errors.end.message}
-              </Text>
-            )}
-          </Box>
-          <Flex direction="row-reverse" gap="2">
-            <Button type="submit" disabled={isFormDisabled}>
-              {isAdding ? "Adding..." : "Add Training Block"}
-            </Button>
-            <Button
-              variant="soft"
-              type="button"
-              disabled={isFormDisabled}
-              onClick={handleClose}
-            >
-              Cancel
-            </Button>
-          </Flex>
+          </FormField>
+          <FormActions
+            isDisabled={isFormDisabled}
+            isPerformingAction={isAdding}
+            onCancel={handleClose}
+          />
         </form>
       </Dialog.Content>
     </Dialog.Root>

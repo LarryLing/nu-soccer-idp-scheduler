@@ -1,70 +1,70 @@
 import { z } from "zod";
 import { parseTime } from "./helpers.ts";
+import { DAYS, POSITIONS } from "./constants.ts";
+
+const TIME_REGEX = /^(1[0-2]|0?[1-9]):([0-5][0-9])([AP]M)$/;
+const TIME_MESSAGE = "Time must be in format '9:30AM' or '12:45PM'.";
+
+const validatePassword = (password: string) => ({
+  hasUppercase: /[A-Z]/.test(password),
+  hasLowercase: /[a-z]/.test(password),
+  hasNumber: /[0-9]/.test(password),
+  hasSpecial: /[!@#$%^&*]/.test(password),
+});
+
+const validateTimeOrder = (data: { start: string; end: string }) =>
+  parseTime(data.end) > parseTime(data.start);
+
+const DaySchema = z.enum(DAYS);
+const TimeSchema = z.string().regex(TIME_REGEX, { message: TIME_MESSAGE });
+const EmailSchema = z.string().email({ message: "Email is required." });
+const PasswordSchema = z
+  .string()
+  .min(8, { message: "Password must contain at least 8 characters." });
+const StrongPasswordSchema = PasswordSchema.refine(
+  (pwd) => validatePassword(pwd).hasUppercase,
+  {
+    message: "Password must contain at least one uppercase letter.",
+  },
+)
+  .refine((pwd) => validatePassword(pwd).hasLowercase, {
+    message: "Password must contain at least one lowercase letter.",
+  })
+  .refine((pwd) => validatePassword(pwd).hasNumber, {
+    message: "Password must contain at least one number.",
+  })
+  .refine((pwd) => validatePassword(pwd).hasSpecial, {
+    message: "Password must contain at least one special character.",
+  });
 
 export const SignInFormSchema = z.object({
-  email: z.string().email({
-    message: "Email is required.",
-  }),
-  password: z.string().min(1, {
-    message: "Password is required.",
-  }),
+  email: EmailSchema,
+  password: z.string().min(1, { message: "Password is required." }),
+});
+
+export const ForgotPasswordFormSchema = z.object({
+  email: EmailSchema,
 });
 
 export const ResetPasswordFormSchema = z
   .object({
-    password: z
+    password: StrongPasswordSchema,
+    confirmPassword: z
       .string()
-      .min(8, { message: "Password must contain at least 8 characters." })
-      .refine((password) => /[A-Z]/.test(password), {
-        message: "Password must contain at least one uppercase letter.",
-      })
-      .refine((password) => /[a-z]/.test(password), {
-        message: "Password must contain at least one lowercase letter.",
-      })
-      .refine((password) => /[0-9]/.test(password), {
-        message: "Password must contain at least one number.",
-      })
-      .refine((password) => /[!@#$%^&*]/.test(password), {
-        message: "Password must contain at least one special character.",
-      }),
-    confirmPassword: z.string().min(1, {
-      message: "Password confirmation is required.",
-    }),
+      .min(1, { message: "Password confirmation is required." }),
   })
   .refine((data) => data.password === data.confirmPassword, {
     message: "Passwords do not match.",
     path: ["confirmPassword"],
   });
 
-export const ForgotPasswordFormSchema = z.object({
-  email: z.string().email({
-    message: "Email is required.",
-  }),
-});
-
 export const CreateAnAccountSchema = z
   .object({
-    email: z.string().email({
-      message: "Email is required.",
-    }),
-    password: z
+    email: EmailSchema,
+    password: StrongPasswordSchema,
+    confirmPassword: z
       .string()
-      .min(8, { message: "Password must contain at least 8 characters." })
-      .refine((password) => /[A-Z]/.test(password), {
-        message: "Password must contain at least one uppercase letter.",
-      })
-      .refine((password) => /[a-z]/.test(password), {
-        message: "Password must contain at least one lowercase letter.",
-      })
-      .refine((password) => /[0-9]/.test(password), {
-        message: "Password must contain at least one number.",
-      })
-      .refine((password) => /[!@#$%^&*]/.test(password), {
-        message: "Password must contain at least one special character.",
-      }),
-    confirmPassword: z.string().min(1, {
-      message: "Password confirmation is required.",
-    }),
+      .min(1, { message: "Password confirmation is required." }),
   })
   .refine((data) => data.password === data.confirmPassword, {
     message: "Passwords do not match.",
@@ -73,87 +73,37 @@ export const CreateAnAccountSchema = z
 
 export const AvailabilitySchema = z
   .object({
-    day: z.enum([
-      "Monday",
-      "Tuesday",
-      "Wednesday",
-      "Thursday",
-      "Friday",
-      "Saturday",
-      "Sunday",
-    ]),
-    start: z
-      .string()
-      .min(1, {
-        message: "Start time is required",
-      })
-      .regex(/^(1[0-2]|0?[1-9]):([0-5][0-9])([AP]M)$/, {
-        message: "Start time must be in format '9:30AM' or '12:45PM'.",
-      }),
-    end: z
-      .string()
-      .min(1, {
-        message: "End time is required",
-      })
-      .regex(/^(1[0-2]|0?[1-9]):([0-5][0-9])([AP]M)$/, {
-        message: "End time must be in format '9:30AM' or '12:45PM'.",
-      }),
+    day: DaySchema,
+    start: TimeSchema,
+    end: TimeSchema,
   })
-  .refine(
-    (data) => {
-      return parseTime(data.end) > parseTime(data.start);
-    },
-    {
-      message: "End time must be after start time.",
-      path: ["end"],
-    },
-  );
+  .refine(validateTimeOrder, {
+    message: "End time must be after start time.",
+    path: ["end"],
+  });
+
+export const TrainingBlockSchema = z
+  .object({
+    day: DaySchema,
+    start: TimeSchema,
+    end: TimeSchema,
+  })
+  .refine(validateTimeOrder, {
+    message: "End time must be after start time.",
+    path: ["end"],
+  });
 
 export const PlayerSchema = z.object({
   name: z
     .string()
-    .min(1, {
-      message: "Name is required",
-    })
+    .min(1, { message: "Name is required" })
     .regex(/^[A-Za-z]+(?:[ '-.][A-Za-z]+)*$/, {
       message: "Name cannot contain special characters.",
     }),
   number: z
     .number({ message: "Number is required" })
-    .min(0, {
-      message: "Number must be greater than or equal to 0.",
-    })
-    .max(99, {
-      message: "Number must be less than or equal to 99.",
-    }),
-  position: z.enum(["Goalkeeper", "Defender", "Midfielder", "Forward"]),
-  availabilities: z.array(AvailabilitySchema),
+    .min(0, { message: "Number must be greater than or equal to 0." })
+    .max(99, { message: "Number must be less than or equal to 99." }),
+  position: z.enum(POSITIONS),
+  availabilities: AvailabilitySchema.array(),
 });
-
-export const TrainingBlockSchema = z
-  .object({
-    day: z.enum([
-      "Monday",
-      "Tuesday",
-      "Wednesday",
-      "Thursday",
-      "Friday",
-      "Saturday",
-      "Sunday",
-    ]),
-    start: z.string().regex(/^(1[0-2]|0?[1-9]):([0-5][0-9])([AP]M)$/, {
-      message: "Start time must be in format '9:30AM' or '12:45PM'.",
-    }),
-    end: z.string().regex(/^(1[0-2]|0?[1-9]):([0-5][0-9])([AP]M)$/, {
-      message: "End time must be in format '9:30AM' or '12:45PM'.",
-    }),
-  })
-  .refine(
-    (data) => {
-      return parseTime(data.end) > parseTime(data.start);
-    },
-    {
-      message: "End time must be after start time.",
-      path: ["end"],
-    },
-  );
