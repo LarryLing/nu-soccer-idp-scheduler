@@ -9,7 +9,7 @@ import {
 } from "@radix-ui/themes";
 import { Controller, type SubmitHandler } from "react-hook-form";
 import type { EditPlayerDialogContextType, Player } from "../../utils/types.ts";
-import { DAYS, POSITION_OPTIONS } from "../../utils/constants.ts";
+import { DAYS, POSITIONS } from "../../utils/constants.ts";
 import { z } from "zod";
 import { PlayerSchema } from "../../utils/schemas.ts";
 import { doc, updateDoc } from "firebase/firestore";
@@ -197,7 +197,7 @@ export default function EditPlayerDialog({
                 >
                   <Select.Trigger style={{ width: "100%" }} id="position" />
                   <Select.Content>
-                    {POSITION_OPTIONS.map((position) => (
+                    {POSITIONS.map((position) => (
                       <Select.Item key={position} value={position}>
                         {position}
                       </Select.Item>

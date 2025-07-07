@@ -34,7 +34,7 @@ export default function ResetPasswordCard({
     formState: { isSubmitting, isValidating, errors },
   } = useForm<z.infer<typeof ResetPasswordFormSchema>>({
     resolver: zodResolver(ResetPasswordFormSchema),
-    mode: 'onSubmit',
+    mode: "onSubmit",
     reValidateMode: "onSubmit",
   });
 

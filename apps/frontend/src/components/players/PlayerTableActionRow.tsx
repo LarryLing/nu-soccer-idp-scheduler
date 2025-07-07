@@ -206,7 +206,7 @@ export default function PlayerTableActionRow({
         </Flex>
         <Box width={{ initial: "100%", sm: "210px" }}>
           <TextField.Root
-            placeholder="Search players by name"
+            placeholder="Search players"
             value={searchValue}
             onChange={handleSearchChange}
           >

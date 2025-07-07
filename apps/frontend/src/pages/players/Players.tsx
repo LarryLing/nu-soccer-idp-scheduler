@@ -101,7 +101,7 @@ const createPlayerColumns = (): ColumnDef<Player>[] => [
     cell: ({ row }) => {
       const position: Player["position"] = row.getValue("position");
       return (
-        <Badge variant="soft" color="gray">
+        <Badge size="2" variant="soft" color="gray">
           {position}
         </Badge>
       );
@@ -121,6 +121,7 @@ const createPlayerColumns = (): ColumnDef<Player>[] => [
       return availabilities.map((availability, index) => (
         <Badge
           key={`${availability.day}.${availability.start}.${availability.end}.${index}`}
+          size="2"
           variant="outline"
           color="gray"
           mr="2"
